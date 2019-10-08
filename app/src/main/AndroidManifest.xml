@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <provider
-            android:name=".StockContentProvider"
-            android:authorities="com.days.kitchenstock"
+            android:name=".data.StockContentProvider"
+            android:authorities="com.days.kitchenstock.data.StockContentProvider"
             android:enabled="true"
-            android:exported="false"></provider>
+            android:exported="false" />
 
         <activity
             android:name=".HomeActivity"

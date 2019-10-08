@@ -1,6 +1,5 @@
 package com.days.kitchenstock;
 
-import android.content.Context;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,10 +9,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.days.kitchenstock.data.StockContentHelper;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -92,6 +97,38 @@ public class StockFragment extends Fragment {
         ListView outOfStock = view.findViewById(R.id.out_of_stock);
         TextView ooItem = new TextView(getActivity());
         inStockItem.setText("Garlic");
+        Button add = view.findViewById(R.id.add_item);
+        final StockContentHelper.Item item = new StockContentHelper.Item();
+        item.name = "beans";
+        item.type = StockContentHelper.ItemType.LONG_TERM;
+        item.status = StockContentHelper.ItemStatus.IN_STOCK;
+        item.autoAddToCart = true;
+        item.autoOutOfStock = true;
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        item.expiry = date;
+        date.setTime(System.currentTimeMillis() + 84600);
+        item.purchaseDate = date;
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StockContentHelper.deleteItem(getContext(), item.name);
+            }
+        });
+        final TextView textView = view.findViewById(R.id.item_list);
+        Button retrive = view.findViewById(R.id.retrieve_item);
+        retrive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> itemArrayList = StockContentHelper.queryAllItems(getContext());
+                String allItems = "";
+                for (StockContentHelper.Item item : itemArrayList) {
+                    allItems = allItems + "\n" + item.toString();
+                }
+                textView.setText(allItems);
+            }
+        });
+
         //inStock.addView(ooItem);
     }
 

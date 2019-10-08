@@ -6,13 +6,33 @@
     tools:context=".StockFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical" >
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_item"
+        android:text="Add Item"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/retrieve_item"
+        android:text="Retrieve Item"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_list"
+        android:singleLine="false"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/in_stock" />
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/out_of_stock" />
+    </LinearLayout>
 
 </FrameLayout>
