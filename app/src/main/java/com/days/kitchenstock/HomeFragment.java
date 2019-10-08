@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.days.kitchenstock.data.StockContentHelper;
+import com.days.kitchenstock.data.StockContentProvider;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
@@ -55,26 +57,21 @@ public class HomeFragment extends Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "OBJECT " + (position + 1);
+            String title = getString(R.string.shopping_list);
+            StockContentHelper.ItemType type = StockContentHelper.ItemType.values()[position];
+            switch (type) {
+                case FRESH:
+                    title = getString(R.string.fresh);
+                    break;
+                case SHORT_TERM:
+                    title = getString(R.string.short_term);
+                    break;
+                case LONG_TERM:
+                    title = getString(R.string.long_term);
+                    break;
+            }
+            return title;
         }
     }
-
-    // Instances of this class are fragments representing a single
-// object in our collection.
-    public static class DemoObjectFragment extends Fragment {
-        public static final String ARG_OBJECT = "object";
-
-        @Override
-        public View onCreateView(LayoutInflater inflater,
-                                 ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_layout, container, false);
-        }
-
-        @Override
-        public void onViewCreated( View view,  Bundle savedInstanceState) {
-            Bundle args = getArguments();
-            ((TextView) view.findViewById(android.R.id.text1))
-                    .setText(Integer.toString(args.getInt(ARG_OBJECT)));
-        }
-    }}
+}
 

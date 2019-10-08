@@ -1,8 +1,18 @@
 <resources>
-    <string name="app_name">KitchenStock</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Home Stock</string>
+    <string name="title_activity_main">Home Stock</string>
+    <string name="fresh">Fresh</string>
+    <string name="short_term">Short Term</string>
+    <string name="long_term">Long Term</string>
+    <string name="shopping_list">Shopping List</string>
+    <string name="in_stock">In Stock</string>
+    <string name="out_of_stock">Out Of Stock</string>
+    <string name="name">Name</string>
+    <string name="type">Item Type</string>
+    <string name="status">Current Status</string>
+    <string name="expiry">Expiry Date</string>
+    <string name="auto_add_to_shopping_list">Automatically Add To Shopping List</string>
+    <string name="auto_move_to_out_of_stock">Automatically Move To Out Of Stock</string>
+    <string name="quantity">Quantity</string>
+    <string name="to_buy">To Buy</string>
 </resources>
