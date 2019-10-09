@@ -26,7 +26,7 @@ public class StockContentProvider extends ContentProvider {
     static final String STATUS = "status";
     static final String EXPIRY = "expiry";
     static final String PURCHASE_DATE = "purchaseDate";
-    static final String AUTO_ADD_TO_CART = "autoAddToCart";
+    static final String QUANTITY = "quantity";
     static final String AUTO_OUT_OF_STOCK = "autoOutOfStock";
 
     private static HashMap<String, String> STUDENTS_PROJECTION_MAP;
@@ -46,7 +46,7 @@ public class StockContentProvider extends ContentProvider {
                     STATUS + " TEXT NOT NULL," +
                     EXPIRY + " DATETIME," +
                     PURCHASE_DATE + " DATETIME," +
-                    AUTO_ADD_TO_CART + " INTEGER DEFAULT 0," +
+                    QUANTITY + " INTEGER DEFAULT 0," +
                     AUTO_OUT_OF_STOCK + " INTEGER DEFAULT 0);";
 
     /**

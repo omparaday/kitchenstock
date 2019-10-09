@@ -14,6 +14,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 public class StockContentHelper {
+
+    public static final SimpleDateFormat DATE_FORMATTER_INDIA = new SimpleDateFormat("dd/MM/yyyy");
+
     public enum ItemType {
         FRESH(), SHORT_TERM(), LONG_TERM(), MISC();
         private final int value;
@@ -41,13 +44,13 @@ public class StockContentHelper {
         public ItemStatus status;
         public Date expiry;
         public Date purchaseDate;
-        public boolean autoAddToCart;
+        public boolean quantity;
         public boolean autoOutOfStock;
 
         @NonNull
         @Override
         public String toString() {
-            return name + "," + type + "," + status + "," + expiry + "," + purchaseDate + "," + autoAddToCart + "," + autoOutOfStock;
+            return name + "," + type + "," + status + "," + expiry + "," + purchaseDate + "," + quantity + "," + autoOutOfStock;
         }
 
         public Item setName(String nameArg) {
@@ -71,7 +74,7 @@ public class StockContentHelper {
         values.put(StockContentProvider.STATUS, item.status.getValue());
         values.put(StockContentProvider.EXPIRY, formatter.format(item.expiry));
         values.put(StockContentProvider.PURCHASE_DATE, formatter.format(item.purchaseDate));
-        values.put(StockContentProvider.AUTO_ADD_TO_CART, item.autoAddToCart);
+        values.put(StockContentProvider.QUANTITY, item.quantity);
         values.put(StockContentProvider.AUTO_OUT_OF_STOCK, item.autoOutOfStock);
 
         Uri uri = context.getContentResolver().insert(
@@ -79,14 +82,14 @@ public class StockContentHelper {
     }
 
     public static void updateItem (Context context, Item item) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = DATE_FORMATTER_INDIA;
         ContentValues values = new ContentValues();
         values.put(StockContentProvider.NAME, item.name);
         values.put(StockContentProvider.TYPE, item.type.getValue());
         values.put(StockContentProvider.STATUS, item.status.getValue());
         values.put(StockContentProvider.EXPIRY, formatter.format(item.expiry));
         values.put(StockContentProvider.PURCHASE_DATE, formatter.format(item.purchaseDate));
-        values.put(StockContentProvider.AUTO_ADD_TO_CART, item.autoAddToCart);
+        values.put(StockContentProvider.QUANTITY, item.quantity);
         values.put(StockContentProvider.AUTO_OUT_OF_STOCK, item.autoOutOfStock);
         String[] args = {item.name};
 
@@ -116,7 +119,7 @@ public class StockContentHelper {
                 item.expiry = null;
                 item.purchaseDate = null;
             }
-            item.autoAddToCart = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_ADD_TO_CART)) ==1;
+            item.quantity = cursor.getInt(cursor.getColumnIndex(StockContentProvider.QUANTITY)) ==1;
             item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
             itemArrayList.add(item);
             Log.println(Log.INFO, "omprak", item.toString());
