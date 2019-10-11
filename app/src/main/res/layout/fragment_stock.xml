@@ -5,11 +5,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".StockFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/in_stock" />
 
     <ListView
         android:id="@+id/in_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/out_of_stock" />
 
     <ListView
         android:id="@+id/out_of_stock"

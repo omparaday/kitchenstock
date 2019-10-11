@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 
 public class StockContentHelper {
 
-    public static final SimpleDateFormat DATE_FORMATTER_INDIA = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 
     public enum ItemType {
         FRESH(), SHORT_TERM(), LONG_TERM(), MISC();
@@ -44,7 +44,7 @@ public class StockContentHelper {
         public ItemStatus status;
         public Date expiry;
         public Date purchaseDate;
-        public boolean quantity;
+        public String quantity;
         public boolean autoOutOfStock;
 
         @NonNull
@@ -72,8 +72,8 @@ public class StockContentHelper {
         values.put(StockContentProvider.NAME, item.name);
         values.put(StockContentProvider.TYPE, item.type.getValue());
         values.put(StockContentProvider.STATUS, item.status.getValue());
-        values.put(StockContentProvider.EXPIRY, formatter.format(item.expiry));
-        values.put(StockContentProvider.PURCHASE_DATE, formatter.format(item.purchaseDate));
+        values.put(StockContentProvider.EXPIRY, item.expiry == null ? null : formatter.format(item.expiry));
+        values.put(StockContentProvider.PURCHASE_DATE, item.purchaseDate == null ? null : formatter.format(item.purchaseDate));
         values.put(StockContentProvider.QUANTITY, item.quantity);
         values.put(StockContentProvider.AUTO_OUT_OF_STOCK, item.autoOutOfStock);
 
@@ -82,7 +82,7 @@ public class StockContentHelper {
     }
 
     public static void updateItem (Context context, Item item) {
-        SimpleDateFormat formatter = DATE_FORMATTER_INDIA;
+        SimpleDateFormat formatter = DATE_FORMATTER;
         ContentValues values = new ContentValues();
         values.put(StockContentProvider.NAME, item.name);
         values.put(StockContentProvider.TYPE, item.type.getValue());
@@ -105,7 +105,7 @@ public class StockContentHelper {
     public static ArrayList<Item> queryAllItems (Context context) {
         Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, null,null,null);
         cursor.moveToFirst();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = DATE_FORMATTER;
         ArrayList<Item> itemArrayList = new ArrayList<>();
         do {
             Item item = new Item();
@@ -115,16 +115,55 @@ public class StockContentHelper {
             try {
                 item.expiry = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
                 item.purchaseDate = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 item.expiry = null;
                 item.purchaseDate = null;
             }
-            item.quantity = cursor.getInt(cursor.getColumnIndex(StockContentProvider.QUANTITY)) ==1;
+            item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
             item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
             itemArrayList.add(item);
             Log.println(Log.INFO, "omprak", item.toString());
+            if (cursor.isLast()) {
+                break;
+            }
             cursor.moveToNext();
-        } while (!cursor.isLast());
+        } while (true);
+        return itemArrayList;
+    }
+
+    public static ArrayList<Item> queryItems (Context context, ItemType type, boolean isInStock) {
+        String selection = null;
+        if (isInStock) {
+            selection = StockContentProvider.TYPE + "="+ type.value +" AND " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+        } else {
+            selection = StockContentProvider.TYPE + "=" + type.value + " AND NOT " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+        }
+        ArrayList<Item> itemArrayList = new ArrayList<>();
+        try {
+            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+            cursor.moveToFirst();
+            SimpleDateFormat formatter = DATE_FORMATTER;
+            do {
+                Item item = new Item();
+                item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
+                item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
+                item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
+                try {
+                    item.expiry = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
+                    item.purchaseDate = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
+                } catch (Exception e) {
+                    item.expiry = null;
+                    item.purchaseDate = null;
+                }
+                item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
+                item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
+                itemArrayList.add(item);
+                Log.println(Log.INFO, "omprak", item.toString());
+                cursor.moveToNext();
+            } while (!cursor.isLast());
+        } catch (Exception e) {
+
+        }
         return itemArrayList;
     }
 }

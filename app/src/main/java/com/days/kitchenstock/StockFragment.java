@@ -6,10 +6,10 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -17,8 +17,7 @@ import android.widget.TextView;
 
 import com.days.kitchenstock.data.StockContentHelper;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -26,14 +25,8 @@ import java.util.Date;
  * Activities that contain this fragment must implement the
  * {@link StockFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link StockFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class StockFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     public enum StockType  {
             FRESH,
         SHORT_TERM,
@@ -44,8 +37,7 @@ public class StockFragment extends Fragment {
     public static final String ARG_OBJECT = "obj";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private StockContentHelper.ItemType itemType;
 
     private OnFragmentInteractionListener mListener;
 
@@ -53,30 +45,11 @@ public class StockFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StockFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StockFragment newInstance(String param1, String param2) {
-        StockFragment fragment = new StockFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            itemType = StockContentHelper.ItemType.values()[getArguments().getInt(ARG_OBJECT)];
         }
     }
 
@@ -90,19 +63,25 @@ public class StockFragment extends Fragment {
     public void onViewCreated( View view,  Bundle savedInstanceState) {
         Bundle args = getArguments();
         ListView inStock = view.findViewById(R.id.in_stock);
-        TextView inStockItem = new TextView(getActivity());
-        inStockItem.setText("Tomato");
-        inStock.setAdapter(new InStockAdapter());
+        inStock.setAdapter(new ItemStockAdapter(itemType, true));
         ListView outOfStock = view.findViewById(R.id.out_of_stock);
-        TextView ooItem = new TextView(getActivity());
-        inStockItem.setText("Garlic");
+        outOfStock.setAdapter(new ItemStockAdapter(itemType, false));
     }
 
-    private class InStockAdapter implements ListAdapter {
+    private class ItemStockAdapter implements ListAdapter {
+        private StockContentHelper.ItemType type;
+        private boolean isInStock;
+        private List<StockContentHelper.Item> itemList;
+
+        ItemStockAdapter(StockContentHelper.ItemType type, boolean isInStock) {
+            this.type = type;
+            this.isInStock = isInStock;
+            itemList = StockContentHelper.queryItems(getContext(), type, isInStock);
+        }
 
         @Override
         public boolean areAllItemsEnabled() {
-            return false;
+            return true;
         }
 
         @Override
@@ -123,7 +102,6 @@ public class StockFragment extends Fragment {
         @Override
         public void registerDataSetObserver(DataSetObserver dataSetObserver) {
 
-
         }
 
         @Override
@@ -133,22 +111,17 @@ public class StockFragment extends Fragment {
 
         @Override
         public boolean isEnabled(int i) {
-            return false;
+            return true;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return itemList.size();
         }
 
         @Override
         public Object getItem(int i) {
-            if (i == 0) {
-                return new String("tomato");
-            } else if (i==1) {
-                return new String ("onion");
-            }
-            return null;
+            return itemList.get(i);
         }
 
         @Override
@@ -163,8 +136,9 @@ public class StockFragment extends Fragment {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            CheckBox grocery = new CheckBox(getContext());
-            grocery.setText((String) getItem(i));
+            StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
+            TextView grocery = new TextView(getContext());
+            grocery.setText(item.name + item.quantity);
             return grocery;
         }
     }

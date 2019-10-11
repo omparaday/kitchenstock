@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
             Fragment fragment = new StockFragment();
             Bundle args = new Bundle();
             // Our object is just an integer :-P
-            args.putInt(StockFragment.ARG_OBJECT, i + 1);
+            args.putInt(StockFragment.ARG_OBJECT, i);
             fragment.setArguments(args);
             return fragment;
         }

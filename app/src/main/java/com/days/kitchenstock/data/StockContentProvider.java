@@ -37,16 +37,16 @@ public class StockContentProvider extends ContentProvider {
 
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "Stock";
-    static final String TABLE_NAME = "items";
+    static final String TABLE_NAME = "new_item";
     static final int DATABASE_VERSION = 1;
     static final String CREATE_DB_TABLE =
             " CREATE TABLE " + TABLE_NAME +
                     " (" + NAME + " TEXT PRIMARY KEY NOT NULL, " +
-                    TYPE + " TEXT NOT NULL," +
-                    STATUS + " TEXT NOT NULL," +
+                    TYPE + " INTEGER DEFAULT 0," +
+                    STATUS + " INTEGER DEFAULT 0," +
                     EXPIRY + " DATETIME," +
                     PURCHASE_DATE + " DATETIME," +
-                    QUANTITY + " INTEGER DEFAULT 0," +
+                    QUANTITY + " TEXT," +
                     AUTO_OUT_OF_STOCK + " INTEGER DEFAULT 0);";
 
     /**
