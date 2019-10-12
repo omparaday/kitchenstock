@@ -21,34 +21,25 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link StockFragment.OnFragmentInteractionListener} interface
+ * {@link ShoppingFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class StockFragment extends Fragment {
+public class ShoppingFragment extends Fragment {
 
-    private ItemStockAdapter mInStockAdapter;
-    private ItemStockAdapter mOutOfStockAdapter;
-    private ListView inStock;
-    private ListView outOfStock;
-
-    public static final String LIST_TYPE_PARAM = "listType";
-
-    // TODO: Rename and change types of parameters
-    private StockContentHelper.ItemType itemType;
+    private ItemStockAdapter mToBuyAdapter;
+    private ItemStockAdapter mPurchaedTodayAdapter;
+    private ListView toBuyList;
+    private ListView purchasedTodayList;
 
     private OnFragmentInteractionListener mListener;
 
-    public StockFragment() {
+    public ShoppingFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            int listType = getArguments().getInt(LIST_TYPE_PARAM);
-            itemType = StockContentHelper.ItemType.values()[listType];
-        }
     }
 
     @Override
@@ -60,28 +51,28 @@ public class StockFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stock, container, false);
+        return inflater.inflate(R.layout.shopping_fragment, container, false);
     }
     @Override
     public void onViewCreated( View view,  Bundle savedInstanceState) {
         Bundle args = getArguments();
-        inStock = view.findViewById(R.id.in_stock);
-        mInStockAdapter = new ItemStockAdapter(itemType, true);
-        inStock.setAdapter(mInStockAdapter);
-        outOfStock = view.findViewById(R.id.out_of_stock);
-        mOutOfStockAdapter = new ItemStockAdapter(itemType, false);
-        outOfStock.setAdapter(mOutOfStockAdapter);
+        toBuyList = view.findViewById(R.id.to_buy);
+        mToBuyAdapter = new ItemStockAdapter(false);
+        toBuyList.setAdapter(mToBuyAdapter);
+        purchasedTodayList = view.findViewById(R.id.purchased_today);
+        mPurchaedTodayAdapter = new ItemStockAdapter(true);
+        purchasedTodayList.setAdapter(mPurchaedTodayAdapter);
     }
 
     private class ItemStockAdapter implements ListAdapter {
         private StockContentHelper.ItemType type;
-        private boolean isInStock;
+        private boolean purchasedToday;
         private List<StockContentHelper.Item> itemList;
 
-        ItemStockAdapter(StockContentHelper.ItemType type, boolean isInStock) {
+        ItemStockAdapter(boolean purchasedToday) {
             this.type = type;
-            this.isInStock = isInStock;
-            itemList = StockContentHelper.queryItems(getContext(), type, isInStock);
+            this.purchasedToday = purchasedToday;
+            itemList = StockContentHelper.queryShoppingItems(getContext(), purchasedToday);
         }
 
         @Override

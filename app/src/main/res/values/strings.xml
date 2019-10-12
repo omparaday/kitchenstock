@@ -14,5 +14,6 @@
     <string name="auto_move_to_out_of_stock">Automatically Move To Out Of Stock (such as Milk which you want to buy every day)</string>
     <string name="quantity">Quantity</string>
     <string name="to_buy">To Buy</string>
+    <string name="purchased_today">Purchased Today</string>
     <string name="add_item">Add Item</string>
 </resources>

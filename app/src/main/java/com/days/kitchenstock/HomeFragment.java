@@ -9,10 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.days.kitchenstock.data.StockContentHelper;
-import com.days.kitchenstock.data.StockContentProvider;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
@@ -42,10 +40,13 @@ public class HomeFragment extends Fragment {
 
         @Override
         public Fragment getItem(int i) {
+            if (i == 3) {
+                return new ShoppingFragment();
+            }
             Fragment fragment = new StockFragment();
             Bundle args = new Bundle();
             // Our object is just an integer :-P
-            args.putInt(StockFragment.ARG_OBJECT, i);
+            args.putInt(StockFragment.LIST_TYPE_PARAM, i);
             fragment.setArguments(args);
             return fragment;
         }
