@@ -1,7 +1,10 @@
 <resources>
 
+    <style name="MyTheme" parent="Theme.Design.Light">
+        <item name="buttonStyle">@style/Widget.AppCompat.Button.Borderless</item>
+    </style>
 
-    <style name="NoActionBar" parent="Theme.Design.Light">
+    <style name="NoActionBar" parent="MyTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

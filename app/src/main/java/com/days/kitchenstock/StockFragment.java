@@ -2,7 +2,6 @@ package com.days.kitchenstock;
 
 import android.content.Context;
 import android.database.ContentObserver;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,8 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,8 +34,8 @@ public class StockFragment extends Fragment {
 
     private ItemStockAdapter mInStockAdapter;
     private ItemStockAdapter mOutOfStockAdapter;
-    private ListView inStock;
-    private ListView outOfStock;
+    private ListView mInStockListView;
+    private ListView mOutOfStockListView;
 
     public static final String LIST_TYPE_PARAM = "listType";
 
@@ -78,8 +77,8 @@ public class StockFragment extends Fragment {
     @Override
     public void onViewCreated( View view,  Bundle savedInstanceState) {
         Bundle args = getArguments();
-        inStock = view.findViewById(R.id.in_stock);
-        outOfStock = view.findViewById(R.id.out_of_stock);
+        mInStockListView = view.findViewById(R.id.in_stock);
+        mOutOfStockListView = view.findViewById(R.id.out_of_stock);
         updateLists();
 
     }
@@ -101,10 +100,10 @@ public class StockFragment extends Fragment {
     private void updateLists() {
         mInStockList = fetchList(true);
         mInStockAdapter = new ItemStockAdapter(getContext(), mInStockList);
-        inStock.setAdapter(mInStockAdapter);
+        mInStockListView.setAdapter(mInStockAdapter);
         mOutOfStockList = fetchList(false);
         mOutOfStockAdapter = new ItemStockAdapter(getContext(), mOutOfStockList);
-        outOfStock.setAdapter(mOutOfStockAdapter);
+        mOutOfStockListView.setAdapter(mOutOfStockAdapter);
     }
 
     private ArrayList<StockContentHelper.Item> fetchList(boolean isInStock) {
@@ -121,19 +120,29 @@ public class StockFragment extends Fragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
             view = getLayoutInflater().inflate(R.layout.list_item, null);
             TextView name = view.findViewById(R.id.item_name);
             name.setText(item.name);
             TextView quantity = view.findViewById(R.id.quantity);
             quantity.setText(item.quantity);
-            TextView status = view.findViewById(R.id.status);
-            status.setText(item.getStatusString(getContext()));
-            TextView expiry = view.findViewById(R.id.expiry);
-            if (item.expiry != null) {
-                expiry.setText(StockContentHelper.DATE_FORMATTER.format(item.expiry));
+            if (item.status == StockContentHelper.ItemStatus.TO_BUY) {
+                TextView status = view.findViewById(R.id.status);
+                status.setText(item.getStatusString(getContext()));
             }
+            if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
+                TextView expiry = view.findViewById(R.id.expiry);
+                if (item.expiry != null) {
+                    expiry.setText(StockContentHelper.DATE_FORMATTER.format(item.expiry));
+                }
+            }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new UpdateItemDialog(getContext(), getItem(i)).show();
+                }
+            });
             return view;
         }
     }

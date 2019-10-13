@@ -22,7 +22,7 @@ public class StockContentHelper {
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 
     public enum ItemType {
-        FRESH(), SHORT_TERM(), LONG_TERM(), MISC();
+        FRESH(), SHORT_TERM(), LONG_TERM();
         private final int value;
         private ItemType() {
             value = ordinal();
@@ -94,20 +94,20 @@ public class StockContentHelper {
                 StockContentProvider.CONTENT_URI, values);
     }
 
-    public static void updateItem (Context context, Item item) {
-        SimpleDateFormat formatter = DATE_FORMATTER;
+    public static void updateItem (Context context, Item item, String oldName) {
         ContentValues values = new ContentValues();
         values.put(StockContentProvider.NAME, item.name);
         values.put(StockContentProvider.TYPE, item.type.getValue());
         values.put(StockContentProvider.STATUS, item.status.getValue());
-        values.put(StockContentProvider.EXPIRY, formatter.format(item.expiry));
-        values.put(StockContentProvider.PURCHASE_DATE, formatter.format(item.purchaseDate));
+        values.put(StockContentProvider.EXPIRY, item.expiry == null ? null : DATE_FORMATTER.format(item.expiry));
+        values.put(StockContentProvider.PURCHASE_DATE, item.purchaseDate == null ? null : DATE_FORMATTER.format(item.purchaseDate));
         values.put(StockContentProvider.QUANTITY, item.quantity);
         values.put(StockContentProvider.AUTO_OUT_OF_STOCK, item.autoOutOfStock);
+
         String[] args = {item.name};
 
         context.getContentResolver().update(
-                StockContentProvider.CONTENT_URI, values,  StockContentProvider.NAME + "=?" , args);
+                StockContentProvider.CONTENT_URI, values,  StockContentProvider.NAME + "='" + oldName +"'", null);
     }
 
     public static void deleteItem (Context context, String name) {
@@ -135,7 +135,6 @@ public class StockContentHelper {
             item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
             item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
             itemArrayList.add(item);
-            Log.println(Log.INFO, "omprak queryAllItems", item.toString());
             if (cursor.isLast()) {
                 break;
             }
@@ -146,16 +145,16 @@ public class StockContentHelper {
     }
 
     public static ArrayList<Item> queryItems (Context context, ItemType type, boolean isInStock) {
-        Log.println(Log.INFO, "omprak queryItems", "" + type + isInStock + new Exception().getStackTrace().toString());
-        String selection = null;
+        String selection,sortOrder = null;
         if (isInStock) {
             selection = StockContentProvider.TYPE + "="+ type.value +" AND " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
         } else {
             selection = StockContentProvider.TYPE + "=" + type.value + " AND NOT " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
         }
+        sortOrder = StockContentProvider.NAME + " ASC";
         ArrayList<Item> itemArrayList = new ArrayList<>();
         try {
-            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, sortOrder);
             if (cursor.moveToFirst()) {
                 do {
                     Item item = new Item();
@@ -179,7 +178,6 @@ public class StockContentHelper {
                     item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
                     item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
                     itemArrayList.add(item);
-                    Log.println(Log.INFO, "omprak queryItems", item.toString());
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -190,17 +188,18 @@ public class StockContentHelper {
     }
 
     public static ArrayList<Item> queryShoppingItems (Context context, boolean purchasedToday) {
-        String selection = null;
+        String selection, sortOrder = null;
         if (purchasedToday) {
             selection = StockContentProvider.STATUS + "="+ ItemStatus.IN_STOCK.getValue() +
                     " AND " + StockContentProvider.PURCHASE_DATE + "='" + DATE_FORMATTER.format(Calendar.getInstance().getTime()) + "'";
+
         } else {
             selection = StockContentProvider.STATUS + "=" + ItemStatus.TO_BUY.getValue();
         }
-        Log.println(Log.INFO, "omprak queryShop", selection + purchasedToday + new Exception().getStackTrace().toString());
+        sortOrder = StockContentProvider.NAME + " ASC";
         ArrayList<Item> itemArrayList = new ArrayList<>();
         try {
-            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, sortOrder);
             SimpleDateFormat formatter = DATE_FORMATTER;
             if (cursor.moveToFirst()) {
                 do {
@@ -225,7 +224,6 @@ public class StockContentHelper {
                     item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
                     item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
                     itemArrayList.add(item);
-                    Log.println(Log.INFO, "omprak queryShop", item.toString());
                 } while (cursor.moveToNext());
             }
         } catch (SQLException e) {

@@ -107,19 +107,23 @@ public class ShoppingFragment extends Fragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
             view = getLayoutInflater().inflate(R.layout.list_item, null);
             TextView name = view.findViewById(R.id.item_name);
             name.setText(item.name);
             TextView quantity = view.findViewById(R.id.quantity);
             quantity.setText(item.quantity);
-            TextView status = view.findViewById(R.id.status);
-            status.setText(item.getStatusString(getContext()));
             TextView expiry = view.findViewById(R.id.expiry);
             if (item.expiry != null) {
                 expiry.setText(StockContentHelper.DATE_FORMATTER.format(item.expiry));
             }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new UpdateItemDialog(getContext(), getItem(i)).show();
+                }
+            });
             return view;
         }
     }

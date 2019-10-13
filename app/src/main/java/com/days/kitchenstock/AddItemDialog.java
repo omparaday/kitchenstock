@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,16 @@ public class AddItemDialog extends AlertDialog {
             }
 
         };
+        mExpiry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    new DatePickerDialog(context, datePickerListener, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            }
+        });
         mExpiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +82,13 @@ public class AddItemDialog extends AlertDialog {
                 }
             };
         });
+        ImageButton close = view.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
         setCancelable(false);
         setupDialogButtons(context);
     }
@@ -82,14 +100,7 @@ public class AddItemDialog extends AlertDialog {
                 addItem();
             }
         };
-        mCancelListener = new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                cancel();
-            }
-        };
         setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.add_item), mAddButtonListener);
-        setButton(AlertDialog.BUTTON_NEGATIVE, context.getResources().getString(android.R.string.cancel), mCancelListener);
     }
 
     private void addItem() {

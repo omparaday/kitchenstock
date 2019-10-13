@@ -29,6 +29,7 @@ public class HomeFragment extends Fragment {
         demoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getChildFragmentManager());
         ViewPager pager = view.findViewById(R.id.pager);
         pager.setAdapter(demoCollectionPagerAdapter);
+        pager.setCurrentItem(3);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
     }
@@ -59,6 +60,9 @@ public class HomeFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             String title = getString(R.string.shopping_list);
+            if (position == 3) {
+                return title;
+            }
             StockContentHelper.ItemType type = StockContentHelper.ItemType.values()[position];
             switch (type) {
                 case FRESH:
