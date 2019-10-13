@@ -156,7 +156,7 @@ public class UpdateItemDialog extends AlertDialog {
             @Override
             public void onClick(View view) {
                 mItem.status = StockContentHelper.ItemStatus.IN_STOCK;
-                mItem.purchaseDate = myCalendar.getTime();
+                mItem.purchaseDate = Calendar.getInstance().getTime();
                 try {
                     mItem.expiry = StockContentHelper.DATE_FORMATTER.parse(mExpiry.getText().toString());
                 } catch (ParseException e) {
