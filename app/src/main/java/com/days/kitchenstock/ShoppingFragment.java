@@ -1,20 +1,25 @@
 package com.days.kitchenstock;
 
-import android.database.DataSetObserver;
+import android.content.Context;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.days.kitchenstock.data.StockContentHelper;
+import com.days.kitchenstock.data.StockContentProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,11 +32,14 @@ import java.util.List;
 public class ShoppingFragment extends Fragment {
 
     private ItemStockAdapter mToBuyAdapter;
-    private ItemStockAdapter mPurchaedTodayAdapter;
-    private ListView toBuyList;
-    private ListView purchasedTodayList;
+    private ItemStockAdapter mPurchasedTodayAdapter;
+    private ListView mTooBuyListView;
+    private ListView mPurchasedTodayListView;
 
     private OnFragmentInteractionListener mListener;
+    private ArrayList<StockContentHelper.Item> mToBuyList;
+    private ArrayList<StockContentHelper.Item> mPurchasedTodayList;
+    private ContentObserver mObserver;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -40,11 +48,26 @@ public class ShoppingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mObserver = new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                super.onChange(selfChange);
+                Log.println(Log.INFO, "omprak Shopping CO", "self " + selfChange);
+                updateLists();
+            }
+        };
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
+        getContext().getContentResolver().registerContentObserver(StockContentProvider.CONTENT_URI, true, mObserver);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
     }
 
     @Override
@@ -56,86 +79,48 @@ public class ShoppingFragment extends Fragment {
     @Override
     public void onViewCreated( View view,  Bundle savedInstanceState) {
         Bundle args = getArguments();
-        toBuyList = view.findViewById(R.id.to_buy);
-        mToBuyAdapter = new ItemStockAdapter(false);
-        toBuyList.setAdapter(mToBuyAdapter);
-        purchasedTodayList = view.findViewById(R.id.purchased_today);
-        mPurchaedTodayAdapter = new ItemStockAdapter(true);
-        purchasedTodayList.setAdapter(mPurchaedTodayAdapter);
+        mTooBuyListView = view.findViewById(R.id.to_buy);
+        mPurchasedTodayListView = view.findViewById(R.id.purchased_today);
+        updateLists();
     }
 
-    private class ItemStockAdapter implements ListAdapter {
+    private void updateLists() {
+        mToBuyList = fetchList(false);
+        mToBuyAdapter = new ItemStockAdapter(getActivity(), mToBuyList);
+        mTooBuyListView.setAdapter(mToBuyAdapter);
+        mPurchasedTodayList = fetchList(true);
+        mPurchasedTodayAdapter = new ItemStockAdapter(getActivity(), mPurchasedTodayList);
+        mPurchasedTodayListView.setAdapter(mPurchasedTodayAdapter);
+    }
+
+    private ArrayList<StockContentHelper.Item> fetchList(boolean purchasedToday) {
+        return StockContentHelper.queryShoppingItems(getContext(), purchasedToday);
+    }
+
+    private class ItemStockAdapter extends ArrayAdapter<StockContentHelper.Item> {
         private StockContentHelper.ItemType type;
-        private boolean purchasedToday;
+        private boolean isInStock;
         private List<StockContentHelper.Item> itemList;
 
-        ItemStockAdapter(boolean purchasedToday) {
-            this.type = type;
-            this.purchasedToday = purchasedToday;
-            itemList = StockContentHelper.queryShoppingItems(getContext(), purchasedToday);
-        }
-
-        @Override
-        public boolean areAllItemsEnabled() {
-            return true;
-        }
-
-        @Override
-        public int getItemViewType(int i) {
-            return 1;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @Override
-        public void registerDataSetObserver(DataSetObserver dataSetObserver) {
-
-        }
-
-        @Override
-        public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-
-        }
-
-        @Override
-        public boolean isEnabled(int i) {
-            return true;
-        }
-
-        @Override
-        public int getCount() {
-            return itemList.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return itemList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return false;
+        public ItemStockAdapter(Context context, ArrayList<StockContentHelper.Item> list) {
+            super(context, 0, list);
         }
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
-            TextView grocery = new TextView(getContext());
-            grocery.setText(item.name + item.quantity);
-            return grocery;
+            view = getLayoutInflater().inflate(R.layout.list_item, null);
+            TextView name = view.findViewById(R.id.item_name);
+            name.setText(item.name);
+            TextView quantity = view.findViewById(R.id.quantity);
+            quantity.setText(item.quantity);
+            TextView status = view.findViewById(R.id.status);
+            status.setText(item.getStatusString(getContext()));
+            TextView expiry = view.findViewById(R.id.expiry);
+            if (item.expiry != null) {
+                expiry.setText(StockContentHelper.DATE_FORMATTER.format(item.expiry));
+            }
+            return view;
         }
     }
 

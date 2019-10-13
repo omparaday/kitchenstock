@@ -15,6 +15,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.days.kitchenstock.R;
+
 public class StockContentHelper {
 
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
@@ -65,6 +67,17 @@ public class StockContentHelper {
             return this;
         }
 
+        public String getStatusString(Context context) {
+            switch (status) {
+                case TO_BUY:
+                    return context.getString(R.string.to_buy);
+                case IN_STOCK:
+                    return context.getString(R.string.in_stock);
+                case OUT_OF_STOCK:
+                    return context.getString(R.string.out_of_stock);
+            }
+            return null;
+        }
     }
 
     public static void addItem (Context context, Item item) {
@@ -143,33 +156,32 @@ public class StockContentHelper {
         ArrayList<Item> itemArrayList = new ArrayList<>();
         try {
             Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
-            cursor.moveToFirst();
-            SimpleDateFormat formatter = DATE_FORMATTER;
-            do {
-                Item item = new Item();
-                item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
-                item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
-                item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
-                try {
-                    item.expiry = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
-                } catch (ParseException e) {
-                    item.expiry = null;
-                } catch (NullPointerException e) {
-                    item.expiry = null;
-                }
-                try {
-                    item.purchaseDate = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
-                } catch (ParseException e) {
-                    item.purchaseDate = null;
-                } catch (NullPointerException e) {
-                    item.purchaseDate = null;
-                }
-                item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
-                item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
-                itemArrayList.add(item);
-                Log.println(Log.INFO, "omprak queryItems", item.toString());
-                cursor.moveToNext();
-            } while (!cursor.isLast());
+            if (cursor.moveToFirst()) {
+                do {
+                    Item item = new Item();
+                    item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
+                    item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
+                    item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
+                    try {
+                        item.expiry = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
+                    } catch (ParseException e) {
+                        item.expiry = null;
+                    } catch (NullPointerException e) {
+                        item.expiry = null;
+                    }
+                    try {
+                        item.purchaseDate = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
+                    } catch (ParseException e) {
+                        item.purchaseDate = null;
+                    } catch (NullPointerException e) {
+                        item.purchaseDate = null;
+                    }
+                    item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
+                    item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
+                    itemArrayList.add(item);
+                    Log.println(Log.INFO, "omprak queryItems", item.toString());
+                } while (cursor.moveToNext());
+            }
             cursor.close();
         } catch (Exception e) {
 
@@ -189,38 +201,33 @@ public class StockContentHelper {
         ArrayList<Item> itemArrayList = new ArrayList<>();
         try {
             Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
-            cursor.moveToFirst();
             SimpleDateFormat formatter = DATE_FORMATTER;
-            if (cursor.getCount() == 0) {
-                Log.println(Log.INFO, "omprak shop", "no items");
-                cursor.close();
-                return itemArrayList;
+            if (cursor.moveToFirst()) {
+                do {
+                    Item item = new Item();
+                    item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
+                    item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
+                    item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
+                    try {
+                        item.expiry = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
+                    } catch (ParseException e) {
+                        item.expiry = null;
+                    } catch (NullPointerException e) {
+                        item.expiry = null;
+                    }
+                    try {
+                        item.purchaseDate = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
+                    } catch (ParseException e) {
+                        item.purchaseDate = null;
+                    } catch (NullPointerException e) {
+                        item.purchaseDate = null;
+                    }
+                    item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
+                    item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
+                    itemArrayList.add(item);
+                    Log.println(Log.INFO, "omprak queryShop", item.toString());
+                } while (cursor.moveToNext());
             }
-            do {
-                Item item = new Item();
-                item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
-                item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
-                item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
-                try {
-                    item.expiry = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
-                } catch (ParseException e) {
-                    item.expiry = null;
-                } catch (NullPointerException e) {
-                    item.expiry = null;
-                }
-                try {
-                    item.purchaseDate = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
-                } catch (ParseException e) {
-                    item.purchaseDate = null;
-                } catch (NullPointerException e) {
-                    item.purchaseDate = null;
-                }
-                item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
-                item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
-                itemArrayList.add(item);
-                Log.println(Log.INFO, "omprak queryShop", item.toString());
-                cursor.moveToNext();
-            } while (!cursor.isLast());
         } catch (SQLException e) {
 
         }

@@ -19,7 +19,7 @@ import android.net.Uri;
 public class StockContentProvider extends ContentProvider {
     static final String PROVIDER_NAME = "com.days.kitchenstock.data.StockContentProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/items";
-    static final Uri CONTENT_URI = Uri.parse(URL);
+    public static final Uri CONTENT_URI = Uri.parse(URL);
 
     static final String NAME = "name";
     static final String TYPE = "type";
