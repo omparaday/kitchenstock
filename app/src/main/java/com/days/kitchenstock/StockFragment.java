@@ -24,6 +24,7 @@ import com.days.kitchenstock.data.StockContentProvider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -120,6 +121,7 @@ public class StockFragment extends Fragment {
 
     private void updateLists() {
         mInStockList = fetchList(true);
+        Collections.sort(mInStockList);
         mInStockAdapter = new ItemStockAdapter(getContext(), mInStockList);
         mInStockListView.setAdapter(mInStockAdapter);
         mOutOfStockList = fetchList(false);
@@ -158,13 +160,12 @@ public class StockFragment extends Fragment {
                     Date today = Calendar.getInstance().getTime();
                     if (item.expiry.before(today)) {
                         status.setText(R.string.expired);
-                        view.setBackgroundColor(Color.parseColor("#ffff4444"));
+                        status.setTextColor(Color.parseColor("#ffcc0000"));
                     } else {
                         long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
-                        Log.println(Log.INFO, "omprak", "total " + totalDays);
                         long remainingDays = TimeUnit.DAYS.convert(item.expiry.getTime() - Calendar.getInstance().getTime().getTime(), TimeUnit.MILLISECONDS);
-                        Log.println(Log.INFO, "omprak", "remaining " + remainingDays);
                         if (remainingDays < totalDays /10) {
+                            status.setTextColor(Color.parseColor("#ff990000"));
                             status.setText(R.string.expiring_soon);
                         }
                     }

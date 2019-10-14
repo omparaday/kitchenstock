@@ -27,5 +27,5 @@
     <string name="item_exist_error">Item with same name exists already. Do you wish to modify the existing item?</string>
     <string name="modify_name">No</string>
     <string name="expired">Expired!</string>
-    <string name="expiring_soon">Expiring Soon</string>
+    <string name="expiring_soon">Expiring Soon!</string>
 </resources>

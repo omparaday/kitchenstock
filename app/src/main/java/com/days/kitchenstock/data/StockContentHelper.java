@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 
 import android.database.Cursor;
@@ -47,7 +48,7 @@ public class StockContentHelper {
         }
     }
 
-    public static class Item {
+    public static class Item implements Comparable {
         public String name;
         public ItemType type;
         public ItemStatus status;
@@ -82,6 +83,20 @@ public class StockContentHelper {
                     return context.getString(R.string.out_of_stock);
             }
             return null;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            Date first = this.expiry;
+            Date second = ((Item) o).expiry;
+            if (first == null) {
+                return 1;
+            } else if (second == null) {
+                return -1;
+            } else if (first.after(second)) {
+                return 1;
+            }
+            return -1;
         }
     }
 
@@ -124,39 +139,60 @@ public class StockContentHelper {
         String selection, sortOrder = null;
         if (isInStock) {
             selection = StockContentProvider.TYPE + "=" + type.value + " AND " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+            sortOrder = StockContentProvider.NAME + " ASC";
         } else {
             selection = StockContentProvider.TYPE + "=" + type.value + " AND NOT " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+            sortOrder = StockContentProvider.STATUS + " DESC" + ", " + StockContentProvider.NAME + " ASC";
         }
-        sortOrder = StockContentProvider.NAME + " ASC";
         ArrayList<Item> itemArrayList = new ArrayList<>();
-            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, sortOrder);
-            if (cursor.moveToFirst()) {
-                do {
-                    Item item = new Item();
-                    item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
-                    item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
-                    item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
-                    try {
-                        item.expiry = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
-                    } catch (ParseException e) {
-                        item.expiry = null;
-                    } catch (NullPointerException e) {
-                        item.expiry = null;
-                    }
-                    try {
-                        item.purchaseDate = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
-                    } catch (ParseException e) {
-                        item.purchaseDate = null;
-                    } catch (NullPointerException e) {
-                        item.purchaseDate = null;
-                    }
-                    item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
-                    item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
-                    itemArrayList.add(item);
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, sortOrder);
+        if (cursor.moveToFirst()) {
+            do {
+                Item item = getItemFromCursor(cursor);
+                itemArrayList.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
         return itemArrayList;
+    }
+
+    public static ArrayList<Item> queryAutoAddToShopItemsInStock(Context context) {
+        String selection;
+        selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue() +
+                " AND " + StockContentProvider.AUTO_OUT_OF_STOCK + "=1";
+        ArrayList<Item> itemArrayList = new ArrayList<>();
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Item item = getItemFromCursor(cursor);
+                itemArrayList.add(item);
+            } while (cursor.moveToNext());
+        }
+        return itemArrayList;
+    }
+
+    private static Item getItemFromCursor(Cursor cursor) {
+        Item item = new Item();
+        item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
+        item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
+        item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
+        try {
+            item.expiry = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
+        } catch (ParseException e) {
+            item.expiry = null;
+        } catch (NullPointerException e) {
+            item.expiry = null;
+        }
+        try {
+            item.purchaseDate = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
+        } catch (ParseException e) {
+            item.purchaseDate = null;
+        } catch (NullPointerException e) {
+            item.purchaseDate = null;
+        }
+        item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
+        item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
+        return item;
     }
 
     public static ArrayList<Item> queryShoppingItems(Context context, boolean purchasedToday) {
@@ -170,65 +206,45 @@ public class StockContentHelper {
         }
         sortOrder = StockContentProvider.NAME + " ASC";
         ArrayList<Item> itemArrayList = new ArrayList<>();
-            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, sortOrder);
-            SimpleDateFormat formatter = DATE_FORMATTER;
-            if (cursor.moveToFirst()) {
-                do {
-                    Item item = new Item();
-                    item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
-                    item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
-                    item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
-                    try {
-                        item.expiry = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
-                    } catch (ParseException e) {
-                        item.expiry = null;
-                    } catch (NullPointerException e) {
-                        item.expiry = null;
-                    }
-                    try {
-                        item.purchaseDate = formatter.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
-                    } catch (ParseException e) {
-                        item.purchaseDate = null;
-                    } catch (NullPointerException e) {
-                        item.purchaseDate = null;
-                    }
-                    item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
-                    item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
-                    itemArrayList.add(item);
-                } while (cursor.moveToNext());
-            }
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, sortOrder);
+        if (cursor.moveToFirst()) {
+            do {
+                Item item = getItemFromCursor(cursor);
+                itemArrayList.add(item);
+            } while (cursor.moveToNext());
+        }
         return itemArrayList;
     }
 
 
-    public static Item getItem(Context context, String name) {
+    public static Item queryItem(Context context, String name) {
         String selection = StockContentProvider.NAME + "='" + name + "'";
-            Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
-            if (cursor.moveToFirst()) {
-                Item item = new Item();
-                item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
-                item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
-                item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
-                try {
-                    item.expiry = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
-                } catch (ParseException e) {
-                    item.expiry = null;
-                } catch (NullPointerException e) {
-                    item.expiry = null;
-                }
-                try {
-                    item.purchaseDate = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
-                } catch (ParseException e) {
-                    item.purchaseDate = null;
-                } catch (NullPointerException e) {
-                    item.purchaseDate = null;
-                }
-                item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
-                item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
-                cursor.close();
-                return item;
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+        if (cursor.moveToFirst()) {
+            Item item = new Item();
+            item.name = cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME));
+            item.type = ItemType.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.TYPE))];
+            item.status = ItemStatus.values()[cursor.getInt(cursor.getColumnIndex(StockContentProvider.STATUS))];
+            try {
+                item.expiry = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.EXPIRY)));
+            } catch (ParseException e) {
+                item.expiry = null;
+            } catch (NullPointerException e) {
+                item.expiry = null;
             }
+            try {
+                item.purchaseDate = DATE_FORMATTER.parse(cursor.getString(cursor.getColumnIndex(StockContentProvider.PURCHASE_DATE)));
+            } catch (ParseException e) {
+                item.purchaseDate = null;
+            } catch (NullPointerException e) {
+                item.purchaseDate = null;
+            }
+            item.quantity = cursor.getString(cursor.getColumnIndex(StockContentProvider.QUANTITY));
+            item.autoOutOfStock = cursor.getInt(cursor.getColumnIndex(StockContentProvider.AUTO_OUT_OF_STOCK)) == 1;
             cursor.close();
+            return item;
+        }
+        cursor.close();
         return null;
     }
 }

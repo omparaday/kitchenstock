@@ -48,7 +48,7 @@ public class AddItemDialog extends AlertDialog {
                                     }
                                 }).create().show();
                     } else {
-                        final StockContentHelper.Item oldItem = StockContentHelper.getItem(getContext(), name.trim());
+                        final StockContentHelper.Item oldItem = StockContentHelper.queryItem(getContext(), name.trim());
                         if (oldItem != null) {
                             new AlertDialog.Builder(getContext()).setMessage(R.string.item_exist_error)
                                     .setPositiveButton(android.R.string.yes, new OnClickListener() {

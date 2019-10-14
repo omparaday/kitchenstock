@@ -7,6 +7,10 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.days.kitchenstock.data.StockContentHelper;
+
+import java.util.List;
+
 public class HomeActivity extends AppCompatActivity {
 
     Button mAddItem;
