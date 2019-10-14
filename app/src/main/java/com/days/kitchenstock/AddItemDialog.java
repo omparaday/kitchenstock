@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -33,6 +34,41 @@ public class AddItemDialog extends AlertDialog {
         View view = getLayoutInflater().inflate(R.layout.add_item_dialog, null);
         setView(view);
         mName = view.findViewById(R.id.item_name);
+        mName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String name = mName.getText().toString();
+                    if (TextUtils.isEmpty(name.trim())) {
+                        new AlertDialog.Builder(getContext()).setMessage(R.string.name_empty_error)
+                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        mName.requestFocus();
+                                    }
+                                }).create().show();
+                    } else {
+                        final StockContentHelper.Item oldItem = StockContentHelper.getItem(getContext(), name.trim());
+                        if (oldItem != null) {
+                            new AlertDialog.Builder(getContext()).setMessage(R.string.item_exist_error)
+                                    .setPositiveButton(android.R.string.yes, new OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            new UpdateItemDialog(getContext(), oldItem).show();
+                                            AddItemDialog.this.dismiss();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.modify_name, new OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            mName.requestFocus();
+                                        }
+                                    }).create().show();
+                        }
+                    }
+                }
+            }
+        });
         mQuantity = view.findViewById(R.id.quantity);
         mExpiry = view.findViewById(R.id.expiry);
         mAutoOutOfStock = view.findViewById(R.id.auto_move_to_out_of_stock);
@@ -105,7 +141,7 @@ public class AddItemDialog extends AlertDialog {
 
     private void addItem() {
         StockContentHelper.Item item = new StockContentHelper.Item();
-        item.name = mName.getText().toString();
+        item.name = mName.getText().toString().trim();
         item.quantity = mQuantity.getText().toString();
         item.type = getItemType();
         item.status = getItemStatus();

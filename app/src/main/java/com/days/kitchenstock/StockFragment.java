@@ -2,12 +2,14 @@ package com.days.kitchenstock;
 
 import android.content.Context;
 import android.database.ContentObserver;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,10 @@ import com.days.kitchenstock.data.StockContentHelper;
 import com.days.kitchenstock.data.StockContentProvider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -79,6 +84,22 @@ public class StockFragment extends Fragment {
         Bundle args = getArguments();
         mInStockListView = view.findViewById(R.id.in_stock);
         mOutOfStockListView = view.findViewById(R.id.out_of_stock);
+        TextView inStockListTitle = view.findViewById(R.id.in_stock_list_title);
+        TextView outOfStockListTitle = view.findViewById(R.id.out_of_stock_list_title);
+        View.OnClickListener titleClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mInStockListView.getVisibility() == View.VISIBLE) {
+                    mOutOfStockListView.setVisibility(View.VISIBLE);
+                    mInStockListView.setVisibility(View.GONE);
+                } else {
+                    mInStockListView.setVisibility(View.VISIBLE);
+                    mOutOfStockListView.setVisibility(View.GONE);
+                }
+            }
+        };
+        inStockListTitle.setOnClickListener(titleClickListener);
+        outOfStockListTitle.setOnClickListener(titleClickListener);
         updateLists();
 
     }
@@ -127,14 +148,26 @@ public class StockFragment extends Fragment {
             name.setText(item.name);
             TextView quantity = view.findViewById(R.id.quantity);
             quantity.setText(item.quantity);
+            TextView status = view.findViewById(R.id.status);
+            TextView expiry = view.findViewById(R.id.expiry);
             if (item.status == StockContentHelper.ItemStatus.TO_BUY) {
-                TextView status = view.findViewById(R.id.status);
                 status.setText(item.getStatusString(getContext()));
-            }
-            if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
-                TextView expiry = view.findViewById(R.id.expiry);
+            } else if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
                 if (item.expiry != null) {
-                    expiry.setText(StockContentHelper.DATE_FORMATTER.format(item.expiry));
+                    expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));
+                    Date today = Calendar.getInstance().getTime();
+                    if (item.expiry.before(today)) {
+                        status.setText(R.string.expired);
+                        view.setBackgroundColor(Color.parseColor("#ffff4444"));
+                    } else {
+                        long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
+                        Log.println(Log.INFO, "omprak", "total " + totalDays);
+                        long remainingDays = TimeUnit.DAYS.convert(item.expiry.getTime() - Calendar.getInstance().getTime().getTime(), TimeUnit.MILLISECONDS);
+                        Log.println(Log.INFO, "omprak", "remaining " + remainingDays);
+                        if (remainingDays < totalDays /10) {
+                            status.setText(R.string.expiring_soon);
+                        }
+                    }
                 }
             }
             view.setOnClickListener(new View.OnClickListener() {

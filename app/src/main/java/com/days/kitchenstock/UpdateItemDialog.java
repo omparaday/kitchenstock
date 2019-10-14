@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -43,6 +44,42 @@ public class UpdateItemDialog extends AlertDialog {
         View view = getLayoutInflater().inflate(R.layout.update_item_dialog, null);
         setView(view);
         mName = view.findViewById(R.id.item_name);
+
+        mName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    String name = mName.getText().toString();
+                    if (TextUtils.isEmpty(name.trim())) {
+                        new AlertDialog.Builder(getContext()).setMessage(R.string.name_empty_error)
+                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        mName.requestFocus();
+                                    }
+                                }).create().show();
+                    } else if (!mItem.name.equals(name.trim())) {
+                        final StockContentHelper.Item oldItem = StockContentHelper.getItem(getContext(), name.trim());
+                        if (oldItem != null) {
+                            new AlertDialog.Builder(getContext()).setMessage(R.string.item_exist_error)
+                                    .setPositiveButton(android.R.string.yes, new OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            new UpdateItemDialog(getContext(), oldItem).show();
+                                            UpdateItemDialog.this.dismiss();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.modify_name, new OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            mName.requestFocus();
+                                        }
+                                    }).create().show();
+                        }
+                    }
+                }
+            }
+        });
         mQuantity = view.findViewById(R.id.quantity);
         mExpiry = view.findViewById(R.id.expiry);
         mMoreOptionsCheckBox = view.findViewById(R.id.more_options_check);
@@ -202,7 +239,7 @@ public class UpdateItemDialog extends AlertDialog {
 
     private void updateItem() {
         String oldName = mItem.name;
-        mItem.name = mName.getText().toString();
+        mItem.name = mName.getText().toString().trim();
         mItem.quantity = mQuantity.getText().toString();
         mItem.type = getItemType();
         mItem.autoOutOfStock = mAutoOutOfStock.isChecked();

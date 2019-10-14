@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ public class ShoppingFragment extends Fragment {
 
     private ItemStockAdapter mToBuyAdapter;
     private ItemStockAdapter mPurchasedTodayAdapter;
-    private ListView mTooBuyListView;
+    private ListView mToBuyListView;
     private ListView mPurchasedTodayListView;
 
     private OnFragmentInteractionListener mListener;
@@ -79,15 +80,31 @@ public class ShoppingFragment extends Fragment {
     @Override
     public void onViewCreated( View view,  Bundle savedInstanceState) {
         Bundle args = getArguments();
-        mTooBuyListView = view.findViewById(R.id.to_buy);
+        mToBuyListView = view.findViewById(R.id.to_buy);
         mPurchasedTodayListView = view.findViewById(R.id.purchased_today);
+        TextView shopListTitle = view.findViewById(R.id.shop_list_title);
+        TextView purchasedTodayTitle = view.findViewById(R.id.purchased_today_list_title);
+        View.OnClickListener titleClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mToBuyListView.getVisibility() == View.VISIBLE) {
+                    mPurchasedTodayListView.setVisibility(View.VISIBLE);
+                    mToBuyListView.setVisibility(View.GONE);
+                } else {
+                    mToBuyListView.setVisibility(View.VISIBLE);
+                    mPurchasedTodayListView.setVisibility(View.GONE);
+                }
+            }
+        };
+        shopListTitle.setOnClickListener(titleClickListener);
+        purchasedTodayTitle.setOnClickListener(titleClickListener);
         updateLists();
     }
 
     private void updateLists() {
         mToBuyList = fetchList(false);
         mToBuyAdapter = new ItemStockAdapter(getActivity(), mToBuyList);
-        mTooBuyListView.setAdapter(mToBuyAdapter);
+        mToBuyListView.setAdapter(mToBuyAdapter);
         mPurchasedTodayList = fetchList(true);
         mPurchasedTodayAdapter = new ItemStockAdapter(getActivity(), mPurchasedTodayList);
         mPurchasedTodayListView.setAdapter(mPurchasedTodayAdapter);
@@ -116,7 +133,7 @@ public class ShoppingFragment extends Fragment {
             quantity.setText(item.quantity);
             TextView expiry = view.findViewById(R.id.expiry);
             if (item.expiry != null) {
-                expiry.setText(StockContentHelper.DATE_FORMATTER.format(item.expiry));
+                expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));
             }
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
