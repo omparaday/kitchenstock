@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.days.kitchenstock.data.StockContentHelper;
+import com.days.kitchenstock.data.StockContentProvider;
 
 import java.util.List;
 
@@ -26,5 +27,11 @@ public class HomeActivity extends AppCompatActivity {
                 new AddItemDialog(HomeActivity.this).show();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StockContentHelper.moveStockToShopAutoAddItems(this);
     }
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import android.database.Cursor;
 import android.database.SQLException;
@@ -156,19 +157,76 @@ public class StockContentHelper {
         return itemArrayList;
     }
 
-    public static ArrayList<Item> queryAutoAddToShopItemsInStock(Context context) {
-        String selection;
-        selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue() +
-                " AND " + StockContentProvider.AUTO_OUT_OF_STOCK + "=1";
-        ArrayList<Item> itemArrayList = new ArrayList<>();
+    public static int getExpiredSinceCount(Context context, Date since) {
+        int count = 0;
+        Date today = Calendar.getInstance().getTime();
+        String selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
         Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
         if (cursor.moveToFirst()) {
             do {
                 Item item = getItemFromCursor(cursor);
-                itemArrayList.add(item);
+                if (item.expiry != null && item.expiry.before(today)) {
+                    if (since == null) {
+                        count = count + 1;
+                    } else if (item.expiry.after(since)) {
+                        count = count + 1;
+                    }
+                }
             } while (cursor.moveToNext());
         }
-        return itemArrayList;
+        return count;
+    }
+    public static int getExpiringSoonSinceCount(Context context, Date since) {
+        int count = 0;
+        Date today = Calendar.getInstance().getTime();
+        String selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Item item = getItemFromCursor(cursor);
+                if (item.expiry != null) {
+                    long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
+                    int tenPercentDays = (int)(totalDays / 10);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(item.expiry);
+                    calendar.add(Calendar.DATE, -tenPercentDays);
+                    Date threshold = calendar.getTime();
+                    if ( threshold.before(today)) {
+                        if (since == null) {
+                            count = count + 1;
+                        } else if (threshold.after(since)) {
+                            count = count + 1;
+                        }
+                    }
+                }
+            } while (cursor.moveToNext());
+        }
+        return count;
+    }
+
+    public static boolean moveStockToShopAutoAddItems(Context context) {
+        String selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue() +
+                " AND " + StockContentProvider.AUTO_OUT_OF_STOCK + "=1";
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
+        if (cursor.moveToFirst()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            Date today = calendar.getTime();
+            do {
+                Item item = getItemFromCursor(cursor);
+                if (item.purchaseDate != today) {
+                    item.purchaseDate = null;
+                    item.expiry = null;
+                    item.status = ItemStatus.TO_BUY;
+                    updateItem(context, item, item.name);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return true;
+
     }
 
     private static Item getItemFromCursor(Cursor cursor) {

@@ -9,14 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
-        <receiver
-            android:name=".ScreenOnReceiver"
+        <service
+            android:name=".DailyJobService"
             android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SCREEN_ON" />
-            </intent-filter>
-        </receiver>
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+
+        </service>
+
 
         <provider
             android:name=".data.StockContentProvider"
