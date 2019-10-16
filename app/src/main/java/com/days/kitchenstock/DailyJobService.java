@@ -6,10 +6,11 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
+import android.util.Log;
 
 import com.days.kitchenstock.data.StockContentHelper;
 
-class DailyJobService extends JobService {
+public class DailyJobService extends JobService {
     private static final int JOB_ID = 1;
     private static final long ONE_DAY_INTERVAL = 24 * 60 * 60 * 1000L; // 1 Day
 
@@ -21,6 +22,7 @@ class DailyJobService extends JobService {
         JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, componentName);
         builder.setPeriodic(ONE_DAY_INTERVAL);
         jobScheduler.schedule(builder.build());
+        Log.println(Log.INFO, "omprak", "successful in scheduling job");
     }
 
     public static void cancel(Context context) {
@@ -31,10 +33,12 @@ class DailyJobService extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters params) {
+        Log.println(Log.INFO, "omprak", "starting job");
         StockContentHelper.moveStockToShopAutoAddItems(getApplicationContext());
         int expired = StockContentHelper.getExpiredSinceCount(getApplicationContext(), null);
         int expiringSoon = StockContentHelper.getExpiringSoonSinceCount(getApplicationContext(), null);
-        // false when it is synchronous.
+        Log.println(Log.INFO, "omprak", "Expired " + expired);
+        Log.println(Log.INFO, "omprak", "Expiring soon " + expiringSoon);
         return false;
     }
 

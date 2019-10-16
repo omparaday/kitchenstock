@@ -184,7 +184,7 @@ public class StockContentHelper {
         if (cursor.moveToFirst()) {
             do {
                 Item item = getItemFromCursor(cursor);
-                if (item.expiry != null) {
+                if (item.expiry != null && item.expiry.after(today)) {
                     long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
                     int tenPercentDays = (int)(totalDays / 10);
                     Calendar calendar = Calendar.getInstance();
