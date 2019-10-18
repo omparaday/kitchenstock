@@ -153,6 +153,19 @@ public class StockContentHelper {
         return itemArrayList;
     }
 
+    public static ArrayList<Item> getAllItems(Context context) {
+        ArrayList<Item> itemArrayList = new ArrayList<>();
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Item item = getItemFromCursor(cursor);
+                itemArrayList.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return itemArrayList;
+    }
+
     public static int getExpiredSinceCount(Context context, Date since) {
         int count = 0;
         Date today = Calendar.getInstance().getTime();

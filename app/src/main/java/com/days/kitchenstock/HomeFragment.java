@@ -17,7 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 public class HomeFragment extends Fragment {
 
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
-    private Button mAddItem;
+    private Button mAddItem, mSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -39,6 +39,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 new AddItemDialog(getContext()).show();
+            }
+        });
+        mSearch = view.findViewById(R.id.search_button);
+        mSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SearchItemDialog(getContext()).show();
             }
         });
     }

@@ -32,4 +32,5 @@
     <string name="expiry_notification_title">Stock Expiry Alert</string>
     <string name="search">Search</string>
     <string name="select">Select</string>
+    <string name="name_to_search">Enter item name to search</string>
 </resources>
