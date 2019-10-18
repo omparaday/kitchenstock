@@ -7,14 +7,11 @@
     android:layout_marginRight="8dp"
     android:orientation="vertical"
     tools:context=".HomeActivity">
-    <include layout="@layout/content_main" />
-
     <Button
         android:id="@+id/add_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:text="@string/add_item" />
-
-
+    <include layout="@layout/content_main" />
 </LinearLayout>
