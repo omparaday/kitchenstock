@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ShoppingFragment">
-    <TextView
+    <Button
         android:id="@+id/shop_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:gravity="left"
         android:text="@string/to_buy" />
 
     <ListView
@@ -19,12 +20,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <TextView
+    <Button
         android:id="@+id/purchased_today_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:gravity="left"
         android:text="@string/purchased_today" />
 
     <ListView

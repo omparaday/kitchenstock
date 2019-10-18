@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -163,7 +164,7 @@ public class StockFragment extends Fragment {
                     } else {
                         long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
                         long remainingDays = TimeUnit.DAYS.convert(item.expiry.getTime() - Calendar.getInstance().getTime().getTime(), TimeUnit.MILLISECONDS);
-                        if (remainingDays < totalDays /10) {
+                        if (remainingDays < totalDays / StockContentHelper.EXPIRING_SOON_DIVISOR) {
                             status.setTextColor(Color.parseColor("#ff990000"));
                             status.setText(R.string.expiring_soon);
                         }

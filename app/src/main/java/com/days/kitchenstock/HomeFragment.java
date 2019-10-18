@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.days.kitchenstock.data.StockContentHelper;
 import com.google.android.material.tabs.TabLayout;
@@ -16,6 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 public class HomeFragment extends Fragment {
 
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
+    private Button mAddItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -32,6 +34,13 @@ public class HomeFragment extends Fragment {
         pager.setCurrentItem(3);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
+        mAddItem = view.findViewById(R.id.add_item);
+        mAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AddItemDialog(getContext()).show();
+            }
+        });
     }
 
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {

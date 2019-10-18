@@ -30,4 +30,6 @@
     <string name="expiring_soon">Expiring Soon!</string>
     <string name="expiry_notification_message">"%d items expired; %d items expiring soon"</string>
     <string name="expiry_notification_title">Stock Expiry Alert</string>
+    <string name="search">Search</string>
+    <string name="select">Select</string>
 </resources>

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".HomeActivity">
+    <include layout="@layout/top_button_layout"/>
 
     <androidx.viewpager.widget.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +18,7 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorGravity="stretch"
+            app:tabIndicatorGravity="top"
             app:tabIndicatorColor="#4aa7b5"
             android:layout_gravity="bottom">
         </com.google.android.material.tabs.TabLayout>

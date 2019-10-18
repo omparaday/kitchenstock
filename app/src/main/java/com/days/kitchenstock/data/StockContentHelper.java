@@ -22,6 +22,7 @@ import com.days.kitchenstock.R;
 public class StockContentHelper {
 
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
+    public static final int EXPIRING_SOON_DIVISOR = 4;
 
     public enum ItemType {
         FRESH(), SHORT_TERM(), LONG_TERM();
@@ -66,11 +67,6 @@ public class StockContentHelper {
 
         public Item setName(String nameArg) {
             name = nameArg;
-            return this;
-        }
-
-        public Item setItemType(ItemType itemType) {
-            type = itemType;
             return this;
         }
 
@@ -186,10 +182,10 @@ public class StockContentHelper {
                 Item item = getItemFromCursor(cursor);
                 if (item.expiry != null && item.expiry.after(today)) {
                     long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
-                    int tenPercentDays = (int)(totalDays / 10);
+                    int lastFewDays = (int)(totalDays / EXPIRING_SOON_DIVISOR);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(item.expiry);
-                    calendar.add(Calendar.DATE, -tenPercentDays);
+                    calendar.add(Calendar.DATE, -lastFewDays);
                     Date threshold = calendar.getTime();
                     if ( threshold.before(today)) {
                         if (since == null) {
