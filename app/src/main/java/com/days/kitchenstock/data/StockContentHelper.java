@@ -82,18 +82,40 @@ public class StockContentHelper {
             return null;
         }
 
+        public boolean isExpired() {
+            if (expiry == null) {
+                return false;
+            }
+            return expiry.before(Calendar.getInstance().getTime());
+        }
+
+        public boolean isExpiringSoon() {
+            if (expiry == null) {
+                return false;
+            }
+            long totalDays = TimeUnit.DAYS.convert(expiry.getTime() - purchaseDate.getTime(), TimeUnit.MILLISECONDS);
+            long remainingDays = TimeUnit.DAYS.convert(expiry.getTime() - Calendar.getInstance().getTime().getTime(), TimeUnit.MILLISECONDS);
+            if (remainingDays < totalDays / EXPIRING_SOON_DIVISOR) {
+                return true;
+            }
+            return false;
+        }
+
         @Override
         public int compareTo(Object o) {
-            Date first = this.expiry;
-            Date second = ((Item) o).expiry;
-            if (first == null) {
-                return 1;
-            } else if (second == null) {
+            Item item2 = (Item) o;
+            if (this.isExpired()) {
+                if (item2.isExpired()) return 0;
                 return -1;
-            } else if (first.after(second)) {
+            } else if (item2.isExpired()) {
+                return 1;
+            } else if (this.isExpiringSoon()) {
+                if (item2.isExpiringSoon()) return 0;
+                return -1;
+            } else if (item2.isExpiringSoon()) {
                 return 1;
             }
-            return -1;
+            return this.name.compareTo(item2.name);
         }
     }
 
@@ -136,7 +158,6 @@ public class StockContentHelper {
         String selection, sortOrder = null;
         if (isInStock) {
             selection = StockContentProvider.TYPE + "=" + type.value + " AND " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
-            sortOrder = StockContentProvider.NAME + " ASC";
         } else {
             selection = StockContentProvider.TYPE + "=" + type.value + " AND NOT " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
             sortOrder = StockContentProvider.STATUS + " DESC" + ", " + StockContentProvider.NAME + " ASC";
@@ -155,7 +176,8 @@ public class StockContentHelper {
 
     public static ArrayList<Item> getAllItems(Context context) {
         ArrayList<Item> itemArrayList = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, null, null, null);
+        String sortOrder = StockContentProvider.NAME + " ASC";
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, null, null, sortOrder);
         if (cursor.moveToFirst()) {
             do {
                 Item item = getItemFromCursor(cursor);
@@ -185,6 +207,7 @@ public class StockContentHelper {
         }
         return count;
     }
+
     public static int getExpiringSoonSinceCount(Context context, Date since) {
         int count = 0;
         Date today = Calendar.getInstance().getTime();
@@ -195,12 +218,12 @@ public class StockContentHelper {
                 Item item = getItemFromCursor(cursor);
                 if (item.expiry != null && item.expiry.after(today)) {
                     long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
-                    int lastFewDays = (int)(totalDays / EXPIRING_SOON_DIVISOR);
+                    int lastFewDays = (int) (totalDays / EXPIRING_SOON_DIVISOR);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(item.expiry);
                     calendar.add(Calendar.DATE, -lastFewDays);
                     Date threshold = calendar.getTime();
-                    if ( threshold.before(today)) {
+                    if (threshold.before(today)) {
                         if (since == null) {
                             count = count + 1;
                         } else if (threshold.after(since)) {

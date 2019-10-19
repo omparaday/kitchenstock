@@ -80,8 +80,9 @@ public class StockFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.stock_fragment, container, false);
     }
+
     @Override
-    public void onViewCreated( View view,  Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         Bundle args = getArguments();
         mInStockListView = view.findViewById(R.id.in_stock);
         mOutOfStockListView = view.findViewById(R.id.out_of_stock);
@@ -130,7 +131,7 @@ public class StockFragment extends Fragment {
     }
 
     private ArrayList<StockContentHelper.Item> fetchList(boolean isInStock) {
-         return StockContentHelper.queryItems(getContext(), itemType, isInStock);
+        return StockContentHelper.queryItems(getContext(), itemType, isInStock);
     }
 
     private class ItemStockAdapter extends ArrayAdapter<StockContentHelper.Item> {
@@ -157,17 +158,12 @@ public class StockFragment extends Fragment {
             } else if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
                 if (item.expiry != null) {
                     expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));
-                    Date today = Calendar.getInstance().getTime();
-                    if (item.expiry.before(today)) {
+                    if (item.isExpired()) {
                         status.setText(R.string.expired);
-                        status.setTextColor(Color.parseColor("#ffcc0000"));
-                    } else {
-                        long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
-                        long remainingDays = TimeUnit.DAYS.convert(item.expiry.getTime() - Calendar.getInstance().getTime().getTime(), TimeUnit.MILLISECONDS);
-                        if (remainingDays < totalDays / StockContentHelper.EXPIRING_SOON_DIVISOR) {
-                            status.setTextColor(Color.parseColor("#ff990000"));
-                            status.setText(R.string.expiring_soon);
-                        }
+                        status.setTextColor(getResources().getColor(R.color.expired));
+                    } else if (item.isExpiringSoon()) {
+                        status.setTextColor(getResources().getColor(R.color.expiring_soon));
+                        status.setText(R.string.expiring_soon);
                     }
                 }
             }

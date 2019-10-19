@@ -80,11 +80,21 @@ public class SearchItemDialog extends AlertDialog {
 
     private ArrayList<StockContentHelper.Item> getResults(String searchString) {
         ArrayList<StockContentHelper.Item> results = new ArrayList<>();
+        ArrayList<StockContentHelper.Item> best = new ArrayList<>();
+        ArrayList<StockContentHelper.Item> better = new ArrayList<>();
+        ArrayList<StockContentHelper.Item> rest = new ArrayList<>();
         for (StockContentHelper.Item item : mAllItemsList) {
-            if (item.name.contains(searchString)) {
-                results.add(item);
+            if (item.name.equals(searchString)) {
+                best.add(item);
+            } else if (item.name.startsWith(searchString)) {
+                better.add(item);
+            } else if (item.name.contains(searchString)) {
+                rest.add(item);
             }
         }
+        results.addAll(best);
+        results.addAll(better);
+        results.addAll(rest);
         return results;
     }
 
@@ -107,22 +117,14 @@ public class SearchItemDialog extends AlertDialog {
             quantity.setText(item.quantity);
             TextView status = view.findViewById(R.id.status);
             TextView expiry = view.findViewById(R.id.expiry);
-            if (item.status == StockContentHelper.ItemStatus.TO_BUY) {
-                status.setText(item.getStatusString(getContext()));
-            } else if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
+            status.setText(item.getStatusString(getContext()));
+            if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
                 if (item.expiry != null) {
                     expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));
-                    Date today = Calendar.getInstance().getTime();
-                    if (item.expiry.before(today)) {
-                        status.setText(R.string.expired);
-                        status.setTextColor(Color.parseColor("#ffcc0000"));
-                    } else {
-                        long totalDays = TimeUnit.DAYS.convert(item.expiry.getTime() - item.purchaseDate.getTime(), TimeUnit.MILLISECONDS);
-                        long remainingDays = TimeUnit.DAYS.convert(item.expiry.getTime() - Calendar.getInstance().getTime().getTime(), TimeUnit.MILLISECONDS);
-                        if (remainingDays < totalDays / StockContentHelper.EXPIRING_SOON_DIVISOR) {
-                            status.setTextColor(Color.parseColor("#ff990000"));
-                            status.setText(R.string.expiring_soon);
-                        }
+                    if (item.isExpired()) {
+                        expiry.setTextColor(getContext().getResources().getColor(R.color.expired));
+                    } else if (item.isExpiringSoon()) {
+                        expiry.setTextColor(getContext().getResources().getColor(R.color.expiring_soon));
                     }
                 }
             }
