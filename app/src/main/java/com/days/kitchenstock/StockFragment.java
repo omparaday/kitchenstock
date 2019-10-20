@@ -83,6 +83,7 @@ public class StockFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.println(Log.INFO, "omprak", "on view created stock");
         Bundle args = getArguments();
         mInStockListView = view.findViewById(R.id.in_stock);
         mOutOfStockListView = view.findViewById(R.id.out_of_stock);
@@ -110,7 +111,7 @@ public class StockFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getContext().getContentResolver().registerContentObserver(StockContentProvider.CONTENT_URI, true, mObserver);
-
+        updateLists();
     }
 
     @Override
@@ -121,6 +122,7 @@ public class StockFragment extends Fragment {
     }
 
     private void updateLists() {
+        Log.println(Log.INFO, "omprak", "update list stock fragment");
         mInStockList = fetchList(true);
         Collections.sort(mInStockList);
         mInStockAdapter = new ItemStockAdapter(getContext(), mInStockList);

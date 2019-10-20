@@ -64,6 +64,7 @@ public class ShoppingFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getContext().getContentResolver().registerContentObserver(StockContentProvider.CONTENT_URI, true, mObserver);
+        updateLists();
     }
 
     @Override
@@ -80,6 +81,7 @@ public class ShoppingFragment extends Fragment {
     }
     @Override
     public void onViewCreated( View view,  Bundle savedInstanceState) {
+        Log.println(Log.INFO, "omprak", "on view created shopping");
         Bundle args = getArguments();
         mToBuyListView = view.findViewById(R.id.to_buy);
         mPurchasedTodayListView = view.findViewById(R.id.purchased_today);
@@ -103,6 +105,7 @@ public class ShoppingFragment extends Fragment {
     }
 
     private void updateLists() {
+        Log.println(Log.INFO, "omprak", "update list shopping fragment");
         mToBuyList = fetchList(false);
         mToBuyAdapter = new ItemStockAdapter(getActivity(), mToBuyList);
         mToBuyListView.setAdapter(mToBuyAdapter);
