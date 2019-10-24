@@ -143,9 +143,9 @@ public class ShoppingFragment extends Fragment {
 
 
         final Button deleteSelectedItems = actionButtons.findViewById(R.id.delete);
-        final Button moveToInStockSelectedItems = actionButtons.findViewById(R.id.button2);
+        final Button moveToInStockSelectedItems = actionButtons.findViewById(R.id.button3);
         moveToInStockSelectedItems.setText(R.string.add_to_stock);
-        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button3);
+        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
         moveToOutOfStockSelectedItems.setText(R.string.out_of_stock);
         deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,9 +204,9 @@ public class ShoppingFragment extends Fragment {
 
 
         final Button deleteToBuySelectedItems = actionButtons.findViewById(R.id.delete);
-        final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button2);
+        final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button3);
         moveToShopSelectedItems.setText(R.string.add_to_shop);
-        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button3);
+        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
         moveToOutOfStockSelectedItems.setText(R.string.out_of_stock);
         deleteToBuySelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,7 +281,6 @@ public class ShoppingFragment extends Fragment {
     }
 
     private class ItemStockAdapter extends ArrayAdapter<StockContentHelper.Item> {
-        private StockContentHelper.ItemType type;
         private boolean isEditing;
         private ArrayList<StockContentHelper.Item> itemList;
         private boolean[] checkedValues;

@@ -2,7 +2,6 @@ package com.days.kitchenstock;
 
 import android.content.Context;
 import android.database.ContentObserver;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,11 +24,6 @@ import com.days.kitchenstock.data.StockContentHelper;
 import com.days.kitchenstock.data.StockContentProvider;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -52,6 +48,13 @@ public class StockFragment extends Fragment {
     private ArrayList<StockContentHelper.Item> mInStockList;
     private ArrayList<StockContentHelper.Item> mOutOfStockList;
     private ContentObserver mObserver;
+    private boolean mIsInStockEditing;
+    private boolean mIsOutOfStockEditing;
+    private View.OnClickListener mTitleClickListener;
+    private Button mInStockListTitle;
+    private Button mOutOfStockListTitle;
+    private Button mInStockEditButton;
+    private Button mOutOfStockEditButton;
 
     public StockFragment() {
         // Required empty public constructor
@@ -87,24 +90,182 @@ public class StockFragment extends Fragment {
         Bundle args = getArguments();
         mInStockListView = view.findViewById(R.id.in_stock);
         mOutOfStockListView = view.findViewById(R.id.out_of_stock);
-        TextView inStockListTitle = view.findViewById(R.id.in_stock_list_title);
-        TextView outOfStockListTitle = view.findViewById(R.id.out_of_stock_list_title);
-        View.OnClickListener titleClickListener = new View.OnClickListener() {
+        mTitleClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mInStockListView.getVisibility() == View.VISIBLE) {
                     mOutOfStockListView.setVisibility(View.VISIBLE);
                     mInStockListView.setVisibility(View.GONE);
+                    mInStockEditButton.setVisibility(View.GONE);
+                    mOutOfStockEditButton.setVisibility(View.VISIBLE);
                 } else {
                     mInStockListView.setVisibility(View.VISIBLE);
                     mOutOfStockListView.setVisibility(View.GONE);
+                    mInStockEditButton.setVisibility(View.VISIBLE);
+                    mOutOfStockEditButton.setVisibility(View.GONE);
                 }
             }
         };
-        inStockListTitle.setOnClickListener(titleClickListener);
-        outOfStockListTitle.setOnClickListener(titleClickListener);
+        setupInStockLayoutButtons(view);
+        setupOutOfStockLayoutButtons(view);
         updateLists();
 
+    }
+    private void setupInStockLayoutButtons(View view) {
+        View inStockTitleButtons = view.findViewById(R.id.in_stock_title_buttons);
+        mInStockEditButton = inStockTitleButtons.findViewById(R.id.edit);
+        final Button cancelEditButton =  inStockTitleButtons.findViewById(R.id.cancel);
+        mInStockListTitle = inStockTitleButtons.findViewById(R.id.list_title);
+        final View actionButtons = view.findViewById(R.id.in_stock_action_buttons);
+        mInStockListTitle.setText(R.string.in_stock);
+        mInStockListTitle.setOnClickListener(mTitleClickListener);
+        mInStockEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInStockListTitle.setOnClickListener(null);
+                mInStockEditButton.setVisibility(View.GONE);
+                mOutOfStockListTitle.setVisibility(View.GONE);
+                cancelEditButton.setVisibility(View.VISIBLE);
+                actionButtons.setVisibility(View.VISIBLE);
+                updateInStockList(true);
+                mIsInStockEditing = true;
+            }
+        });
+        cancelEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitEditingInStockList(cancelEditButton, mInStockEditButton, mInStockListTitle, actionButtons);
+            }
+        });
+
+
+        final Button deleteSelectedItems = actionButtons.findViewById(R.id.delete);
+        final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button3);
+        moveToShopSelectedItems.setText(R.string.add_to_shop);
+        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
+        moveToOutOfStockSelectedItems.setText(R.string.out_of_stock);
+        deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
+                StockContentHelper.deleteItemList(getContext(), selectedItems);
+                exitEditingInStockList(cancelEditButton, mInStockEditButton, mInStockListTitle, actionButtons);
+            }
+        });
+        moveToShopSelectedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
+                StockContentHelper.moveToShopList(getContext(), selectedItems);
+                exitEditingInStockList(cancelEditButton, mInStockEditButton, mInStockListTitle, actionButtons);
+            }
+        });
+        moveToOutOfStockSelectedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
+                StockContentHelper.moveToOutOfStockList(getContext(), selectedItems);
+                exitEditingInStockList(cancelEditButton, mInStockEditButton, mInStockListTitle, actionButtons);
+            }
+        });
+    }
+
+
+    private void setupOutOfStockLayoutButtons(View view) {
+        View listTitleButtons = view.findViewById(R.id.out_of_stock_title_buttons);
+        final View actionButtons = view.findViewById(R.id.out_of_stock_action_buttons);
+        mOutOfStockEditButton = listTitleButtons.findViewById(R.id.edit);
+        mOutOfStockEditButton.setVisibility(View.GONE);
+        final Button cancelEditButton =  listTitleButtons.findViewById(R.id.cancel);
+        mOutOfStockListTitle = listTitleButtons.findViewById(R.id.list_title);
+        mOutOfStockListTitle.setText(R.string.out_of_stock);
+        mOutOfStockListTitle.setOnClickListener(mTitleClickListener);
+        mOutOfStockEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOutOfStockListTitle.setOnClickListener(null);
+                mOutOfStockEditButton.setVisibility(View.GONE);
+                mInStockListTitle.setVisibility(View.GONE);
+                cancelEditButton.setVisibility(View.VISIBLE);
+                actionButtons.setVisibility(View.VISIBLE);
+                updateOutOfStockList(true);
+                mIsOutOfStockEditing = true;
+            }
+        });
+        cancelEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitEditingOutOfStockList(cancelEditButton, mOutOfStockEditButton, mOutOfStockListTitle, actionButtons);
+            }
+        });
+
+
+        final Button deleteSelectedItems = actionButtons.findViewById(R.id.delete);
+        final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button3);
+        moveToShopSelectedItems.setText(R.string.add_to_shop);
+        final Button moveToInStockSelectedItems = actionButtons.findViewById(R.id.button2);
+        moveToInStockSelectedItems.setText(R.string.add_to_stock);
+        deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
+                StockContentHelper.deleteItemList(getContext(), selectedItems);
+                exitEditingOutOfStockList(cancelEditButton, mOutOfStockEditButton, mOutOfStockListTitle, actionButtons);
+            }
+        });
+        moveToShopSelectedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
+                StockContentHelper.moveToShopList(getContext(), selectedItems);
+                exitEditingOutOfStockList(cancelEditButton, mOutOfStockEditButton, mOutOfStockListTitle, actionButtons);
+            }
+        });
+        moveToInStockSelectedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
+                StockContentHelper.moveToInStockList(getContext(), selectedItems);
+                exitEditingOutOfStockList(cancelEditButton, mOutOfStockEditButton, mOutOfStockListTitle, actionButtons);
+            }
+        });
+    }
+
+    private void exitEditingInStockList(Button cancelEdit, Button editButton, Button listTitle, View actionButtons) {
+        cancelEdit.setVisibility(View.GONE);
+        actionButtons.setVisibility(View.GONE);
+        editButton.setVisibility(View.VISIBLE);
+        mOutOfStockListTitle.setVisibility(View.VISIBLE);
+        mIsInStockEditing = false;
+        listTitle.setOnClickListener(mTitleClickListener);
+        updateInStockList(false);
+    }
+
+    private void exitEditingOutOfStockList(Button cancelEdit, Button editButton, Button listTitle, View actionButtons) {
+        cancelEdit.setVisibility(View.GONE);
+        actionButtons.setVisibility(View.GONE);
+        editButton.setVisibility(View.VISIBLE);
+        mInStockListTitle.setVisibility(View.VISIBLE);
+        mIsOutOfStockEditing = false;
+        listTitle.setOnClickListener(mTitleClickListener);
+        updateOutOfStockList(false);
+    }
+
+
+    private void updateInStockList(boolean editMode) {
+        if (!mIsInStockEditing) {
+            mInStockList = fetchList(true);
+            mInStockAdapter = new ItemStockAdapter(getActivity(), mInStockList, editMode);
+            mInStockListView.setAdapter(mInStockAdapter);
+        }
+    }
+
+    private void updateOutOfStockList(boolean editMode) {
+        if (!mIsOutOfStockEditing) {
+            mOutOfStockList = fetchList(false);
+            mOutOfStockAdapter = new ItemStockAdapter(getActivity(), mOutOfStockList, editMode);
+            mOutOfStockListView.setAdapter(mOutOfStockAdapter);
+        }
     }
 
     @Override
@@ -123,13 +284,8 @@ public class StockFragment extends Fragment {
 
     private void updateLists() {
         Log.println(Log.INFO, "omprak", "update list stock fragment");
-        mInStockList = fetchList(true);
-        Collections.sort(mInStockList);
-        mInStockAdapter = new ItemStockAdapter(getContext(), mInStockList);
-        mInStockListView.setAdapter(mInStockAdapter);
-        mOutOfStockList = fetchList(false);
-        mOutOfStockAdapter = new ItemStockAdapter(getContext(), mOutOfStockList);
-        mOutOfStockListView.setAdapter(mOutOfStockAdapter);
+        updateInStockList(false);
+        updateOutOfStockList(false);
     }
 
     private ArrayList<StockContentHelper.Item> fetchList(boolean isInStock) {
@@ -137,18 +293,36 @@ public class StockFragment extends Fragment {
     }
 
     private class ItemStockAdapter extends ArrayAdapter<StockContentHelper.Item> {
-        private StockContentHelper.ItemType type;
-        private boolean isInStock;
-        private List<StockContentHelper.Item> itemList;
+        private boolean isEditing;
+        private ArrayList<StockContentHelper.Item> itemList;
+        private boolean[] checkedValues;
 
-        public ItemStockAdapter(Context context, ArrayList<StockContentHelper.Item> list) {
+        public ItemStockAdapter(Context context, ArrayList<StockContentHelper.Item> list, boolean isEditing) {
             super(context, R.layout.list_item, list);
+            this.isEditing = isEditing;
+            checkedValues = new boolean[list.size()];
+            itemList = list;
         }
+
+        ArrayList<StockContentHelper.Item> getSelectedItems() {
+            ArrayList<StockContentHelper.Item> selectedItems = new ArrayList<>();
+            for (int i = 0; i < itemList.size(); i++) {
+                if (checkedValues[i]) {
+                    selectedItems.add(itemList.get(i));
+                }
+            }
+            return selectedItems;
+        }
+
 
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
             StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
-            view = getLayoutInflater().inflate(R.layout.list_item, null);
+            if (!isEditing) {
+                view = getLayoutInflater().inflate(R.layout.list_item, null);
+            } else {
+                view = getLayoutInflater().inflate(R.layout.editing_list_item, null);
+            }
             TextView name = view.findViewById(R.id.item_name);
             name.setText(item.name);
             TextView quantity = view.findViewById(R.id.quantity);
@@ -169,12 +343,30 @@ public class StockFragment extends Fragment {
                     }
                 }
             }
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new UpdateItemDialog(getContext(), getItem(i)).show();
-                }
-            });
+            if (!isEditing) {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new UpdateItemDialog(getContext(), getItem(i)).show();
+                    }
+                });
+            } else {
+                final CheckBox checkBox = view.findViewById(R.id.checkbox);
+                checkBox.setTag(i);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        checkedValues[(Integer) compoundButton.getTag()] = b;
+                    }
+                });
+                checkBox.setChecked(checkedValues[i]);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        checkBox.toggle();
+                    }
+                });
+            }
             return view;
         }
     }

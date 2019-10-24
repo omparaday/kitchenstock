@@ -5,29 +5,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".StockFragment">
-    <Button
-        android:id="@+id/in_stock_list_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
-        android:gravity="left"
-        android:text="@string/in_stock" />
-
+    <include
+        android:id="@+id/in_stock_title_buttons"
+        layout="@layout/list_title_buttons_layout" />
     <ListView
         android:id="@+id/in_stock"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <Button
-        android:id="@+id/out_of_stock_list_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
-        android:gravity="left"
-        android:text="@string/out_of_stock" />
+    <include
+        android:id="@+id/in_stock_action_buttons"
+        layout="@layout/action_buttons_layout"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/out_of_stock_title_buttons"
+        layout="@layout/list_title_buttons_layout" />
+
 
     <ListView
         android:id="@+id/out_of_stock"
@@ -35,5 +30,9 @@
         android:visibility="gone"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+    <include
+        android:id="@+id/out_of_stock_action_buttons"
+        layout="@layout/action_buttons_layout"
+        android:visibility="gone" />
 </LinearLayout>
 

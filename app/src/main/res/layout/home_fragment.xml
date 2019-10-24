@@ -20,7 +20,7 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorGravity="top"
+            android:paddingBottom="8dp"
             app:tabIndicatorColor="#4aa7b5"
             android:layout_gravity="bottom">
         </com.google.android.material.tabs.TabLayout>
