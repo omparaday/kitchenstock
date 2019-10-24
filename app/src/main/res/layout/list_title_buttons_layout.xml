@@ -8,12 +8,12 @@
     <Button
         android:id="@+id/list_title"
         android:layout_width="0dp"
-        android:paddingLeft="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_weight="1"
-        android:gravity="left" />
+        android:gravity="left"
+        android:paddingLeft="0dp" />
 
     <Button
         android:id="@+id/edit"
@@ -21,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:paddingRight="0dp"
         android:layout_weight="1"
         android:gravity="right"
+        android:paddingRight="0dp"
         android:text="@string/edit" />
 
     <Button
@@ -32,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:paddingRight="0dp"
         android:layout_weight="1"
         android:gravity="right"
+        android:paddingRight="0dp"
         android:text="@string/cancel"
         android:visibility="gone" />
 </LinearLayout>

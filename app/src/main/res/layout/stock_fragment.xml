@@ -5,14 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".StockFragment">
+
     <include
         android:id="@+id/in_stock_title_buttons"
         layout="@layout/list_title_buttons_layout" />
+
     <ListView
         android:id="@+id/in_stock"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <include
         android:id="@+id/in_stock_action_buttons"
@@ -27,9 +29,10 @@
     <ListView
         android:id="@+id/out_of_stock"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:visibility="gone" />
+
     <include
         android:id="@+id/out_of_stock_action_buttons"
         layout="@layout/action_buttons_layout"

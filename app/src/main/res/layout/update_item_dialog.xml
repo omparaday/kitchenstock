@@ -9,12 +9,12 @@
     android:orientation="vertical">
 
     <ImageButton
+        android:id="@+id/close"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="right"
         android:scaleType="fitXY"
-        android:id="@+id/close"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
     <EditText
         android:id="@+id/item_name"
@@ -47,18 +47,19 @@
         android:inputType="date" />
 
     <CheckBox
+        android:id="@+id/more_options_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/more_options_check"
         android:layout_marginBottom="8dp"
-        android:text="@string/more_options"/>
+        android:text="@string/more_options" />
+
     <LinearLayout
         android:id="@+id/more_options"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RadioGroup
             android:id="@+id/type_group"
@@ -98,39 +99,44 @@
             android:text="@string/auto_move_to_out_of_stock" />
 
         <Button
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/delete"
             android:text="@string/delete_item" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusedByDefault="true"
         android:orientation="horizontal">
+
         <Button
+            android:id="@+id/button_save"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:id="@+id/button_save"
             android:text="@string/save" />
+
         <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
             android:id="@+id/button_move_out"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/out_of_stock" />
+
         <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
             android:id="@+id/button_add_to_stock"
-            android:text="@string/add_to_stock" />
-        <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:text="@string/add_to_stock" />
+
+        <Button
             android:id="@+id/button_add_to_shop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/add_to_shop" />
 
     </LinearLayout>

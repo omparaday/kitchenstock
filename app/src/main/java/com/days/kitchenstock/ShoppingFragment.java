@@ -62,7 +62,6 @@ public class ShoppingFragment extends Fragment {
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
-                Log.println(Log.INFO, "omprak Shopping CO", "self " + selfChange);
                 updateLists();
             }
         };
@@ -85,12 +84,12 @@ public class ShoppingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.shopping_fragment, container, false);
     }
+
     @Override
-    public void onViewCreated( View view,  Bundle savedInstanceState) {
-        Log.println(Log.INFO, "omprak", "on view created shopping");
-        Bundle args = getArguments();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         mToBuyListView = view.findViewById(R.id.to_buy);
         mPurchasedTodayListView = view.findViewById(R.id.purchased_today);
         mTitleClickListener = new View.OnClickListener() {
@@ -117,7 +116,7 @@ public class ShoppingFragment extends Fragment {
     private void setupToBuyLayoutButtons(View view) {
         View toBuyTitleButtons = view.findViewById(R.id.to_buy_title_buttons);
         mToBuyEditButton = toBuyTitleButtons.findViewById(R.id.edit);
-        final Button cancelEditButton =  toBuyTitleButtons.findViewById(R.id.cancel);
+        final Button cancelEditButton = toBuyTitleButtons.findViewById(R.id.cancel);
         mToBuyListTitle = toBuyTitleButtons.findViewById(R.id.list_title);
         final View actionButtons = view.findViewById(R.id.to_buy_action_buttons);
         mToBuyListTitle.setText(R.string.to_buy);
@@ -179,7 +178,7 @@ public class ShoppingFragment extends Fragment {
         final View actionButtons = view.findViewById(R.id.purchased_today_action_buttons);
         mPurchasedTodayEditButton = listTitleButtons.findViewById(R.id.edit);
         mPurchasedTodayEditButton.setVisibility(View.GONE);
-        final Button cancelEditButton =  listTitleButtons.findViewById(R.id.cancel);
+        final Button cancelEditButton = listTitleButtons.findViewById(R.id.cancel);
         mPurchasedTodayListTitle = listTitleButtons.findViewById(R.id.list_title);
         mPurchasedTodayListTitle.setText(R.string.purchased_today);
         mPurchasedTodayListTitle.setOnClickListener(mTitleClickListener);
@@ -271,7 +270,6 @@ public class ShoppingFragment extends Fragment {
     }
 
     private void updateLists() {
-        Log.println(Log.INFO, "omprak", "update list shopping fragment");
         updateToBuyList(false);
         updatePurchasedTodayList(false);
     }

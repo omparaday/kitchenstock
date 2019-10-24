@@ -116,7 +116,9 @@ public class AddItemDialog extends AlertDialog {
                     default:
                         mExpiry.setVisibility(View.GONE);
                 }
-            };
+            }
+
+            ;
         });
         ImageButton close = view.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {

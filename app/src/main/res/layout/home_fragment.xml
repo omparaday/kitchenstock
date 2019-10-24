@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".HomeActivity">
+
     <include
         android:id="@+id/top_button_layout"
-        layout="@layout/top_button_layout"/>
+        layout="@layout/top_button_layout" />
 
-    <androidx.viewpager.widget.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -20,10 +20,9 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:paddingBottom="8dp"
-            app:tabIndicatorColor="#4aa7b5"
-            android:layout_gravity="bottom">
-        </com.google.android.material.tabs.TabLayout>
+            app:tabIndicatorColor="#0066cc"></com.google.android.material.tabs.TabLayout>
 
     </androidx.viewpager.widget.ViewPager>
 

@@ -16,22 +16,24 @@ import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
 
+    public static final int TAB_COUNT = 4;
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
     private Button mAddItem, mSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-                              ViewGroup container,
-                              Bundle savedInstanceState) {
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
     @Override
-    public void onViewCreated( View view,  Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         demoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getChildFragmentManager());
         ViewPager pager = view.findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(TAB_COUNT - 1);
         pager.setAdapter(demoCollectionPagerAdapter);
-        pager.setCurrentItem(3);
+        pager.setCurrentItem(TAB_COUNT - 1);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
         mAddItem = view.findViewById(R.id.add_item);
@@ -57,12 +59,11 @@ public class HomeFragment extends Fragment {
 
         @Override
         public Fragment getItem(int i) {
-            if (i == 3) {
+            if (i == TAB_COUNT - 1) {
                 return new ShoppingFragment();
             }
             Fragment fragment = new StockFragment();
             Bundle args = new Bundle();
-            // Our object is just an integer :-P
             args.putInt(StockFragment.LIST_TYPE_PARAM, i);
             fragment.setArguments(args);
             return fragment;
@@ -70,13 +71,13 @@ public class HomeFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 4;
+            return TAB_COUNT;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             String title = getString(R.string.shopping_list);
-            if (position == 3) {
+            if (position == TAB_COUNT - 1) {
                 return title;
             }
             StockContentHelper.ItemType type = StockContentHelper.ItemType.values()[position];

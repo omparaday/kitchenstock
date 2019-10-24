@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <Button
         android:id="@+id/search_button"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="0dp"
-        android:gravity="left"
-        android:text="@string/search"
-        android:layout_height="wrap_content" />
-    <!--Button
-        android:id="@+id/select_button"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/select"
-        android:layout_weight="1"/-->
+        android:layout_weight="1"
+        android:gravity="left"
+        android:paddingLeft="0dp"
+        android:text="@string/search" />
+
     <Button
         android:id="@+id/add_item"
         android:layout_width="0dp"

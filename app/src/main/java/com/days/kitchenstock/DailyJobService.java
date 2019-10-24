@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class DailyJobService extends JobService {
     public static final int JOB_ID = 5;
-    private static final long ONE_DAY_INTERVAL = 60 * 1000L; // 1 Day
+    private static final long HALF_DAY_INTERVAL = 12 * 60 * 60 * 1000L; // 1 Day
     private static final String LAST_CHECKED = "last_checked";
     public static final String DATE_KEY = "date";
 
@@ -31,9 +31,9 @@ public class DailyJobService extends JobService {
         ComponentName componentName =
                 new ComponentName(context, DailyJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, componentName);
-        builder.setPeriodic(ONE_DAY_INTERVAL);
+        builder.setPeriodic(HALF_DAY_INTERVAL);
         jobScheduler.schedule(builder.build());
-        Log.println(Log.INFO, "omprak", "successful in scheduling job "+ ONE_DAY_INTERVAL);
+        Log.println(Log.INFO, "omprak", "successful in scheduling job "+ HALF_DAY_INTERVAL);
     }
 
     public static void cancel(Context context) {

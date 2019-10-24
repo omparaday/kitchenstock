@@ -24,6 +24,7 @@ import com.days.kitchenstock.data.StockContentHelper;
 import com.days.kitchenstock.data.StockContentProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -71,7 +72,6 @@ public class StockFragment extends Fragment {
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
-                Log.println(Log.INFO, "omprak CO", "self " + selfChange);
                 updateLists();
             }
         };
@@ -80,13 +80,11 @@ public class StockFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.stock_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        Log.println(Log.INFO, "omprak", "on view created stock");
         Bundle args = getArguments();
         mInStockListView = view.findViewById(R.id.in_stock);
         mOutOfStockListView = view.findViewById(R.id.out_of_stock);
@@ -111,10 +109,11 @@ public class StockFragment extends Fragment {
         updateLists();
 
     }
+
     private void setupInStockLayoutButtons(View view) {
         View inStockTitleButtons = view.findViewById(R.id.in_stock_title_buttons);
         mInStockEditButton = inStockTitleButtons.findViewById(R.id.edit);
-        final Button cancelEditButton =  inStockTitleButtons.findViewById(R.id.cancel);
+        final Button cancelEditButton = inStockTitleButtons.findViewById(R.id.cancel);
         mInStockListTitle = inStockTitleButtons.findViewById(R.id.list_title);
         final View actionButtons = view.findViewById(R.id.in_stock_action_buttons);
         mInStockListTitle.setText(R.string.in_stock);
@@ -176,7 +175,7 @@ public class StockFragment extends Fragment {
         final View actionButtons = view.findViewById(R.id.out_of_stock_action_buttons);
         mOutOfStockEditButton = listTitleButtons.findViewById(R.id.edit);
         mOutOfStockEditButton.setVisibility(View.GONE);
-        final Button cancelEditButton =  listTitleButtons.findViewById(R.id.cancel);
+        final Button cancelEditButton = listTitleButtons.findViewById(R.id.cancel);
         mOutOfStockListTitle = listTitleButtons.findViewById(R.id.list_title);
         mOutOfStockListTitle.setText(R.string.out_of_stock);
         mOutOfStockListTitle.setOnClickListener(mTitleClickListener);
@@ -255,6 +254,7 @@ public class StockFragment extends Fragment {
     private void updateInStockList(boolean editMode) {
         if (!mIsInStockEditing) {
             mInStockList = fetchList(true);
+            Collections.sort(mInStockList);
             mInStockAdapter = new ItemStockAdapter(getActivity(), mInStockList, editMode);
             mInStockListView.setAdapter(mInStockAdapter);
         }
@@ -283,7 +283,6 @@ public class StockFragment extends Fragment {
     }
 
     private void updateLists() {
-        Log.println(Log.INFO, "omprak", "update list stock fragment");
         updateInStockList(false);
         updateOutOfStockList(false);
     }

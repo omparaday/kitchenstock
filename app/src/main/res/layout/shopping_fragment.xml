@@ -6,36 +6,36 @@
     android:orientation="vertical"
     tools:context=".ShoppingFragment">
 
-        <include
-            android:id="@+id/to_buy_title_buttons"
-            layout="@layout/list_title_buttons_layout" />
+    <include
+        android:id="@+id/to_buy_title_buttons"
+        layout="@layout/list_title_buttons_layout" />
 
-        <ListView
-            android:id="@+id/to_buy"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <ListView
+        android:id="@+id/to_buy"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-        <include
-            android:id="@+id/to_buy_action_buttons"
-            layout="@layout/action_buttons_layout"
-            android:visibility="gone" />
+    <include
+        android:id="@+id/to_buy_action_buttons"
+        layout="@layout/action_buttons_layout"
+        android:visibility="gone" />
 
 
-        <include
-            android:id="@+id/purchased_today_title_buttons"
-            layout="@layout/list_title_buttons_layout" />
+    <include
+        android:id="@+id/purchased_today_title_buttons"
+        layout="@layout/list_title_buttons_layout" />
 
-        <ListView
-            android:id="@+id/purchased_today"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:visibility="gone" />
+    <ListView
+        android:id="@+id/purchased_today"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
 
-        <include
-            android:id="@+id/purchased_today_action_buttons"
-            layout="@layout/action_buttons_layout"
-            android:visibility="gone" />
+    <include
+        android:id="@+id/purchased_today_action_buttons"
+        layout="@layout/action_buttons_layout"
+        android:visibility="gone" />
 </LinearLayout>
 

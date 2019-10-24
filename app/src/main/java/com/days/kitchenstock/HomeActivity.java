@@ -39,12 +39,16 @@ public class HomeActivity extends AppCompatActivity {
         String lastCheckedString = lastOpenedSharedPref.getString(DATE_KEY, null);
         String todayString = StockContentHelper.DATE_FORMATTER.format(Calendar.getInstance().getTime());
         if (!todayString.equals(lastCheckedString)) {
-            Log.println(Log.INFO, "omprak", "date changed " + todayString + lastCheckedString);
             SharedPreferences.Editor editor = lastOpenedSharedPref.edit();
             editor.putString(DATE_KEY, todayString);
             editor.apply();
             editor.commit();
             StockContentHelper.moveStockToShopAutoAddItems(this);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }
