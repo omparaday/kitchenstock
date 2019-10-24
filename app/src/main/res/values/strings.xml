@@ -18,7 +18,7 @@
     <string name="add_item">Add Item</string>
     <string name="more_options">Show More Options</string>
     <string name="add_to_stock">Add to Stock</string>
-    <string name="move_to_out_of_stock">Move to Out of Stock</string>
+    <string name="move_to_out_of_stock">Out of Stock</string>
     <string name="save">Save</string>
     <string name="add_to_shop">Add to Shop</string>
     <string name="delete_item">Delete Item</string>
@@ -31,6 +31,8 @@
     <string name="expiry_notification_message">"%d items expired; %d items expiring soon"</string>
     <string name="expiry_notification_title">Stock Expiry Alert</string>
     <string name="search">Search</string>
-    <string name="select">Select</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
     <string name="name_to_search">Enter item name to search</string>
+    <string name="delete_selected">Delete</string>
 </resources>

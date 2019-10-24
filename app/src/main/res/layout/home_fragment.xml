@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".HomeActivity">
-    <include layout="@layout/top_button_layout"/>
+    <include
+        android:id="@+id/top_button_layout"
+        layout="@layout/top_button_layout"/>
 
     <androidx.viewpager.widget.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"

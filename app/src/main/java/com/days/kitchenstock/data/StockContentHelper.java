@@ -149,6 +149,38 @@ public class StockContentHelper {
                 StockContentProvider.CONTENT_URI, values, StockContentProvider.NAME + "='" + oldName + "'", null);
     }
 
+    public static void deleteItemList(Context context, ArrayList<Item> items) {
+        for (Item item : items) {
+            deleteItem(context, item.name);
+        }
+    }
+
+    public static void moveToInStockList(Context context, ArrayList<Item> items) {
+        for (Item item : items) {
+            item.status = ItemStatus.IN_STOCK;
+            item.purchaseDate = Calendar.getInstance().getTime();
+            updateItem(context, item, item.name);
+        }
+    }
+
+    public static void moveToOutOfStockList(Context context, ArrayList<Item> items) {
+        for (Item item : items) {
+            item.status = ItemStatus.OUT_OF_STOCK;
+            item.purchaseDate = null;
+            item.expiry = null;
+            updateItem(context, item, item.name);
+        }
+    }
+
+    public static void moveToShopList(Context context, ArrayList<Item> items) {
+        for (Item item : items) {
+            item.purchaseDate = null;
+            item.expiry = null;
+            item.status = ItemStatus.TO_BUY;
+            updateItem(context, item, item.name);
+        }
+    }
+
     public static void deleteItem(Context context, String name) {
         String[] args = {name};
         context.getContentResolver().delete(StockContentProvider.CONTENT_URI, StockContentProvider.NAME + "=?", args);
