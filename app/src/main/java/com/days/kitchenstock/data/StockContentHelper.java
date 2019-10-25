@@ -22,7 +22,7 @@ import com.days.kitchenstock.R;
 public class StockContentHelper {
 
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
-    public static final int EXPIRING_SOON_DIVISOR = 4;
+    public static final int EXPIRING_SOON_DIVISOR = 3;
 
     public enum ItemType {
         FRESH(), SHORT_TERM(), LONG_TERM();

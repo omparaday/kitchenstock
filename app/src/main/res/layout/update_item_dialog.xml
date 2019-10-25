@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:checked="false"
             android:gravity="center_horizontal"
-            android:text="@string/auto_move_to_out_of_stock" />
+            android:text="@string/auto_move_to_shop" />
 
         <Button
             android:id="@+id/delete"
@@ -123,7 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/out_of_stock" />
+            android:text="@string/move_to_out_of_stock" />
 
         <Button
             android:id="@+id/button_add_to_stock"

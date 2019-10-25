@@ -145,7 +145,7 @@ public class ShoppingFragment extends Fragment {
         final Button moveToInStockSelectedItems = actionButtons.findViewById(R.id.button3);
         moveToInStockSelectedItems.setText(R.string.add_to_stock);
         final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
-        moveToOutOfStockSelectedItems.setText(R.string.out_of_stock);
+        moveToOutOfStockSelectedItems.setText(R.string.move_to_out_of_stock);
         deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +206,7 @@ public class ShoppingFragment extends Fragment {
         final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button3);
         moveToShopSelectedItems.setText(R.string.add_to_shop);
         final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
-        moveToOutOfStockSelectedItems.setText(R.string.out_of_stock);
+        moveToOutOfStockSelectedItems.setText(R.string.move_to_out_of_stock);
         deleteToBuySelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

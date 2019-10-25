@@ -2,7 +2,7 @@
 
     <style name="MyTheme" parent="Theme.Design.Light">
         <item name="buttonStyle">@style/MyButtonStyle</item>
-        <item name="colorAccent">#0066cc</item>
+        <item name="colorAccent">@color/keep_blue</item>
 
     </style>
 
@@ -11,7 +11,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="MyButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">#0066cc</item>
+        <item name="android:textColor">@color/keep_blue</item>
     </style>
 
 

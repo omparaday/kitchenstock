@@ -113,6 +113,6 @@
         android:layout_height="wrap_content"
         android:checked="false"
         android:gravity="center_horizontal"
-        android:text="@string/auto_move_to_out_of_stock" />
+        android:text="@string/auto_move_to_shop" />
 
 </LinearLayout>

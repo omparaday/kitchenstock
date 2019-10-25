@@ -142,7 +142,7 @@ public class StockFragment extends Fragment {
         final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button3);
         moveToShopSelectedItems.setText(R.string.add_to_shop);
         final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
-        moveToOutOfStockSelectedItems.setText(R.string.out_of_stock);
+        moveToOutOfStockSelectedItems.setText(R.string.move_to_out_of_stock);
         deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
