@@ -132,7 +132,7 @@ public class UpdateItemDialog extends AlertDialog {
         mFresh = view.findViewById(R.id.fresh);
         mShortTerm = view.findViewById(R.id.short_term);
         mLongTerm = view.findViewById(R.id.long_term);
-        ImageButton close = view.findViewById(R.id.close);
+        Button close = view.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -35,4 +35,5 @@
     <string name="cancel_edit">Cancel Editing</string>
     <string name="name_to_search">Enter item name to search</string>
     <string name="delete_selected">&#x1f5d1; Delete</string>
+    <string name="close_icon">&#x2A09;</string>
 </resources>

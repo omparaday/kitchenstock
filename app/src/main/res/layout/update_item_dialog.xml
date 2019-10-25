@@ -8,13 +8,12 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <ImageButton
+    <Button
         android:id="@+id/close"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="right"
-        android:scaleType="fitXY"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+        android:text="@string/close_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right" />
 
     <EditText
         android:id="@+id/item_name"
