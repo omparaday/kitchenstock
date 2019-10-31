@@ -161,6 +161,7 @@ public class UpdateItemDialog extends AlertDialog {
                 break;
         }
         mAutoOutOfStock.setChecked(mItem.autoOutOfStock);
+        mName.requestFocus();
     }
 
     private void setupDialogButtons(@NonNull Context context, View view) {

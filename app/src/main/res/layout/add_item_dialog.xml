@@ -1,117 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="16dp"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="@string/close_icon" />
-
-    <EditText
-        android:id="@+id/item_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:gravity="center_horizontal"
-        android:hint="@string/name"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/quantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center_horizontal"
-        android:hint="@string/quantity"
-        android:inputType="text" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/expiry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="4dp"
-        android:gravity="center_horizontal"
-        android:hint="@string/expiry"
-        android:inputType="date"
-        android:visibility="gone" />
-
-    <RadioGroup
-        android:id="@+id/type_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/fresh"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/fresh" />
+            android:layout_gravity="right"
+            android:text="@string/close_icon" />
 
-        <RadioButton
-            android:id="@+id/short_term"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/item_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/short_term" />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_horizontal"
+            android:hint="@string/name"
+            android:inputType="text" />
 
-        <RadioButton
-            android:id="@+id/long_term"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/long_term" />
-    </RadioGroup>
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:hint="@string/quantity"
+            android:inputType="text" />
 
-    <RadioGroup
-        android:id="@+id/status_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/shopping"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/expiry"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/shopping_list" />
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_horizontal"
+            android:hint="@string/expiry"
+            android:inputType="date"
+            android:visibility="gone" />
 
-        <RadioButton
-            android:id="@+id/in_stock"
-            android:layout_width="0dp"
+        <RadioGroup
+            android:id="@+id/type_group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/in_stock" />
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/out_of_stock"
-            android:layout_width="0dp"
+            <RadioButton
+                android:id="@+id/fresh"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/fresh" />
+
+            <RadioButton
+                android:id="@+id/short_term"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/short_term" />
+
+            <RadioButton
+                android:id="@+id/long_term"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/long_term" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/status_group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/out_of_stock" />
-    </RadioGroup>
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/auto_move_to_out_of_stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:gravity="center_horizontal"
-        android:text="@string/auto_move_to_shop" />
+            <RadioButton
+                android:id="@+id/shopping"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/shopping_list" />
 
-</LinearLayout>
+            <RadioButton
+                android:id="@+id/in_stock"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/in_stock" />
+
+            <RadioButton
+                android:id="@+id/out_of_stock"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/out_of_stock" />
+        </RadioGroup>
+
+        <CheckBox
+            android:id="@+id/auto_move_to_out_of_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:gravity="center_horizontal"
+            android:text="@string/auto_move_to_shop" />
+
+    </LinearLayout>
+</ScrollView>

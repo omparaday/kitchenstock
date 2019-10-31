@@ -36,6 +36,7 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleInstance"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

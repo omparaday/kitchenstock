@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:paddingBottom="8dp"
-            app:tabIndicatorColor="#0066cc"></com.google.android.material.tabs.TabLayout>
+            app:tabIndicatorColor="@color/keep_blue" />
 
     </androidx.viewpager.widget.ViewPager>
 

@@ -16,6 +16,7 @@
     <string name="to_buy">&#x1F6D2; Shop</string>
     <string name="purchased_today">Purchased Today</string>
     <string name="add_item">&#xFF0B; Add Item</string>
+    <string name="add_button">Add</string>
     <string name="more_options">Show More Options</string>
     <string name="add_to_stock">Add to Stock</string>
     <string name="move_to_out_of_stock">Make Out of Stock</string>

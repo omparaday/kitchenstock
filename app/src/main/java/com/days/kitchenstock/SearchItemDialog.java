@@ -4,14 +4,18 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.ContentObserver;
 import android.graphics.Color;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.days.kitchenstock.data.StockContentHelper;
+import com.days.kitchenstock.data.StockContentProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,7 +41,9 @@ public class SearchItemDialog extends AlertDialog {
 
     private EditText mName;
     private ListView mResultsList;
+    private String mSearchString;
     private ArrayList<StockContentHelper.Item> mAllItemsList;
+    private ContentObserver mObserver;
     private Calendar myCalendar = Calendar.getInstance();
 
     public SearchItemDialog(@NonNull final Context context) {
@@ -44,8 +51,23 @@ public class SearchItemDialog extends AlertDialog {
         View view = getLayoutInflater().inflate(R.layout.search_item_dialog, null);
         setView(view);
         mName = view.findViewById(R.id.item_name);
+        mName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    SearchItemDialog.this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }
+        });
         mResultsList = view.findViewById(R.id.results);
         mAllItemsList = StockContentHelper.getAllItems(context);
+        mObserver = new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                super.onChange(selfChange);
+                updateSearchResults(getContext());
+            }
+        };
         mName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -54,13 +76,8 @@ public class SearchItemDialog extends AlertDialog {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String searchString = charSequence.toString();
-                if (!TextUtils.isEmpty(searchString)) {
-                    ArrayList<StockContentHelper.Item> results = getResults(searchString);
-                    mResultsList.setAdapter(new ItemStockAdapter(context, results));
-                } else {
-                    mResultsList.setAdapter(new ItemStockAdapter(context, new ArrayList<StockContentHelper.Item>()));
-                }
+                mSearchString = charSequence.toString();
+                updateSearchResults(context);
             }
 
             @Override
@@ -68,7 +85,7 @@ public class SearchItemDialog extends AlertDialog {
 
             }
         });
-        ImageButton close = view.findViewById(R.id.close);
+        Button close = view.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +93,29 @@ public class SearchItemDialog extends AlertDialog {
             }
         });
         setCancelable(false);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    private void updateSearchResults(@NonNull Context context) {
+        if (!TextUtils.isEmpty(mSearchString)) {
+            ArrayList<StockContentHelper.Item> results = getResults(mSearchString);
+            mResultsList.setAdapter(new ItemStockAdapter(context, results));
+        } else {
+            mResultsList.setAdapter(new ItemStockAdapter(context, new ArrayList<StockContentHelper.Item>()));
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getContext().getContentResolver().registerContentObserver(StockContentProvider.CONTENT_URI, true, mObserver);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
     }
 
     private ArrayList<StockContentHelper.Item> getResults(String searchString) {

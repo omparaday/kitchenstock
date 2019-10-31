@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
@@ -67,6 +67,8 @@ public class AddItemDialog extends AlertDialog {
                                     }).create().show();
                         }
                     }
+                } else {
+                    AddItemDialog.this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
             }
         });
@@ -139,7 +141,7 @@ public class AddItemDialog extends AlertDialog {
                 addItem();
             }
         };
-        setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.add_item), mAddButtonListener);
+        setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.add_button), mAddButtonListener);
     }
 
     private void addItem() {
