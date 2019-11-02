@@ -93,7 +93,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="@string/shopping_list" />
+                android:text="@string/shopping_list_tab" />
 
             <RadioButton
                 android:id="@+id/in_stock"

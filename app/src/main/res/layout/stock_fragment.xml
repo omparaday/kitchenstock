@@ -10,32 +10,66 @@
         android:id="@+id/in_stock_title_buttons"
         layout="@layout/list_title_buttons_layout" />
 
-    <ListView
-        android:id="@+id/in_stock"
+    <LinearLayout
+        android:id="@+id/in_stock_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <include
-        android:id="@+id/in_stock_action_buttons"
-        layout="@layout/action_buttons_layout"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/empty_in_stock_message"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/no_items_to_display"
+            android:visibility="gone" />
+
+
+        <ListView
+            android:id="@+id/in_stock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include
+            android:id="@+id/in_stock_action_buttons"
+            layout="@layout/action_buttons_layout"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <include
         android:id="@+id/out_of_stock_title_buttons"
         layout="@layout/list_title_buttons_layout" />
 
-
-    <ListView
-        android:id="@+id/out_of_stock"
+    <LinearLayout
+        android:id="@+id/out_of_stock_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:orientation="vertical">
 
-    <include
-        android:id="@+id/out_of_stock_action_buttons"
-        layout="@layout/action_buttons_layout"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/empty_out_of_stock_message"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/no_items_to_display"
+            android:visibility="gone" />
+
+        <ListView
+            android:id="@+id/out_of_stock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include
+            android:id="@+id/out_of_stock_action_buttons"
+            layout="@layout/action_buttons_layout"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>
 

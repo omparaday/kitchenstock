@@ -4,16 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -22,7 +19,7 @@ import com.days.kitchenstock.R;
 public class StockContentHelper {
 
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
-    public static final int EXPIRING_SOON_DIVISOR = 3;
+    public static final int EXPIRING_SOON_DIVISOR = 2;
 
     public enum ItemType {
         FRESH(), SHORT_TERM(), LONG_TERM();
@@ -73,7 +70,7 @@ public class StockContentHelper {
         public String getStatusString(Context context) {
             switch (status) {
                 case TO_BUY:
-                    return context.getString(R.string.to_buy);
+                    return context.getString(R.string.shop_status_string);
                 case IN_STOCK:
                     return context.getString(R.string.in_stock);
                 case OUT_OF_STOCK:

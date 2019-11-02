@@ -4,17 +4,24 @@
     <string name="fresh">&#x1F955; Fresh</string>
     <string name="short_term">Short Term</string>
     <string name="long_term">Long Term</string>
-    <string name="shopping_list">&#x1F6D2; Shop</string>
+    <string name="shopping_list_tab">&#x1F6D2; Shop</string>
     <string name="in_stock">In Stock</string>
+    <string name="in_stock_expand">In Stock &#65088;</string>
+    <string name="in_stock_collapse">In Stock &#10217;</string>
     <string name="out_of_stock">Out Of Stock</string>
+    <string name="out_of_stock_expand">Out Of Stock &#65088;</string>
+    <string name="out_of_stock_collapse">Out Of Stock &#10217;</string>
     <string name="name">Name</string>
     <string name="type">Item Type</string>
     <string name="status">Current Status</string>
     <string name="expiry">Expiry (Optional) as DD/MM/YYYY</string>
     <string name="auto_move_to_shop">Automatically Move To Shop Every Day (such as Milk which you want to buy every day)</string>
     <string name="quantity">Quantity (Optional)</string>
-    <string name="to_buy">&#x1F6D2; Shop</string>
-    <string name="purchased_today">Purchased Today</string>
+    <string name="shop_status_string">&#x1F6D2; Shop</string>
+    <string name="to_buy_collapse">&#x1F6D2; Shop &#10217;</string>
+    <string name="purchased_today_collapse">Purchased Today &#10217;</string>
+    <string name="to_buy_expand">&#x1F6D2; Shop &#65088;</string>
+    <string name="purchased_today_expand">Purchased Today &#65088;</string>
     <string name="add_item">&#xFF0B; Add Item</string>
     <string name="add_button">Add</string>
     <string name="more_options">Show More Options</string>
@@ -37,4 +44,5 @@
     <string name="name_to_search">Enter item name to search</string>
     <string name="delete_selected">&#x1f5d1; Delete</string>
     <string name="close_icon">&#x2A09;</string>
+    <string name="no_items_to_display">No items in this list. Click \"&#xFF0B; Add Item\" or edit other lists to add items here.</string>
 </resources>

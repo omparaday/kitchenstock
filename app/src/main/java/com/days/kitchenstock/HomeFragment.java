@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String title = getString(R.string.shopping_list);
+            String title = getString(R.string.shopping_list_tab);
             if (position == TAB_COUNT - 1) {
                 return title;
             }

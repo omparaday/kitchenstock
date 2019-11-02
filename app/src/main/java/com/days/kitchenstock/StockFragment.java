@@ -56,6 +56,8 @@ public class StockFragment extends Fragment {
     private Button mOutOfStockListTitle;
     private Button mInStockEditButton;
     private Button mOutOfStockEditButton;
+    private View mInStockEmptyMessage, mOutOfStockEmptyMessage;
+    private View mInStockLayout, mOutOfStockLayout;
 
     public StockFragment() {
         // Required empty public constructor
@@ -85,20 +87,27 @@ public class StockFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        Bundle args = getArguments();
+        mInStockLayout = view.findViewById(R.id.in_stock_layout);
+        mOutOfStockLayout = view.findViewById(R.id.out_of_stock_layout);
+        mInStockEmptyMessage = view.findViewById(R.id.empty_in_stock_message);
+        mOutOfStockEmptyMessage = view.findViewById(R.id.empty_out_of_stock_message);
         mInStockListView = view.findViewById(R.id.in_stock);
         mOutOfStockListView = view.findViewById(R.id.out_of_stock);
         mTitleClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInStockListView.getVisibility() == View.VISIBLE) {
-                    mOutOfStockListView.setVisibility(View.VISIBLE);
-                    mInStockListView.setVisibility(View.GONE);
+                if (mInStockLayout.getVisibility() == View.VISIBLE) {
+                    mInStockListTitle.setText(R.string.in_stock_collapse);
+                    mOutOfStockListTitle.setText(R.string.out_of_stock_expand);
+                    mOutOfStockLayout.setVisibility(View.VISIBLE);
+                    mInStockLayout.setVisibility(View.GONE);
                     mInStockEditButton.setVisibility(View.GONE);
                     mOutOfStockEditButton.setVisibility(View.VISIBLE);
                 } else {
-                    mInStockListView.setVisibility(View.VISIBLE);
-                    mOutOfStockListView.setVisibility(View.GONE);
+                    mInStockListTitle.setText(R.string.in_stock_expand);
+                    mOutOfStockListTitle.setText(R.string.out_of_stock_collapse);
+                    mInStockLayout.setVisibility(View.VISIBLE);
+                    mOutOfStockLayout.setVisibility(View.GONE);
                     mInStockEditButton.setVisibility(View.VISIBLE);
                     mOutOfStockEditButton.setVisibility(View.GONE);
                 }
@@ -116,7 +125,7 @@ public class StockFragment extends Fragment {
         final Button cancelEditButton = inStockTitleButtons.findViewById(R.id.cancel);
         mInStockListTitle = inStockTitleButtons.findViewById(R.id.list_title);
         final View actionButtons = view.findViewById(R.id.in_stock_action_buttons);
-        mInStockListTitle.setText(R.string.in_stock);
+        mInStockListTitle.setText(R.string.in_stock_expand);
         mInStockListTitle.setOnClickListener(mTitleClickListener);
         mInStockEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +186,7 @@ public class StockFragment extends Fragment {
         mOutOfStockEditButton.setVisibility(View.GONE);
         final Button cancelEditButton = listTitleButtons.findViewById(R.id.cancel);
         mOutOfStockListTitle = listTitleButtons.findViewById(R.id.list_title);
-        mOutOfStockListTitle.setText(R.string.out_of_stock);
+        mOutOfStockListTitle.setText(R.string.out_of_stock_collapse);
         mOutOfStockListTitle.setOnClickListener(mTitleClickListener);
         mOutOfStockEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,17 +263,31 @@ public class StockFragment extends Fragment {
     private void updateInStockList(boolean editMode) {
         if (!mIsInStockEditing) {
             mInStockList = fetchList(true);
-            Collections.sort(mInStockList);
-            mInStockAdapter = new ItemStockAdapter(getActivity(), mInStockList, editMode);
-            mInStockListView.setAdapter(mInStockAdapter);
+            if (mInStockList.size() != 0) {
+                mInStockListView.setVisibility(View.VISIBLE);
+                mInStockEmptyMessage.setVisibility(View.GONE);
+                Collections.sort(mInStockList);
+                mInStockAdapter = new ItemStockAdapter(getActivity(), mInStockList, editMode);
+                mInStockListView.setAdapter(mInStockAdapter);
+            } else {
+                mInStockListView.setVisibility(View.GONE);
+                mInStockEmptyMessage.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     private void updateOutOfStockList(boolean editMode) {
         if (!mIsOutOfStockEditing) {
             mOutOfStockList = fetchList(false);
-            mOutOfStockAdapter = new ItemStockAdapter(getActivity(), mOutOfStockList, editMode);
-            mOutOfStockListView.setAdapter(mOutOfStockAdapter);
+            if (mOutOfStockList.size() != 0) {
+                mOutOfStockEmptyMessage.setVisibility(View.GONE);
+                mOutOfStockListView.setVisibility(View.VISIBLE);
+                mOutOfStockAdapter = new ItemStockAdapter(getActivity(), mOutOfStockList, editMode);
+                mOutOfStockListView.setAdapter(mOutOfStockAdapter);
+            } else {
+                mOutOfStockEmptyMessage.setVisibility(View.VISIBLE);
+                mOutOfStockListView.setVisibility(View.GONE);
+            }
         }
     }
 
