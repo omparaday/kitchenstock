@@ -2,4 +2,6 @@
 <resources>
     <color name="expired">#ffcc0000</color>
     <color name="expiring_soon">#ff990000</color>
+    <color name="first_swipe_button">#808080</color>
+    <color name="second_swipe_button">#3366cc</color>
 </resources>

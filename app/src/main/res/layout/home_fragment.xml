@@ -11,7 +11,7 @@
         android:id="@+id/top_button_layout"
         layout="@layout/top_button_layout" />
 
-    <androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.days.kitchenstock.MyViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,6 +24,6 @@
             android:paddingBottom="8dp"
             app:tabIndicatorColor="@color/keep_blue" />
 
-    </androidx.viewpager.widget.ViewPager>
+    </com.days.kitchenstock.MyViewPager>
 
 </LinearLayout>

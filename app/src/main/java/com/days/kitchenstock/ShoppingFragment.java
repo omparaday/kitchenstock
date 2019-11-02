@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,6 +24,7 @@ import com.days.kitchenstock.data.StockContentHelper;
 import com.days.kitchenstock.data.StockContentProvider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -97,7 +98,21 @@ public class ShoppingFragment extends Fragment {
         mToBuyLayout = view.findViewById(R.id.to_buy_layout);
         mPurhcasedTodayLayout = view.findViewById(R.id.purchased_today_layout);
         mToBuyListView = view.findViewById(R.id.to_buy);
+        mToBuyListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mToBuyAdapter.dismissSwipe();
+                return false;
+            }
+        });
         mPurchasedTodayListView = view.findViewById(R.id.purchased_today);
+        mPurchasedTodayListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mPurchasedTodayAdapter.dismissSwipe();
+                return false;
+            }
+        });
         mTitleClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -306,6 +321,14 @@ public class ShoppingFragment extends Fragment {
         private boolean isEditing;
         private ArrayList<StockContentHelper.Item> itemList;
         private boolean[] checkedValues;
+        private View currentVisibleSwipe;
+
+        private void dismissSwipe() {
+            if (currentVisibleSwipe != null) {
+                currentVisibleSwipe.setVisibility(View.GONE);
+                currentVisibleSwipe = null;
+            }
+        }
 
         public ItemStockAdapter(Context context, ArrayList<StockContentHelper.Item> list, boolean isEditing) {
             super(context, 0, list);
@@ -326,13 +349,13 @@ public class ShoppingFragment extends Fragment {
 
         @Override
         public View getView(final int i, View view, final ViewGroup viewGroup) {
-            StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
+            final StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
             if (!isEditing) {
                 view = getLayoutInflater().inflate(R.layout.list_item, null);
             } else {
                 view = getLayoutInflater().inflate(R.layout.editing_list_item, null);
             }
-            TextView name = view.findViewById(R.id.item_name);
+            final TextView name = view.findViewById(R.id.item_name);
             name.setText(item.name);
             TextView quantity = view.findViewById(R.id.quantity);
             quantity.setText(item.quantity);
@@ -347,6 +370,7 @@ public class ShoppingFragment extends Fragment {
                         new UpdateItemDialog(getContext(), getItem(i)).show();
                     }
                 });
+                setupSwipeButtons(view, item);
             } else {
                 final CheckBox checkBox = view.findViewById(R.id.checkbox);
                 checkBox.setTag(i);
@@ -365,6 +389,59 @@ public class ShoppingFragment extends Fragment {
                 });
             }
             return view;
+        }
+
+        private void setupSwipeButtons(View view, final StockContentHelper.Item item) {
+            final View swipeButtons = view.findViewById(R.id.swipe_buttons);
+            Button swipe1 = swipeButtons.findViewById(R.id.swipe1);
+            swipe1.setText(R.string.out_of_stock);
+            swipe1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    item.status = StockContentHelper.ItemStatus.OUT_OF_STOCK;
+                    item.expiry = null;
+                    item.purchaseDate = null;
+                    StockContentHelper.updateItem(getContext(), item, item.name);
+                }
+            });
+            Button swipe2 = swipeButtons.findViewById(R.id.swipe2);
+            if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
+                swipe2.setText(R.string.add_to_shop);
+                swipe2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        item.status = StockContentHelper.ItemStatus.TO_BUY;
+                        item.purchaseDate = null;
+                        item.expiry = null;
+                        StockContentHelper.updateItem(getContext(), item, item.name);
+                    }
+                });
+            } else {
+                swipe2.setText(R.string.add_to_stock);
+                swipe2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        item.status = StockContentHelper.ItemStatus.IN_STOCK;
+                        item.purchaseDate = Calendar.getInstance().getTime();
+                        StockContentHelper.updateItem(getContext(), item, item.name);
+                    }
+                });
+            }
+            view.setOnTouchListener(new OnSwipeListener() {
+                @Override
+                public boolean onSwipeLeft() {
+                    dismissSwipe();
+                    swipeButtons.setVisibility(View.VISIBLE);
+                    currentVisibleSwipe = swipeButtons;
+                    return true;
+                }
+
+                @Override
+                public boolean onSwipeRight() {
+                    dismissSwipe();
+                    return true;
+                }
+            });
         }
     }
 
