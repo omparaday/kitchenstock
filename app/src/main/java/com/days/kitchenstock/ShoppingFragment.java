@@ -123,6 +123,9 @@ public class ShoppingFragment extends Fragment {
                     mToBuyLayout.setVisibility(View.GONE);
                     mToBuyEditButton.setVisibility(View.GONE);
                     mPurchasedTodayEditButton.setVisibility(View.VISIBLE);
+                    if (mToBuyAdapter != null) {
+                        mToBuyAdapter.dismissSwipe();
+                    }
                 } else {
                     mToBuyListTitle.setText(R.string.to_buy_expand);
                     mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
@@ -130,6 +133,9 @@ public class ShoppingFragment extends Fragment {
                     mPurhcasedTodayLayout.setVisibility(View.GONE);
                     mToBuyEditButton.setVisibility(View.VISIBLE);
                     mPurchasedTodayEditButton.setVisibility(View.GONE);
+                    if (mPurchasedTodayAdapter != null) {
+                        mPurchasedTodayAdapter.dismissSwipe();
+                    }
                 }
             }
         };
@@ -367,6 +373,7 @@ public class ShoppingFragment extends Fragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        dismissSwipe();
                         new UpdateItemDialog(getContext(), getItem(i)).show();
                     }
                 });
