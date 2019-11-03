@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
 
-    public static final int TAB_COUNT = 4;
+    public static final int TAB_COUNT = 3;
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
     private Button mAddItem, mSearch;
 
@@ -84,9 +84,6 @@ public class HomeFragment extends Fragment {
             switch (type) {
                 case FRESH:
                     title = getString(R.string.fresh);
-                    break;
-                case SHORT_TERM:
-                    title = getString(R.string.short_term);
                     break;
                 case LONG_TERM:
                     title = getString(R.string.long_term);

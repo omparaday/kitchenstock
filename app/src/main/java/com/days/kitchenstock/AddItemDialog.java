@@ -23,15 +23,14 @@ import java.util.Calendar;
 
 public class AddItemDialog extends AlertDialog {
 
-    private OnClickListener mCancelListener;
     private OnClickListener mAddButtonListener;
     private EditText mName, mQuantity, mExpiry;
     private RadioGroup mItemTypeGroup, mItemStatusGroup;
-    private Calendar myCalendar = Calendar.getInstance();
+    private Calendar mExpiryCalendar = Calendar.getInstance();
     private CheckBox mAutoOutOfStock;
 
     public AddItemDialog(@NonNull final Context context) {
-        super(context);
+        super(context, R.style.MyDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.add_item_dialog, null);
         setView(view);
         mName = view.findViewById(R.id.item_name);
@@ -80,12 +79,12 @@ public class AddItemDialog extends AlertDialog {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                mExpiryCalendar.set(Calendar.YEAR, year);
+                mExpiryCalendar.set(Calendar.MONTH, monthOfYear);
+                mExpiryCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 SimpleDateFormat sdf = StockContentHelper.DATE_FORMATTER;
-                mExpiry.setText(sdf.format(myCalendar.getTime()));
+                mExpiry.setText(sdf.format(mExpiryCalendar.getTime()));
             }
 
         };
@@ -93,18 +92,18 @@ public class AddItemDialog extends AlertDialog {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    new DatePickerDialog(context, datePickerListener, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    new DatePickerDialog(context, datePickerListener, mExpiryCalendar
+                            .get(Calendar.YEAR), mExpiryCalendar.get(Calendar.MONTH),
+                            mExpiryCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
             }
         });
         mExpiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(context, datePickerListener, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(context, datePickerListener, mExpiryCalendar
+                        .get(Calendar.YEAR), mExpiryCalendar.get(Calendar.MONTH),
+                        mExpiryCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         mItemTypeGroup = view.findViewById(R.id.type_group);
@@ -181,8 +180,6 @@ public class AddItemDialog extends AlertDialog {
         switch (mItemTypeGroup.getCheckedRadioButtonId()) {
             case R.id.fresh:
                 return StockContentHelper.ItemType.FRESH;
-            case R.id.short_term:
-                return StockContentHelper.ItemType.SHORT_TERM;
             case R.id.long_term:
                 return StockContentHelper.ItemType.LONG_TERM;
         }

@@ -22,7 +22,7 @@ public class StockContentHelper {
     public static final int EXPIRING_SOON_DIVISOR = 2;
 
     public enum ItemType {
-        FRESH(), SHORT_TERM(), LONG_TERM();
+        FRESH(), LONG_TERM();
         private final int value;
 
         private ItemType() {

@@ -2,11 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/light_grey"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:orientation="horizontal">
 
     <Button
         android:id="@+id/search_button"
         android:layout_width="0dp"
+        android:minHeight="0dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
@@ -16,6 +22,9 @@
     <Button
         android:id="@+id/add_item"
         android:layout_width="0dp"
+        android:minHeight="0dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="right"

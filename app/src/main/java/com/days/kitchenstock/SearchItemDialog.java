@@ -44,10 +44,9 @@ public class SearchItemDialog extends AlertDialog {
     private String mSearchString;
     private ArrayList<StockContentHelper.Item> mAllItemsList;
     private ContentObserver mObserver;
-    private Calendar myCalendar = Calendar.getInstance();
 
     public SearchItemDialog(@NonNull final Context context) {
-        super(context);
+        super(context, R.style.MyDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.search_item_dialog, null);
         setView(view);
         mName = view.findViewById(R.id.item_name);

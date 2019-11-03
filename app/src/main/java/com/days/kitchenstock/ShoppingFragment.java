@@ -53,6 +53,10 @@ public class ShoppingFragment extends Fragment {
     private Button mPurchasedTodayListTitle;
     private Button mToBuyEditButton;
     private Button mPurchasedTodayEditButton;
+    private View mPurchasedTodayTitleButtons;
+    private View mToBuyTitleButtons;
+    private View mToBuyEditCancelLayout;
+    private View mPurchasedTodayEditCancelLayout;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -81,6 +85,12 @@ public class ShoppingFragment extends Fragment {
     public void onStop() {
         super.onStop();
         getContext().getContentResolver().unregisterContentObserver(mObserver);
+        if (mToBuyAdapter != null) {
+            mToBuyAdapter.dismissSwipe();
+        }
+        if (mPurchasedTodayAdapter != null) {
+            mPurchasedTodayAdapter.dismissSwipe();
+        }
     }
 
     @Override
@@ -121,8 +131,8 @@ public class ShoppingFragment extends Fragment {
                     mPurchasedTodayListTitle.setText(R.string.purchased_today_expand);
                     mPurhcasedTodayLayout.setVisibility(View.VISIBLE);
                     mToBuyLayout.setVisibility(View.GONE);
-                    mToBuyEditButton.setVisibility(View.GONE);
-                    mPurchasedTodayEditButton.setVisibility(View.VISIBLE);
+                    mToBuyEditCancelLayout.setVisibility(View.GONE);
+                    mPurchasedTodayEditCancelLayout.setVisibility(View.VISIBLE);
                     if (mToBuyAdapter != null) {
                         mToBuyAdapter.dismissSwipe();
                     }
@@ -131,8 +141,8 @@ public class ShoppingFragment extends Fragment {
                     mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
                     mToBuyLayout.setVisibility(View.VISIBLE);
                     mPurhcasedTodayLayout.setVisibility(View.GONE);
-                    mToBuyEditButton.setVisibility(View.VISIBLE);
-                    mPurchasedTodayEditButton.setVisibility(View.GONE);
+                    mToBuyEditCancelLayout.setVisibility(View.VISIBLE);
+                    mPurchasedTodayEditCancelLayout.setVisibility(View.GONE);
                     if (mPurchasedTodayAdapter != null) {
                         mPurchasedTodayAdapter.dismissSwipe();
                     }
@@ -145,10 +155,11 @@ public class ShoppingFragment extends Fragment {
     }
 
     private void setupToBuyLayoutButtons(View view) {
-        View toBuyTitleButtons = view.findViewById(R.id.to_buy_title_buttons);
-        mToBuyEditButton = toBuyTitleButtons.findViewById(R.id.edit);
-        final Button cancelEditButton = toBuyTitleButtons.findViewById(R.id.cancel);
-        mToBuyListTitle = toBuyTitleButtons.findViewById(R.id.list_title);
+        mToBuyTitleButtons = view.findViewById(R.id.to_buy_title_buttons);
+        mToBuyEditCancelLayout = mToBuyTitleButtons.findViewById(R.id.other_buttons);
+        mToBuyEditButton = mToBuyTitleButtons.findViewById(R.id.edit);
+        final Button cancelEditButton = mToBuyTitleButtons.findViewById(R.id.cancel);
+        mToBuyListTitle = mToBuyTitleButtons.findViewById(R.id.list_title);
         final View actionButtons = view.findViewById(R.id.to_buy_action_buttons);
         mToBuyListTitle.setText(R.string.to_buy_expand);
         mToBuyListTitle.setOnClickListener(mTitleClickListener);
@@ -157,7 +168,7 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View view) {
                 mToBuyListTitle.setOnClickListener(null);
                 mToBuyEditButton.setVisibility(View.GONE);
-                mPurchasedTodayListTitle.setVisibility(View.GONE);
+                mPurchasedTodayTitleButtons.setVisibility(View.GONE);
                 cancelEditButton.setVisibility(View.VISIBLE);
                 actionButtons.setVisibility(View.VISIBLE);
                 updateToBuyList(true);
@@ -205,12 +216,13 @@ public class ShoppingFragment extends Fragment {
 
 
     private void setupPurchasedTodayLayoutButtons(View view) {
-        View listTitleButtons = view.findViewById(R.id.purchased_today_title_buttons);
+        mPurchasedTodayTitleButtons = view.findViewById(R.id.purchased_today_title_buttons);
+        mPurchasedTodayEditCancelLayout = mPurchasedTodayTitleButtons.findViewById(R.id.other_buttons);
         final View actionButtons = view.findViewById(R.id.purchased_today_action_buttons);
-        mPurchasedTodayEditButton = listTitleButtons.findViewById(R.id.edit);
-        mPurchasedTodayEditButton.setVisibility(View.GONE);
-        final Button cancelEditButton = listTitleButtons.findViewById(R.id.cancel);
-        mPurchasedTodayListTitle = listTitleButtons.findViewById(R.id.list_title);
+        mPurchasedTodayEditButton = mPurchasedTodayTitleButtons.findViewById(R.id.edit);
+        mPurchasedTodayEditCancelLayout.setVisibility(View.GONE);
+        final Button cancelEditButton = mPurchasedTodayTitleButtons.findViewById(R.id.cancel);
+        mPurchasedTodayListTitle = mPurchasedTodayTitleButtons.findViewById(R.id.list_title);
         mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
         mPurchasedTodayListTitle.setOnClickListener(mTitleClickListener);
         mPurchasedTodayEditButton.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +230,7 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View view) {
                 mPurchasedTodayListTitle.setOnClickListener(null);
                 mPurchasedTodayEditButton.setVisibility(View.GONE);
-                mToBuyListTitle.setVisibility(View.GONE);
+                mToBuyTitleButtons.setVisibility(View.GONE);
                 cancelEditButton.setVisibility(View.VISIBLE);
                 actionButtons.setVisibility(View.VISIBLE);
                 updatePurchasedTodayList(true);
@@ -268,7 +280,7 @@ public class ShoppingFragment extends Fragment {
         cancelEdit.setVisibility(View.GONE);
         actionButtons.setVisibility(View.GONE);
         editButton.setVisibility(View.VISIBLE);
-        mPurchasedTodayListTitle.setVisibility(View.VISIBLE);
+        mPurchasedTodayTitleButtons.setVisibility(View.VISIBLE);
         mIsToBuyEditing = false;
         listTitle.setOnClickListener(mTitleClickListener);
         updateToBuyList(false);
@@ -278,7 +290,7 @@ public class ShoppingFragment extends Fragment {
         cancelEdit.setVisibility(View.GONE);
         actionButtons.setVisibility(View.GONE);
         editButton.setVisibility(View.VISIBLE);
-        mToBuyListTitle.setVisibility(View.VISIBLE);
+        mToBuyTitleButtons.setVisibility(View.VISIBLE);
         mIsPurchasedTodayEditing = false;
         listTitle.setOnClickListener(mTitleClickListener);
         updatePurchasedTodayList(false);
@@ -291,9 +303,14 @@ public class ShoppingFragment extends Fragment {
                 mToBuyAdapter = new ItemStockAdapter(getActivity(), mToBuyList, editMode);
                 mToBuyListView.setVisibility(View.VISIBLE);
                 mToBuyEmptyMessage.setVisibility(View.GONE);
+                if (!editMode) {
+                    mToBuyEditButton.setVisibility(View.VISIBLE);
+                }
                 mToBuyListView.setAdapter(mToBuyAdapter);
             } else {
                 mToBuyListView.setVisibility(View.GONE);
+                mToBuyEditButton.setVisibility(View.GONE);
+                mToBuyAdapter = null;
                 mToBuyEmptyMessage.setVisibility(View.VISIBLE);
             }
         }
@@ -307,8 +324,13 @@ public class ShoppingFragment extends Fragment {
                 mPurchasedTodayEmptyMessge.setVisibility(View.GONE);
                 mPurchasedTodayAdapter = new ItemStockAdapter(getActivity(), mPurchasedTodayList, editMode);
                 mPurchasedTodayListView.setAdapter(mPurchasedTodayAdapter);
+                if (!editMode) {
+                    mPurchasedTodayEditButton.setVisibility(View.VISIBLE);
+                }
             } else {
                 mPurchasedTodayListView.setVisibility(View.GONE);
+                mPurchasedTodayAdapter = null;
+                mPurchasedTodayEditButton.setVisibility(View.GONE);
                 mPurchasedTodayEmptyMessge.setVisibility(View.VISIBLE);
             }
         }

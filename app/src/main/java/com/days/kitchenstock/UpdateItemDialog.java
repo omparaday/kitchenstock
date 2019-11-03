@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,15 +28,15 @@ public class UpdateItemDialog extends AlertDialog {
 
     private EditText mName, mQuantity, mExpiry;
     private RadioGroup mItemTypeGroup;
-    private Calendar myCalendar = Calendar.getInstance();
+    private Calendar mExpiryCalendar = Calendar.getInstance();
     private CheckBox mAutoOutOfStock, mMoreOptionsCheckBox;
     private LinearLayout mMoreOptionsLayout;
     StockContentHelper.Item mItem;
     private Button mAddToShop, mAddToStock, mMoveToOutOfStock, mSave, mDelete;
-    private RadioButton mFresh, mShortTerm, mLongTerm;
+    private RadioButton mFresh, mLongTerm;//mShortTerm, mLongTerm;
 
     public UpdateItemDialog(@NonNull final Context context, StockContentHelper.Item item) {
-        super(context);
+        super(context, R.style.MyDialogTheme);
         if (item == null) {
             throw new NullPointerException();
         }
@@ -102,12 +101,12 @@ public class UpdateItemDialog extends AlertDialog {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                mExpiryCalendar.set(Calendar.YEAR, year);
+                mExpiryCalendar.set(Calendar.MONTH, monthOfYear);
+                mExpiryCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 SimpleDateFormat sdf = StockContentHelper.DATE_FORMATTER;
-                mExpiry.setText(sdf.format(myCalendar.getTime()));
+                mExpiry.setText(sdf.format(mExpiryCalendar.getTime()));
             }
 
         };
@@ -115,23 +114,23 @@ public class UpdateItemDialog extends AlertDialog {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    new DatePickerDialog(context, datePickerListener, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    new DatePickerDialog(context, datePickerListener, mExpiryCalendar
+                            .get(Calendar.YEAR), mExpiryCalendar.get(Calendar.MONTH),
+                            mExpiryCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
             }
         });
         mExpiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(context, datePickerListener, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(context, datePickerListener, mExpiryCalendar
+                        .get(Calendar.YEAR), mExpiryCalendar.get(Calendar.MONTH),
+                        mExpiryCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         mItemTypeGroup = view.findViewById(R.id.type_group);
         mFresh = view.findViewById(R.id.fresh);
-        mShortTerm = view.findViewById(R.id.short_term);
+        //mShortTerm = view.findViewById(R.id.short_term);
         mLongTerm = view.findViewById(R.id.long_term);
         Button close = view.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +149,7 @@ public class UpdateItemDialog extends AlertDialog {
         mName.setText(mItem.name);
         mQuantity.setText(mItem.quantity);
         if (mItem.expiry != null) {
+            mExpiryCalendar.setTime(mItem.expiry);
             mExpiry.setText(StockContentHelper.DATE_FORMATTER.format(mItem.expiry));
         }
         switch (mItem.type) {
@@ -158,9 +158,6 @@ public class UpdateItemDialog extends AlertDialog {
                 break;
             case LONG_TERM:
                 mLongTerm.setChecked(true);
-                break;
-            case SHORT_TERM:
-                mShortTerm.setChecked(true);
                 break;
         }
         mAutoOutOfStock.setChecked(mItem.autoOutOfStock);
@@ -261,8 +258,6 @@ public class UpdateItemDialog extends AlertDialog {
         switch (mItemTypeGroup.getCheckedRadioButtonId()) {
             case R.id.fresh:
                 return StockContentHelper.ItemType.FRESH;
-            case R.id.short_term:
-                return StockContentHelper.ItemType.SHORT_TERM;
             case R.id.long_term:
                 return StockContentHelper.ItemType.LONG_TERM;
         }

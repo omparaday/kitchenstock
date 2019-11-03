@@ -2,7 +2,6 @@
     <string name="app_name">Keep Stock</string>
     <string name="title_activity_main">Keep Stock</string>
     <string name="fresh">&#x1F955; Fresh</string>
-    <string name="short_term">Short Term</string>
     <string name="long_term">Long Term</string>
     <string name="shopping_list_tab">&#x1F6D2; Shop</string>
     <string name="in_stock">In Stock</string>

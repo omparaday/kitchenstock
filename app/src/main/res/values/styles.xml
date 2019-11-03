@@ -10,9 +10,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="MyButtonStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/keep_blue</item>
     </style>
 
+    <style name="MyDialogTheme" parent="MyTheme">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 
 </resources>
