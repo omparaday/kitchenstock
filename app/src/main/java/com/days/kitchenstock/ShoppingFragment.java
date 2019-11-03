@@ -329,11 +329,13 @@ public class ShoppingFragment extends Fragment {
         private boolean[] checkedValues;
         private View currentVisibleSwipe;
 
-        private void dismissSwipe() {
+        private boolean dismissSwipe() {
             if (currentVisibleSwipe != null) {
                 currentVisibleSwipe.setVisibility(View.GONE);
                 currentVisibleSwipe = null;
+                return true;
             }
+            return false;
         }
 
         public ItemStockAdapter(Context context, ArrayList<StockContentHelper.Item> list, boolean isEditing) {
@@ -373,8 +375,9 @@ public class ShoppingFragment extends Fragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dismissSwipe();
-                        new UpdateItemDialog(getContext(), getItem(i)).show();
+                        if (!dismissSwipe()) {
+                            new UpdateItemDialog(getContext(), getItem(i)).show();
+                        }
                     }
                 });
                 setupSwipeButtons(view, item);

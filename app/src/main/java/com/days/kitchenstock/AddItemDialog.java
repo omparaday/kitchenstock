@@ -132,6 +132,8 @@ public class AddItemDialog extends AlertDialog {
         });
         setCancelable(false);
         setupDialogButtons(context);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     private void setupDialogButtons(@NonNull Context context) {
