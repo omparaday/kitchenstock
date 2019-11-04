@@ -33,7 +33,7 @@ import java.util.Calendar;
  * {@link ShoppingFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ShoppingFragment extends Fragment {
+public class ShoppingFragment extends Fragment implements ITabFragment {
 
     private ItemStockAdapter mToBuyAdapter;
     private ItemStockAdapter mPurchasedTodayAdapter;
@@ -57,6 +57,10 @@ public class ShoppingFragment extends Fragment {
     private View mToBuyTitleButtons;
     private View mToBuyEditCancelLayout;
     private View mPurchasedTodayEditCancelLayout;
+    private Button mCancelEditingToBuyButton;
+    private View mToBuyActionButtons;
+    private Button mCancelEditingPurchasedTodayButton;
+    private View mPurchasedTodayActionButtons;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -158,9 +162,9 @@ public class ShoppingFragment extends Fragment {
         mToBuyTitleButtons = view.findViewById(R.id.to_buy_title_buttons);
         mToBuyEditCancelLayout = mToBuyTitleButtons.findViewById(R.id.other_buttons);
         mToBuyEditButton = mToBuyTitleButtons.findViewById(R.id.edit);
-        final Button cancelEditButton = mToBuyTitleButtons.findViewById(R.id.cancel);
+        mCancelEditingToBuyButton = mToBuyTitleButtons.findViewById(R.id.cancel);
         mToBuyListTitle = mToBuyTitleButtons.findViewById(R.id.list_title);
-        final View actionButtons = view.findViewById(R.id.to_buy_action_buttons);
+        mToBuyActionButtons = view.findViewById(R.id.to_buy_action_buttons);
         mToBuyListTitle.setText(R.string.to_buy_expand);
         mToBuyListTitle.setOnClickListener(mTitleClickListener);
         mToBuyEditButton.setOnClickListener(new View.OnClickListener() {
@@ -169,31 +173,31 @@ public class ShoppingFragment extends Fragment {
                 mToBuyListTitle.setOnClickListener(null);
                 mToBuyEditButton.setVisibility(View.GONE);
                 mPurchasedTodayTitleButtons.setVisibility(View.GONE);
-                cancelEditButton.setVisibility(View.VISIBLE);
-                actionButtons.setVisibility(View.VISIBLE);
+                mCancelEditingToBuyButton.setVisibility(View.VISIBLE);
+                mToBuyActionButtons.setVisibility(View.VISIBLE);
                 updateToBuyList(true);
                 mIsToBuyEditing = true;
             }
         });
-        cancelEditButton.setOnClickListener(new View.OnClickListener() {
+        mCancelEditingToBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                exitEditingToBuyList(cancelEditButton, mToBuyEditButton, mToBuyListTitle, actionButtons);
+                exitEditingToBuyList();
             }
         });
 
 
-        final Button deleteSelectedItems = actionButtons.findViewById(R.id.delete);
-        final Button moveToInStockSelectedItems = actionButtons.findViewById(R.id.button3);
+        final Button deleteSelectedItems = mToBuyActionButtons.findViewById(R.id.delete);
+        final Button moveToInStockSelectedItems = mToBuyActionButtons.findViewById(R.id.button3);
         moveToInStockSelectedItems.setText(R.string.add_to_stock);
-        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
+        final Button moveToOutOfStockSelectedItems = mToBuyActionButtons.findViewById(R.id.button2);
         moveToOutOfStockSelectedItems.setText(R.string.move_to_out_of_stock);
         deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<StockContentHelper.Item> selectedItems = mToBuyAdapter.getSelectedItems();
                 StockContentHelper.deleteItemList(getContext(), selectedItems);
-                exitEditingToBuyList(cancelEditButton, mToBuyEditButton, mToBuyListTitle, actionButtons);
+                exitEditingToBuyList();
             }
         });
         moveToInStockSelectedItems.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +205,7 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View view) {
                 ArrayList<StockContentHelper.Item> selectedItems = mToBuyAdapter.getSelectedItems();
                 StockContentHelper.moveToInStockList(getContext(), selectedItems);
-                exitEditingToBuyList(cancelEditButton, mToBuyEditButton, mToBuyListTitle, actionButtons);
+                exitEditingToBuyList();
             }
         });
         moveToOutOfStockSelectedItems.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +213,7 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View view) {
                 ArrayList<StockContentHelper.Item> selectedItems = mToBuyAdapter.getSelectedItems();
                 StockContentHelper.moveToOutOfStockList(getContext(), selectedItems);
-                exitEditingToBuyList(cancelEditButton, mToBuyEditButton, mToBuyListTitle, actionButtons);
+                exitEditingToBuyList();
             }
         });
     }
@@ -218,10 +222,10 @@ public class ShoppingFragment extends Fragment {
     private void setupPurchasedTodayLayoutButtons(View view) {
         mPurchasedTodayTitleButtons = view.findViewById(R.id.purchased_today_title_buttons);
         mPurchasedTodayEditCancelLayout = mPurchasedTodayTitleButtons.findViewById(R.id.other_buttons);
-        final View actionButtons = view.findViewById(R.id.purchased_today_action_buttons);
+        mPurchasedTodayActionButtons = view.findViewById(R.id.purchased_today_action_buttons);
         mPurchasedTodayEditButton = mPurchasedTodayTitleButtons.findViewById(R.id.edit);
         mPurchasedTodayEditCancelLayout.setVisibility(View.GONE);
-        final Button cancelEditButton = mPurchasedTodayTitleButtons.findViewById(R.id.cancel);
+        mCancelEditingPurchasedTodayButton = mPurchasedTodayTitleButtons.findViewById(R.id.cancel);
         mPurchasedTodayListTitle = mPurchasedTodayTitleButtons.findViewById(R.id.list_title);
         mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
         mPurchasedTodayListTitle.setOnClickListener(mTitleClickListener);
@@ -231,31 +235,31 @@ public class ShoppingFragment extends Fragment {
                 mPurchasedTodayListTitle.setOnClickListener(null);
                 mPurchasedTodayEditButton.setVisibility(View.GONE);
                 mToBuyTitleButtons.setVisibility(View.GONE);
-                cancelEditButton.setVisibility(View.VISIBLE);
-                actionButtons.setVisibility(View.VISIBLE);
+                mCancelEditingPurchasedTodayButton.setVisibility(View.VISIBLE);
+                mPurchasedTodayActionButtons.setVisibility(View.VISIBLE);
                 updatePurchasedTodayList(true);
                 mIsPurchasedTodayEditing = true;
             }
         });
-        cancelEditButton.setOnClickListener(new View.OnClickListener() {
+        mCancelEditingPurchasedTodayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                exitEditingPurchasedTodayList(cancelEditButton, mPurchasedTodayEditButton, mPurchasedTodayListTitle, actionButtons);
+                exitEditingPurchasedTodayList();
             }
         });
 
 
-        final Button deleteToBuySelectedItems = actionButtons.findViewById(R.id.delete);
-        final Button moveToShopSelectedItems = actionButtons.findViewById(R.id.button3);
+        final Button deleteToBuySelectedItems = mPurchasedTodayActionButtons.findViewById(R.id.delete);
+        final Button moveToShopSelectedItems = mPurchasedTodayActionButtons.findViewById(R.id.button3);
         moveToShopSelectedItems.setText(R.string.add_to_shop);
-        final Button moveToOutOfStockSelectedItems = actionButtons.findViewById(R.id.button2);
+        final Button moveToOutOfStockSelectedItems = mPurchasedTodayActionButtons.findViewById(R.id.button2);
         moveToOutOfStockSelectedItems.setText(R.string.move_to_out_of_stock);
         deleteToBuySelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<StockContentHelper.Item> selectedItems = mPurchasedTodayAdapter.getSelectedItems();
                 StockContentHelper.deleteItemList(getContext(), selectedItems);
-                exitEditingPurchasedTodayList(cancelEditButton, mPurchasedTodayEditButton, mPurchasedTodayListTitle, actionButtons);
+                exitEditingPurchasedTodayList();
             }
         });
         moveToShopSelectedItems.setOnClickListener(new View.OnClickListener() {
@@ -263,7 +267,7 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View view) {
                 ArrayList<StockContentHelper.Item> selectedItems = mPurchasedTodayAdapter.getSelectedItems();
                 StockContentHelper.moveToShopList(getContext(), selectedItems);
-                exitEditingPurchasedTodayList(cancelEditButton, mPurchasedTodayEditButton, mPurchasedTodayListTitle, actionButtons);
+                exitEditingPurchasedTodayList();
             }
         });
         moveToOutOfStockSelectedItems.setOnClickListener(new View.OnClickListener() {
@@ -271,28 +275,26 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View view) {
                 ArrayList<StockContentHelper.Item> selectedItems = mPurchasedTodayAdapter.getSelectedItems();
                 StockContentHelper.moveToOutOfStockList(getContext(), selectedItems);
-                exitEditingPurchasedTodayList(cancelEditButton, mPurchasedTodayEditButton, mPurchasedTodayListTitle, actionButtons);
+                exitEditingPurchasedTodayList();
             }
         });
     }
 
-    private void exitEditingToBuyList(Button cancelEdit, Button editButton, Button listTitle, View actionButtons) {
-        cancelEdit.setVisibility(View.GONE);
-        actionButtons.setVisibility(View.GONE);
-        editButton.setVisibility(View.VISIBLE);
+    private void exitEditingToBuyList() {
+        mCancelEditingToBuyButton.setVisibility(View.GONE);
+        mToBuyActionButtons.setVisibility(View.GONE);
         mPurchasedTodayTitleButtons.setVisibility(View.VISIBLE);
         mIsToBuyEditing = false;
-        listTitle.setOnClickListener(mTitleClickListener);
+        mToBuyListTitle.setOnClickListener(mTitleClickListener);
         updateToBuyList(false);
     }
 
-    private void exitEditingPurchasedTodayList(Button cancelEdit, Button editButton, Button listTitle, View actionButtons) {
-        cancelEdit.setVisibility(View.GONE);
-        actionButtons.setVisibility(View.GONE);
-        editButton.setVisibility(View.VISIBLE);
+    private void exitEditingPurchasedTodayList() {
+        mCancelEditingPurchasedTodayButton.setVisibility(View.GONE);
+        mPurchasedTodayActionButtons.setVisibility(View.GONE);
         mToBuyTitleButtons.setVisibility(View.VISIBLE);
         mIsPurchasedTodayEditing = false;
-        listTitle.setOnClickListener(mTitleClickListener);
+        mPurchasedTodayListTitle.setOnClickListener(mTitleClickListener);
         updatePurchasedTodayList(false);
     }
 
@@ -343,6 +345,22 @@ public class ShoppingFragment extends Fragment {
 
     private ArrayList<StockContentHelper.Item> fetchList(boolean purchasedToday) {
         return StockContentHelper.queryShoppingItems(getContext(), purchasedToday);
+    }
+
+    @Override
+    public void onTabChanged() {
+        if (mIsToBuyEditing) {
+            exitEditingToBuyList();
+        } else if (mIsPurchasedTodayEditing) {
+            exitEditingPurchasedTodayList();
+        } else {
+            if (mPurchasedTodayAdapter != null) {
+                mPurchasedTodayAdapter.dismissSwipe();
+            }
+            if (mToBuyAdapter != null) {
+                mToBuyAdapter.dismissSwipe();
+            }
+        }
     }
 
     private class ItemStockAdapter extends ArrayAdapter<StockContentHelper.Item> {

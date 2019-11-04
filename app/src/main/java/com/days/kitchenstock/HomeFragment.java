@@ -14,9 +14,14 @@ import android.widget.Button;
 import com.days.kitchenstock.data.StockContentHelper;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class HomeFragment extends Fragment {
 
     public static final int TAB_COUNT = 3;
+    private ITabFragment mTabFragments[];
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
     private Button mAddItem, mSearch;
 
@@ -29,11 +34,30 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        mTabFragments = new ITabFragment[TAB_COUNT];
         demoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getChildFragmentManager());
         ViewPager pager = view.findViewById(R.id.pager);
         pager.setOffscreenPageLimit(TAB_COUNT - 1);
         pager.setAdapter(demoCollectionPagerAdapter);
         pager.setCurrentItem(TAB_COUNT - 1);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (ITabFragment fragment : mTabFragments) {
+                    fragment.onTabChanged();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
         mAddItem = view.findViewById(R.id.add_item);
@@ -60,12 +84,15 @@ public class HomeFragment extends Fragment {
         @Override
         public Fragment getItem(int i) {
             if (i == TAB_COUNT - 1) {
-                return new ShoppingFragment();
+                ShoppingFragment shoppingFragment = new ShoppingFragment();
+                mTabFragments [i] = shoppingFragment;
+                return shoppingFragment;
             }
             Fragment fragment = new StockFragment();
             Bundle args = new Bundle();
             args.putInt(StockFragment.LIST_TYPE_PARAM, i);
             fragment.setArguments(args);
+            mTabFragments [i] = (ITabFragment) fragment;
             return fragment;
         }
 
