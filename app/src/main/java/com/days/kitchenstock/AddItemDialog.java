@@ -21,7 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class AddItemDialog extends AlertDialog {
+public class AddItemDialog extends AlertDialog implements DialogInterface.OnShowListener {
 
     private OnClickListener mAddButtonListener;
     private EditText mName, mQuantity, mExpiry;
@@ -38,34 +38,7 @@ public class AddItemDialog extends AlertDialog {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    String name = mName.getText().toString();
-                    if (TextUtils.isEmpty(name.trim())) {
-                        new AlertDialog.Builder(getContext()).setMessage(R.string.name_empty_error)
-                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        mName.requestFocus();
-                                    }
-                                }).create().show();
-                    } else {
-                        final StockContentHelper.Item oldItem = StockContentHelper.queryItem(getContext(), name.trim());
-                        if (oldItem != null) {
-                            new AlertDialog.Builder(getContext()).setMessage(R.string.item_exist_error)
-                                    .setPositiveButton(android.R.string.yes, new OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            new UpdateItemDialog(getContext(), oldItem).show();
-                                            AddItemDialog.this.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.modify_name, new OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            mName.requestFocus();
-                                        }
-                                    }).create().show();
-                        }
-                    }
+                    validateItemName();
                 } else {
                     AddItemDialog.this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
@@ -131,37 +104,69 @@ public class AddItemDialog extends AlertDialog {
         });
         setCancelable(false);
         setupDialogButtons(context);
+        setOnShowListener(this);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
-    private void setupDialogButtons(@NonNull Context context) {
-        mAddButtonListener = new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                addItem();
+    private boolean validateItemName() {
+        String name = mName.getText().toString();
+        if (TextUtils.isEmpty(name.trim())) {
+            new Builder(getContext()).setMessage(R.string.name_empty_error)
+                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mName.requestFocus();
+                        }
+                    }).create().show();
+            return false;
+        } else {
+            final StockContentHelper.Item oldItem = StockContentHelper.queryItem(getContext(), name.trim());
+            if (oldItem != null) {
+                new Builder(getContext()).setMessage(R.string.item_exist_error)
+                        .setPositiveButton(android.R.string.yes, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new UpdateItemDialog(getContext(), oldItem).show();
+                                AddItemDialog.this.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.modify_name, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mName.requestFocus();
+                            }
+                        }).create().show();
+                return false;
             }
-        };
-        setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.add_button), mAddButtonListener);
+        }
+        return true;
+    }
+
+    private void setupDialogButtons(@NonNull Context context) {
+        setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.add_button), (OnClickListener) null);
     }
 
     private void addItem() {
-        StockContentHelper.Item item = new StockContentHelper.Item();
-        item.name = mName.getText().toString().trim();
-        item.quantity = mQuantity.getText().toString();
-        item.type = getItemType();
-        item.status = getItemStatus();
-        if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
-            try {
-                item.purchaseDate = Calendar.getInstance().getTime();
-                item.expiry = StockContentHelper.DATE_FORMATTER.parse(mExpiry.getText().toString());
-            } catch (ParseException e) {
-                item.expiry = null;
+        if (validateItemName()) {
+            StockContentHelper.Item item = new StockContentHelper.Item();
+            item.name = mName.getText().toString().trim();
+            item.quantity = mQuantity.getText().toString();
+            item.type = getItemType();
+            item.status = getItemStatus();
+            if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
+                try {
+                    item.purchaseDate = Calendar.getInstance().getTime();
+                    item.expiry = StockContentHelper.DATE_FORMATTER.parse(mExpiry.getText().toString());
+                } catch (ParseException e) {
+                    item.expiry = null;
+                }
             }
-        }
-        item.autoOutOfStock = mAutoOutOfStock.isChecked();
+            item.autoOutOfStock = mAutoOutOfStock.isChecked();
 
-        StockContentHelper.addItem(getContext(), item);
+            StockContentHelper.addItem(getContext(), item);
+            dismiss();
+        }
     }
 
     private StockContentHelper.ItemStatus getItemStatus() {
@@ -184,5 +189,15 @@ public class AddItemDialog extends AlertDialog {
                 return StockContentHelper.ItemType.LONG_TERM;
         }
         return StockContentHelper.ItemType.FRESH;
+    }
+
+    @Override
+    public void onShow(DialogInterface dialogInterface) {
+        getButton(BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addItem();
+            }
+        });
     }
 }

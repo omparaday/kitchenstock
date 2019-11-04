@@ -49,34 +49,7 @@ public class UpdateItemDialog extends AlertDialog {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    String name = mName.getText().toString();
-                    if (TextUtils.isEmpty(name.trim())) {
-                        new AlertDialog.Builder(getContext()).setMessage(R.string.name_empty_error)
-                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        mName.requestFocus();
-                                    }
-                                }).create().show();
-                    } else if (!mItem.name.equals(name.trim())) {
-                        final StockContentHelper.Item oldItem = StockContentHelper.queryItem(getContext(), name.trim());
-                        if (oldItem != null) {
-                            new AlertDialog.Builder(getContext()).setMessage(R.string.item_exist_error)
-                                    .setPositiveButton(android.R.string.yes, new OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            new UpdateItemDialog(getContext(), oldItem).show();
-                                            UpdateItemDialog.this.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.modify_name, new OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            mName.requestFocus();
-                                        }
-                                    }).create().show();
-                        }
-                    }
+                    validateName();
                 }
             }
         });
@@ -143,6 +116,40 @@ public class UpdateItemDialog extends AlertDialog {
         initViews();
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    private boolean validateName() {
+        String name = mName.getText().toString();
+        if (TextUtils.isEmpty(name.trim())) {
+            new Builder(getContext()).setMessage(R.string.name_empty_error)
+                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mName.requestFocus();
+                        }
+                    }).create().show();
+            return false;
+        } else if (!mItem.name.equals(name.trim())) {
+            final StockContentHelper.Item oldItem = StockContentHelper.queryItem(getContext(), name.trim());
+            if (oldItem != null) {
+                new Builder(getContext()).setMessage(R.string.item_exist_error)
+                        .setPositiveButton(android.R.string.yes, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new UpdateItemDialog(getContext(), oldItem).show();
+                                UpdateItemDialog.this.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.modify_name, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mName.requestFocus();
+                            }
+                        }).create().show();
+                return false;
+            }
+        }
+        return true;
     }
 
     private void initViews() {
@@ -239,14 +246,16 @@ public class UpdateItemDialog extends AlertDialog {
     }
 
     private void updateItem() {
-        String oldName = mItem.name;
-        mItem.name = mName.getText().toString().trim();
-        mItem.quantity = mQuantity.getText().toString();
-        mItem.type = getItemType();
-        mItem.autoOutOfStock = mAutoOutOfStock.isChecked();
+        if (validateName()) {
+            String oldName = mItem.name;
+            mItem.name = mName.getText().toString().trim();
+            mItem.quantity = mQuantity.getText().toString();
+            mItem.type = getItemType();
+            mItem.autoOutOfStock = mAutoOutOfStock.isChecked();
 
-        StockContentHelper.updateItem(getContext(), mItem, oldName);
-        dismiss();
+            StockContentHelper.updateItem(getContext(), mItem, oldName);
+            dismiss();
+        }
     }
 
     private void deleteItem() {
