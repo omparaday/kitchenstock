@@ -52,7 +52,7 @@ public class StockFragment extends Fragment implements ITabFragment {
     private ContentObserver mObserver;
     private boolean mIsInStockEditing;
     private boolean mIsOutOfStockEditing;
-    private View.OnClickListener mTitleClickListener;
+    private View.OnClickListener mInStockTitleClickListener, mOutOfStockTitleClickListener;
     private Button mInStockListTitle;
     private Button mOutOfStockListTitle;
     private Button mInStockEditButton;
@@ -116,20 +116,10 @@ public class StockFragment extends Fragment implements ITabFragment {
                 return false;
             }
         });
-        mTitleClickListener = new View.OnClickListener() {
+        mInStockTitleClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInStockLayout.getVisibility() == View.VISIBLE) {
-                    mInStockListTitle.setText(R.string.in_stock_collapse);
-                    mOutOfStockListTitle.setText(R.string.out_of_stock_expand);
-                    mOutOfStockLayout.setVisibility(View.VISIBLE);
-                    mInStockLayout.setVisibility(View.GONE);
-                    mInStockEditCanceLayout.setVisibility(View.GONE);
-                    mOutOfStockEditCancelLayout.setVisibility(View.VISIBLE);
-                    if (mInStockAdapter != null) {
-                        mInStockAdapter.dismissSwipe();
-                    }
-                } else {
+                if (mInStockLayout.getVisibility() != View.VISIBLE) {
                     mInStockListTitle.setText(R.string.in_stock_expand);
                     mOutOfStockListTitle.setText(R.string.out_of_stock_collapse);
                     mInStockLayout.setVisibility(View.VISIBLE);
@@ -138,6 +128,22 @@ public class StockFragment extends Fragment implements ITabFragment {
                     mOutOfStockEditCancelLayout.setVisibility(View.GONE);
                     if (mOutOfStockAdapter != null) {
                         mOutOfStockAdapter.dismissSwipe();
+                    }
+                }
+            }
+        };
+        mOutOfStockTitleClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOutOfStockLayout.getVisibility() != View.VISIBLE) {
+                    mInStockListTitle.setText(R.string.in_stock_collapse);
+                    mOutOfStockListTitle.setText(R.string.out_of_stock_expand);
+                    mOutOfStockLayout.setVisibility(View.VISIBLE);
+                    mInStockLayout.setVisibility(View.GONE);
+                    mInStockEditCanceLayout.setVisibility(View.GONE);
+                    mOutOfStockEditCancelLayout.setVisibility(View.VISIBLE);
+                    if (mInStockAdapter != null) {
+                        mInStockAdapter.dismissSwipe();
                     }
                 }
             }
@@ -156,7 +162,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mInStockListTitle = mInStockTitleButtons.findViewById(R.id.list_title);
         mInStockActionButtons = view.findViewById(R.id.in_stock_action_buttons);
         mInStockListTitle.setText(R.string.in_stock_expand);
-        mInStockListTitle.setOnClickListener(mTitleClickListener);
+        mInStockListTitle.setOnClickListener(mInStockTitleClickListener);
         mInStockEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,7 +224,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mCancelEditingOutOfStockButton = mOutOfStockTitleButtons.findViewById(R.id.cancel);
         mOutOfStockListTitle = mOutOfStockTitleButtons.findViewById(R.id.list_title);
         mOutOfStockListTitle.setText(R.string.out_of_stock_collapse);
-        mOutOfStockListTitle.setOnClickListener(mTitleClickListener);
+        mOutOfStockListTitle.setOnClickListener(mOutOfStockTitleClickListener);
         mOutOfStockEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -275,7 +281,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mInStockActionButtons.setVisibility(View.GONE);
         mOutOfStockTitleButtons.setVisibility(View.VISIBLE);
         mIsInStockEditing = false;
-        mInStockListTitle.setOnClickListener(mTitleClickListener);
+        mInStockListTitle.setOnClickListener(mInStockTitleClickListener);
         updateInStockList(false);
     }
 
@@ -284,7 +290,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mOutOfStockActionButtons.setVisibility(View.GONE);
         mInStockTitleButtons.setVisibility(View.VISIBLE);
         mIsOutOfStockEditing = false;
-        mOutOfStockListTitle.setOnClickListener(mTitleClickListener);
+        mOutOfStockListTitle.setOnClickListener(mOutOfStockTitleClickListener);
         updateOutOfStockList(false);
     }
 

@@ -48,7 +48,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     private ContentObserver mObserver;
     private boolean mIsToBuyEditing;
     private boolean mIsPurchasedTodayEditing;
-    private View.OnClickListener mTitleClickListener;
+    private View.OnClickListener mToBuyTitleClickListener, mPurchasedTodayTitleClickListener;
     private Button mToBuyListTitle;
     private Button mPurchasedTodayListTitle;
     private Button mToBuyEditButton;
@@ -127,20 +127,10 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                 return false;
             }
         });
-        mTitleClickListener = new View.OnClickListener() {
+        mToBuyTitleClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mToBuyLayout.getVisibility() == View.VISIBLE) {
-                    mToBuyListTitle.setText(R.string.to_buy_collapse);
-                    mPurchasedTodayListTitle.setText(R.string.purchased_today_expand);
-                    mPurhcasedTodayLayout.setVisibility(View.VISIBLE);
-                    mToBuyLayout.setVisibility(View.GONE);
-                    mToBuyEditCancelLayout.setVisibility(View.GONE);
-                    mPurchasedTodayEditCancelLayout.setVisibility(View.VISIBLE);
-                    if (mToBuyAdapter != null) {
-                        mToBuyAdapter.dismissSwipe();
-                    }
-                } else {
+                if (mToBuyLayout.getVisibility() != View.VISIBLE) {
                     mToBuyListTitle.setText(R.string.to_buy_expand);
                     mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
                     mToBuyLayout.setVisibility(View.VISIBLE);
@@ -149,6 +139,22 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                     mPurchasedTodayEditCancelLayout.setVisibility(View.GONE);
                     if (mPurchasedTodayAdapter != null) {
                         mPurchasedTodayAdapter.dismissSwipe();
+                    }
+                }
+            }
+        };
+        mPurchasedTodayTitleClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPurhcasedTodayLayout.getVisibility() != View.VISIBLE) {
+                    mToBuyListTitle.setText(R.string.to_buy_collapse);
+                    mPurchasedTodayListTitle.setText(R.string.purchased_today_expand);
+                    mPurhcasedTodayLayout.setVisibility(View.VISIBLE);
+                    mToBuyLayout.setVisibility(View.GONE);
+                    mToBuyEditCancelLayout.setVisibility(View.GONE);
+                    mPurchasedTodayEditCancelLayout.setVisibility(View.VISIBLE);
+                    if (mToBuyAdapter != null) {
+                        mToBuyAdapter.dismissSwipe();
                     }
                 }
             }
@@ -166,7 +172,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mToBuyListTitle = mToBuyTitleButtons.findViewById(R.id.list_title);
         mToBuyActionButtons = view.findViewById(R.id.to_buy_action_buttons);
         mToBuyListTitle.setText(R.string.to_buy_expand);
-        mToBuyListTitle.setOnClickListener(mTitleClickListener);
+        mToBuyListTitle.setOnClickListener(mToBuyTitleClickListener);
         mToBuyEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,7 +234,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mCancelEditingPurchasedTodayButton = mPurchasedTodayTitleButtons.findViewById(R.id.cancel);
         mPurchasedTodayListTitle = mPurchasedTodayTitleButtons.findViewById(R.id.list_title);
         mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
-        mPurchasedTodayListTitle.setOnClickListener(mTitleClickListener);
+        mPurchasedTodayListTitle.setOnClickListener(mPurchasedTodayTitleClickListener);
         mPurchasedTodayEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -285,7 +291,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mToBuyActionButtons.setVisibility(View.GONE);
         mPurchasedTodayTitleButtons.setVisibility(View.VISIBLE);
         mIsToBuyEditing = false;
-        mToBuyListTitle.setOnClickListener(mTitleClickListener);
+        mToBuyListTitle.setOnClickListener(mToBuyTitleClickListener);
         updateToBuyList(false);
     }
 
@@ -294,7 +300,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mPurchasedTodayActionButtons.setVisibility(View.GONE);
         mToBuyTitleButtons.setVisibility(View.VISIBLE);
         mIsPurchasedTodayEditing = false;
-        mPurchasedTodayListTitle.setOnClickListener(mTitleClickListener);
+        mPurchasedTodayListTitle.setOnClickListener(mPurchasedTodayTitleClickListener);
         updatePurchasedTodayList(false);
     }
 

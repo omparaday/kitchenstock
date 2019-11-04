@@ -14,10 +14,6 @@ import android.widget.Button;
 import com.days.kitchenstock.data.StockContentHelper;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class HomeFragment extends Fragment {
 
     public static final int TAB_COUNT = 3;
