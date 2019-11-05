@@ -13,22 +13,24 @@ public class OnSwipeListener implements OnTouchListener {
     static final int MIN_DISTANCE = 60;
     private float downX, downY, upX, upY;
 
-    public boolean onSwipeLeft(){
+    public boolean onSwipeLeft() {
         return false;
     }
 
-    public boolean onMoveLeft(float deltaX){
+    public boolean onMoveLeft(float deltaX) {
         return false;
     }
-    public boolean onDown(){
+
+    public boolean onDown() {
         return false;
     }
-    public boolean onCancel(){
+
+    public boolean onCancel() {
         return false;
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        switch(event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 downX = event.getX();
                 downY = event.getY();
@@ -42,11 +44,12 @@ public class OnSwipeListener implements OnTouchListener {
                 float deltaY = downY - upY;
 
                 // swipe horizontal?
-                if(Math.abs(deltaX) > Math.abs(deltaY))
-                {
-                    if(Math.abs(deltaX) > MIN_DISTANCE){
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (Math.abs(deltaX) > MIN_DISTANCE) {
                         // left or right
-                        if(deltaX > 0) { return this.onSwipeLeft(); }
+                        if (deltaX > 0) {
+                            return this.onSwipeLeft();
+                        }
                     }
                 }
                 onCancel();
@@ -58,9 +61,10 @@ public class OnSwipeListener implements OnTouchListener {
                 float deltaX = downX - curX;
                 float deltaY = downY - curY;
                 // swipe horizontal?
-                if(Math.abs(deltaX) > Math.abs(deltaY))
-                {
-                        if(deltaX > 30) { return this.onMoveLeft(deltaX); }
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > 30) {
+                        return this.onMoveLeft(deltaX);
+                    }
                 }
                 return false;
             }
@@ -71,13 +75,12 @@ public class OnSwipeListener implements OnTouchListener {
                 float deltaX = downX - upX;
                 float deltaY = downY - upY;
 
-                // swipe horizontal?
-                if(Math.abs(deltaX) > Math.abs(deltaY))
-                {
-                    if(Math.abs(deltaX) > MIN_DISTANCE){
-                        // left or right
-                        if (deltaX > 0) { this.onSwipeLeft();
-                        return false;}
+
+                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                    // left or right
+                    if (deltaX > 0) {
+                        this.onSwipeLeft();
+                        return false;
                     }
                 }
                 onCancel();
