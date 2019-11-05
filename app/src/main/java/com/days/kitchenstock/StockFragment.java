@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,6 +71,7 @@ public class StockFragment extends Fragment implements ITabFragment {
     private View mInStockActionButtons;
     private View mOutOfStockActionButtons;
     private Button mCancelEditingOutOfStockButton;
+    private GestureDetector mGestureDetector;
 
     public StockFragment() {
         // Required empty public constructor
@@ -104,9 +106,23 @@ public class StockFragment extends Fragment implements ITabFragment {
         mInStockEmptyMessage = view.findViewById(R.id.empty_in_stock_message);
         mOutOfStockEmptyMessage = view.findViewById(R.id.empty_out_of_stock_message);
         mInStockListView = view.findViewById(R.id.in_stock);
+        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                Log.println(Log.INFO, "omprak", "onDown");
+                if (mInStockAdapter != null) {
+                    mInStockAdapter.dismissSwipe();
+                }
+                if (mOutOfStockAdapter != null) {
+                    mOutOfStockAdapter.dismissSwipe();
+                }
+                return false;
+            }
+        });
         mInStockListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
                 return false;
             }
         });
@@ -114,6 +130,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mOutOfStockListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
                 return false;
             }
         });

@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,6 +65,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     private View mToBuyActionButtons;
     private Button mCancelEditingPurchasedTodayButton;
     private View mPurchasedTodayActionButtons;
+    private GestureDetector mGestureDetector;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -115,9 +117,23 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mToBuyLayout = view.findViewById(R.id.to_buy_layout);
         mPurhcasedTodayLayout = view.findViewById(R.id.purchased_today_layout);
         mToBuyListView = view.findViewById(R.id.to_buy);
+        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                Log.println(Log.INFO, "omprak", "onDown");
+                if (mPurchasedTodayAdapter != null) {
+                    mPurchasedTodayAdapter.dismissSwipe();
+                }
+                if (mToBuyAdapter != null) {
+                    mToBuyAdapter.dismissSwipe();
+                }
+                return false;
+            }
+        });
         mToBuyListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
                 return false;
             }
         });
@@ -126,6 +142,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mPurchasedTodayListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
                 return false;
             }
         });
