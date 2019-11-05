@@ -1,5 +1,7 @@
 package com.days.kitchenstock;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -8,61 +10,80 @@ import android.view.View.OnTouchListener;
 
 public class OnSwipeListener implements OnTouchListener {
 
-    private final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
+    static final int MIN_DISTANCE = 60;
+    private float downX, downY, upX, upY;
 
-    public boolean onTouch(final View v, final MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
+    public boolean onSwipeLeft(){
+        return false;
     }
 
-    private final class GestureListener extends SimpleOnGestureListener {
+    public boolean onMoveLeft(float deltaX){
+        return false;
+    }
+    public boolean onDown(){
+        return false;
+    }
+    public boolean onCancel(){
+        return false;
+    }
 
-        private static final int SWIPE_THRESHOLD = 20;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 10;
+    public boolean onTouch(View v, MotionEvent event) {
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN: {
+                downX = event.getX();
+                downY = event.getY();
+                return onDown();
+            }
+            case MotionEvent.ACTION_UP: {
+                upX = event.getX();
+                upY = event.getY();
 
+                float deltaX = downX - upX;
+                float deltaY = downY - upY;
 
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
-            try {
-                float diffY = e2.getY() - e1.getY();
-                float diffX = e2.getX() - e1.getX();
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            result = onSwipeRight();
-                        } else {
-                            result = onSwipeLeft();
-                        }
-                    }
-                } else {
-                    if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY > 0) {
-                            result = onSwipeBottom();
-                        } else {
-                            result = onSwipeTop();
-                        }
+                // swipe horizontal?
+                if(Math.abs(deltaX) > Math.abs(deltaY))
+                {
+                    if(Math.abs(deltaX) > MIN_DISTANCE){
+                        // left or right
+                        if(deltaX > 0) { return this.onSwipeLeft(); }
                     }
                 }
-            } catch (Exception exception) {
-                exception.printStackTrace();
+                onCancel();
+                return false; // We don't consume the event
             }
-            return result;
+            case MotionEvent.ACTION_MOVE: {
+                float curX = event.getX();
+                float curY = event.getY();
+                float deltaX = downX - curX;
+                float deltaY = downY - curY;
+                // swipe horizontal?
+                if(Math.abs(deltaX) > Math.abs(deltaY))
+                {
+                        if(deltaX > 30) { return this.onMoveLeft(deltaX); }
+                }
+                return false;
+            }
+            case MotionEvent.ACTION_CANCEL:
+                upX = event.getX();
+                upY = event.getY();
+
+                float deltaX = downX - upX;
+                float deltaY = downY - upY;
+
+                // swipe horizontal?
+                if(Math.abs(deltaX) > Math.abs(deltaY))
+                {
+                    if(Math.abs(deltaX) > MIN_DISTANCE){
+                        // left or right
+                        if (deltaX > 0) { this.onSwipeLeft();
+                        return false;}
+                    }
+                }
+                onCancel();
+                return false;
         }
-    }
-
-    public boolean onSwipeRight() {
         return false;
     }
 
-    public boolean onSwipeLeft() {
-        return false;
-    }
-
-    public boolean onSwipeTop() {
-        return false;
-    }
-
-    public boolean onSwipeBottom() {
-        return false;
-    }
 }

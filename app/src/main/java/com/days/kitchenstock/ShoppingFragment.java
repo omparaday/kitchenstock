@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -115,15 +118,14 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mToBuyListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mToBuyAdapter.dismissSwipe();
                 return false;
             }
         });
+
         mPurchasedTodayListView = view.findViewById(R.id.purchased_today);
         mPurchasedTodayListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mPurchasedTodayAdapter.dismissSwipe();
                 return false;
             }
         });
@@ -377,7 +379,10 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
 
         private boolean dismissSwipe() {
             if (currentVisibleSwipe != null) {
-                currentVisibleSwipe.setVisibility(View.GONE);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(((LinearLayout) currentVisibleSwipe).getLayoutParams());
+                params.width = 0;
+                currentVisibleSwipe.setLayoutParams(params);
+                currentVisibleSwipe.invalidate();
                 currentVisibleSwipe = null;
                 return true;
             }
@@ -483,19 +488,43 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                     }
                 });
             }
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
             view.setOnTouchListener(new OnSwipeListener() {
                 @Override
                 public boolean onSwipeLeft() {
                     dismissSwipe();
-                    swipeButtons.setVisibility(View.VISIBLE);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
+                    params.width = (int)convertDpToPixel(120,getContext());
+                    swipeButtons.setLayoutParams(params);
+                    swipeButtons.invalidate();
                     currentVisibleSwipe = swipeButtons;
                     return true;
                 }
-
-                @Override
-                public boolean onSwipeRight() {
-                    dismissSwipe();
+                public boolean onMoveLeft(float deltaX){
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
+                    params.width = (int) Math.min(convertDpToPixel(120, getContext()), deltaX);
+                    swipeButtons.setLayoutParams(params);
+                    swipeButtons.invalidate();
+                    currentVisibleSwipe = swipeButtons;
                     return true;
+                }
+                public float convertDpToPixel(float dp, Context context){
+                    return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+                }
+
+                public boolean onDown(){
+                    return dismissSwipe();
+                }
+
+                public boolean onCancel(){
+                    dismissSwipe();
+                    return false;
                 }
             });
         }

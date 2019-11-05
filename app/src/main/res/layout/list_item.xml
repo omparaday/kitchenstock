@@ -8,8 +8,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingRight="4dp"
         android:orientation="vertical">
 
         <TextView
@@ -54,14 +55,18 @@
     <LinearLayout
         android:id="@+id/swipe_buttons"
         android:layout_marginLeft="4dp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:minWidth="0dp"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/swipe1"
-            android:layout_width="60dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:maxWidth="60dp"
+            android:minWidth="0dp"
+            android:maxLines="2"
             android:textAllCaps="false"
             android:layout_height="match_parent"
             android:textColor="@android:color/white"
@@ -69,7 +74,11 @@
 
         <Button
             android:id="@+id/swipe2"
-            android:layout_width="60dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:maxWidth="60dp"
+            android:minWidth="0dp"
+            android:maxLines="2"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:background="@color/second_swipe_button"
