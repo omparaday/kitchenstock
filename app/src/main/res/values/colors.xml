@@ -4,5 +4,6 @@
     <color name="expiring_soon">#ff990000</color>
     <color name="first_swipe_button">#79797a</color>
     <color name="second_swipe_button">#3f52a1</color>
+    <color name="keep_blue">#0066CC</color>
     <color name="light_grey">#edebeb</color>
 </resources>

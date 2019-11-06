@@ -9,9 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,7 +62,6 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     private View mToBuyActionButtons;
     private Button mCancelEditingPurchasedTodayButton;
     private View mPurchasedTodayActionButtons;
-    private GestureDetector mGestureDetector;
 
     public ShoppingFragment() {
         // Required empty public constructor
@@ -117,23 +113,14 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mToBuyLayout = view.findViewById(R.id.to_buy_layout);
         mPurhcasedTodayLayout = view.findViewById(R.id.purchased_today_layout);
         mToBuyListView = view.findViewById(R.id.to_buy);
-        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                Log.println(Log.INFO, "omprak", "onDown");
-                if (mPurchasedTodayAdapter != null) {
-                    mPurchasedTodayAdapter.dismissSwipe();
-                }
-                if (mToBuyAdapter != null) {
-                    mToBuyAdapter.dismissSwipe();
-                }
-                return false;
-            }
-        });
         mToBuyListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mToBuyAdapter != null) {
+                        mToBuyAdapter.dismissSwipe();
+                    }
+                }
                 return false;
             }
         });
@@ -142,7 +129,11 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mPurchasedTodayListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mPurchasedTodayAdapter != null) {
+                        mPurchasedTodayAdapter.dismissSwipe();
+                    }
+                }
                 return false;
             }
         });
@@ -517,7 +508,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                 public boolean onSwipeLeft() {
                     dismissSwipe();
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
-                    params.width = (int)convertDpToPixel(120,getContext());
+                    params.width = (int)convertDpToPixel(BUTTONS_WIDTH,getContext());
                     swipeButtons.setLayoutParams(params);
                     swipeButtons.invalidate();
                     currentVisibleSwipe = swipeButtons;
@@ -525,14 +516,11 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                 }
                 public boolean onMoveLeft(float deltaX){
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
-                    params.width = (int) Math.min(convertDpToPixel(120, getContext()), deltaX);
+                    params.width = (int) Math.min(convertDpToPixel(BUTTONS_WIDTH, getContext()), deltaX);
                     swipeButtons.setLayoutParams(params);
                     swipeButtons.invalidate();
                     currentVisibleSwipe = swipeButtons;
                     return true;
-                }
-                public float convertDpToPixel(float dp, Context context){
-                    return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
                 }
 
                 public boolean onDown(){

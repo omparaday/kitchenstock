@@ -9,9 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -71,7 +68,6 @@ public class StockFragment extends Fragment implements ITabFragment {
     private View mInStockActionButtons;
     private View mOutOfStockActionButtons;
     private Button mCancelEditingOutOfStockButton;
-    private GestureDetector mGestureDetector;
 
     public StockFragment() {
         // Required empty public constructor
@@ -106,23 +102,14 @@ public class StockFragment extends Fragment implements ITabFragment {
         mInStockEmptyMessage = view.findViewById(R.id.empty_in_stock_message);
         mOutOfStockEmptyMessage = view.findViewById(R.id.empty_out_of_stock_message);
         mInStockListView = view.findViewById(R.id.in_stock);
-        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                Log.println(Log.INFO, "omprak", "onDown");
-                if (mInStockAdapter != null) {
-                    mInStockAdapter.dismissSwipe();
-                }
-                if (mOutOfStockAdapter != null) {
-                    mOutOfStockAdapter.dismissSwipe();
-                }
-                return false;
-            }
-        });
         mInStockListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mInStockAdapter != null) {
+                        mInStockAdapter.dismissSwipe();
+                    }
+                }
                 return false;
             }
         });
@@ -130,7 +117,11 @@ public class StockFragment extends Fragment implements ITabFragment {
         mOutOfStockListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mOutOfStockAdapter != null) {
+                        mOutOfStockAdapter.dismissSwipe();
+                    }
+                }
                 return false;
             }
         });
@@ -555,7 +546,7 @@ public class StockFragment extends Fragment implements ITabFragment {
                 public boolean onSwipeLeft() {
                     dismissSwipe();
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
-                    params.width = (int)convertDpToPixel(120,getContext());
+                    params.width = (int)convertDpToPixel(BUTTONS_WIDTH, getContext());
                     swipeButtons.setLayoutParams(params);
                     swipeButtons.invalidate();
                     currentVisibleSwipe = swipeButtons;
@@ -563,14 +554,11 @@ public class StockFragment extends Fragment implements ITabFragment {
                 }
                 public boolean onMoveLeft(float deltaX){
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
-                    params.width = (int) Math.min(convertDpToPixel(120, getContext()), deltaX);
+                    params.width = (int) Math.min(convertDpToPixel(BUTTONS_WIDTH, getContext()), deltaX);
                     swipeButtons.setLayoutParams(params);
                     swipeButtons.invalidate();
                     currentVisibleSwipe = swipeButtons;
                     return true;
-                }
-                public float convertDpToPixel(float dp, Context context){
-                    return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
                 }
 
                 public boolean onDown(){
