@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -103,7 +105,6 @@ public class UpdateItemDialog extends AlertDialog {
         });
         mItemTypeGroup = view.findViewById(R.id.type_group);
         mFresh = view.findViewById(R.id.fresh);
-        //mShortTerm = view.findViewById(R.id.short_term);
         mLongTerm = view.findViewById(R.id.long_term);
         Button close = view.findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +181,11 @@ public class UpdateItemDialog extends AlertDialog {
         switch (mItem.status) {
             case IN_STOCK:
                 mAddToStock.setVisibility(View.GONE);
+                TextView lastPurchased = mMoreOptionsLayout.findViewById(R.id.last_added_to_stock);
+                if (mItem.purchaseDate != null) {
+                    lastPurchased.setVisibility(View.VISIBLE);
+                    lastPurchased.setText(context.getString(R.string.last_added, DateFormat.getMediumDateFormat(getContext()).format(mItem.purchaseDate)));
+                }
                 break;
             case OUT_OF_STOCK:
                 mMoveToOutOfStock.setVisibility(View.GONE);

@@ -1,7 +1,5 @@
 package com.days.kitchenstock.data;
 
-import java.util.HashMap;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -28,8 +26,6 @@ public class StockContentProvider extends ContentProvider {
     static final String PURCHASE_DATE = "purchaseDate";
     static final String QUANTITY = "quantity";
     static final String AUTO_OUT_OF_STOCK = "autoOutOfStock";
-
-    private static HashMap<String, String> STUDENTS_PROJECTION_MAP;
 
     /**
      * Database specific constant declarations

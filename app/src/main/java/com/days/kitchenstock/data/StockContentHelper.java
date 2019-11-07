@@ -266,8 +266,7 @@ public class StockContentHelper {
     }
 
     public static boolean moveStockToShopAutoAddItems(Context context) {
-        String selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue() +
-                " AND " + StockContentProvider.AUTO_OUT_OF_STOCK + "=1";
+        String selection = StockContentProvider.AUTO_OUT_OF_STOCK + "=1";
         Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
         if (cursor.moveToFirst()) {
             Calendar calendar = Calendar.getInstance();
@@ -277,7 +276,7 @@ public class StockContentHelper {
             Date today = calendar.getTime();
             do {
                 Item item = getItemFromCursor(cursor);
-                if (item.purchaseDate != today) {
+                if (item.status != ItemStatus.TO_BUY && item.purchaseDate != today) {
                     item.purchaseDate = null;
                     item.expiry = null;
                     item.status = ItemStatus.TO_BUY;

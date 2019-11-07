@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "773942018609",
+    "firebase_url": "https://keep-stock.firebaseio.com",
+    "project_id": "keep-stock",
+    "storage_bucket": "keep-stock.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773942018609:android:39fd70f42c189772bb8b10",
+        "android_client_info": {
+          "package_name": "com.days.kitchenstock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773942018609-184pvs2q3oi12q960tba8su60vtgj0pu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHvGLq4ueNquyX5jBIsAcxrsH5UstFQZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773942018609-184pvs2q3oi12q960tba8su60vtgj0pu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

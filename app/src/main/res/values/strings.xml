@@ -14,7 +14,7 @@
     <string name="type">Item Type</string>
     <string name="status">Current Status</string>
     <string name="expiry">Expiry (Optional) as DD/MM/YYYY</string>
-    <string name="auto_move_to_shop">Automatically Move To Shop Every Day (such as Milk which you want to buy every day)</string>
+    <string name="auto_move_to_shop">Auto Add To Shop Every Day (such as leafy greens which you may buy daily)</string>
     <string name="quantity">Quantity (Optional)</string>
     <string name="shop_status_string">&#x1F6D2; Shop</string>
     <string name="to_buy_collapse">&#x1F6D2; Shop &#10217;</string>
@@ -44,4 +44,5 @@
     <string name="delete_selected">&#x1f5d1; Delete</string>
     <string name="close_icon">&#x2A09;</string>
     <string name="no_items_to_display">No items in this list. Click \"&#xFF0B; Add Item\" or edit other lists to add items here.</string>
+    <string name="last_added">Last Added To Stock: %s</string>
 </resources>
