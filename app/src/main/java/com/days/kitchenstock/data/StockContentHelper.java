@@ -220,7 +220,7 @@ public class StockContentHelper {
     public static int getExpiredSinceCount(Context context, Date since) {
         int count = 0;
         Date today = Calendar.getInstance().getTime();
-        String selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+        String selection = StockContentProvider.AUTO_OUT_OF_STOCK + "=0 AND " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
         Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
         if (cursor.moveToFirst()) {
             do {
@@ -240,7 +240,7 @@ public class StockContentHelper {
     public static int getExpiringSoonSinceCount(Context context, Date since) {
         int count = 0;
         Date today = Calendar.getInstance().getTime();
-        String selection = StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
+        String selection = StockContentProvider.AUTO_OUT_OF_STOCK + "=0 AND " + StockContentProvider.STATUS + "=" + ItemStatus.IN_STOCK.getValue();
         Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, selection, null, null);
         if (cursor.moveToFirst()) {
             do {
