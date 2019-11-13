@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="veg">
+        <item>Cake</item>
+        <item>Chocolates</item>
+        <item>Candy</item>
+        <item>Brownie</item>
+        <item>Milk</item>
+        <item>Cheese</item>
+        <item>Cottage Cheese</item>
+        <item>Tofu</item>
+        <item>Soy Milk</item>
+        <item>Soy Bean</item>
+        <item>Spinach</item>
+        <item>Curry leaves</item>
+        <item>Coriander leaves</item>
+        <item>Cabbage</item>
+        <item>Brinjal</item>
+        <item>Drumstick</item>
+        <item>Ladys Finger</item>
+        <item>Potato</item>
+        <item>Tomato</item>
+        <item>Coconut</item>
+        <item>Pistachios</item>
+        <item>Almonds</item>
+        <item>Cashew</item>
+        <item>Cucumber</item>
+        <item>Onion</item>
+        <item>Garlic</item>
+        <item>Chilli</item>
+        <item>Carrot</item>
+        <item>Beans</item>
+        <item>Capsicum</item>
+        <item>Beetroot</item>
+        <item>Cauliflower</item>
+        <item>Rice</item>
+        <item>Wheat</item>
+        <item>Salt</item>
+        <item>Sugar</item>
+        <item>Biscuit</item>
+        <item>Bread</item>
+        <item>Burger Bun</item>
+        <item>Chilli Powder</item>
+        <item>Ginger</item>
+        <item>Turmeric</item>
+        <item>Coriander Powder</item>
+        <item>Pepper</item>
+        <item>Pepper Powder</item>
+        <item>Cardamom</item>
+        <item>Sauce</item>
+        <item>Jam</item>
+        <item>Honey</item>
+        <item>Butter</item>
+        <item>Green Peas</item>
+        <item>Black Peas</item>
+        <item>Chick Peas</item>
+        <item>Mustard</item>
+        <item>Olive</item>
+        <item>Olive Oil</item>
+        <item>Cumin</item>
+        <item>Fennel</item>
+        <item>Gram</item>
+        <item>Tea</item>
+        <item>Coffee</item>
+        <item>Gram Flour</item>
+        <item>Brown Sugar</item>
+        <item>Black Salt</item>
+        <item>Crystal Salt</item>
+        <item>Curd/Yogurt</item>
+        <item>Cooking Oil</item>
+        <item>Cloves</item>
+        <item>Broccoli</item>
+        <item>Lettuce</item>
+        <item>Sprouts</item>
+        <item>Eggplant</item>
+        <item>Legumes</item>
+        <item>Kidney Beans</item>
+        <item>Green Beans</item>
+        <item>Lentils</item>
+        <item>Peas</item>
+        <item>Basil</item>
+        <item>Lemon Grass</item>
+        <item>Oregano</item>
+        <item>Mushroom</item>
+        <item>Spring Onions</item>
+        <item>Bell Pepper</item>
+        <item>Paprika</item>
+        <item>Radish</item>
+        <item>Gourd</item>
+        <item>Ridge Gourd</item>
+        <item>Bottle Gourd</item>
+        <item>Bitter Gourd</item>
+        <item>Sweet Potato</item>
+        <item>Yam</item>
+        <item>Turnip</item>
+        <item>Corn</item>
+        <item>Sweet Corn</item>
+        <item>Tamarind</item>
+    </string-array>
+
+    <string-array name="fruits">
+        <item>Apple</item>
+        <item>Banana</item>
+        <item>Water Melon</item>
+        <item>Lemon</item>
+        <item>Melon</item>
+        <item>Pomogranate</item>
+        <item>Orange</item>
+        <item>Sweet Lime</item>
+        <item>Grapes</item>
+        <item>Green Grapes</item>
+        <item>Black Grapes</item>
+        <item>Pear</item>
+        <item>Lime</item>
+        <item>Apricot</item>
+        <item>Peach</item>
+        <item>Plums</item>
+        <item>Mango</item>
+        <item>Strawberry</item>
+        <item>Raspberry</item>
+        <item>Blueberry</item>
+        <item>Berries</item>
+        <item>Kiwi Fruit</item>
+        <item>Passion Fruit</item>
+        <item>Rock Melon</item>
+        <item>Avocado</item>
+        <item>Gooseberry</item>
+        <item>Cherry</item>
+        <item>Jamun Fruit</item>
+        <item>Dates</item>
+        <item>Fig</item>
+        <item>Dragon Fruit</item>
+        <item>Guava</item>
+        <item>Honeydew Melon</item>
+        <item>Jack Fruit</item>
+        <item>Lychee</item>
+        <item>Mulberry</item>
+        <item>Papaya</item>
+        <item>Peach</item>
+        <item>Pineapple</item>
+        <item>Rambutan</item>
+    </string-array>
+    <string-array name="other_house_hold">
+        <item>Tooth Paste</item>
+        <item>Tooth Brush</item>
+        <item>Comb</item>
+        <item>Hair Oil</item>
+        <item>Conditioner</item>
+        <item>Water Bottle</item>
+        <item>Bath Soap</item>
+        <item>Battery</item>
+        <item>Nail Clipper/Cutter</item>
+        <item>Pillow</item>
+        <item>Pillow Cover</item>
+        <item>Bed Cover/Sheet</item>
+        <item>Quilt</item>
+        <item>Shrug</item>
+        <item>Ball</item>
+        <item>Bat</item>
+        <item>Goggles</item>
+        <item>Racquet</item>
+        <item>Blanket</item>
+        <item>Gloves</item>
+        <item>Coolers</item>
+        <item>Warmer</item>
+        <item>Headphone</item>
+        <item>Dust bin</item>
+        <item>Clock</item>
+        <item>Wrist Watch</item>
+        <item>Spoon</item>
+        <item>Tea Spoon</item>
+        <item>Table Spoon</item>
+        <item>Cup</item>
+        <item>Knife</item>
+        <item>Plate</item>
+        <item>Dish Washer</item>
+        <item>Detergent</item>
+        <item>Mop</item>
+        <item>Broomstick</item>
+        <item>Kitchen Scissor</item>
+        <item>Mattress/Bed</item>
+        <item>Cot</item>
+        <item>Chair</item>
+        <item>Dining Table</item>
+        <item>Table</item>
+        <item>Iron Box</item>
+        <item>Stool</item>
+        <item>Bench</item>
+        <item>Curtain</item>
+        <item>Glass Cup</item>
+        <item>Glass Mug</item>
+        <item>Scrum</item>
+        <item>Dish Washer</item>
+        <item>Tumbler</item>
+        <item>Frying Pan</item>
+    </string-array>
+    
+    <string-array name="stationery">
+        <item>Writing Pad</item>
+        <item>Wastebasket</item>
+        <item>Desk</item>
+        <item>Swivel chair</item>
+        <item>Telephone</item>
+        <item>Filing cabinet</item>
+        <item>Fax</item>
+        <item>Folder</item>
+        <item>Keyboard</item>
+        <item>Computer</item>
+        <item>Monitor</item>
+        <item>Clipboard</item>
+        <item>Envelope</item>
+        <item>Notebook</item>
+        <item>Paper</item>
+        <item>Sticky notes</item>
+        <item>Scissors</item>
+        <item>Glue</item>
+        <item>Calculator</item>
+        <item>Label</item>
+        <item>Pencil sharpener</item>
+        <item>Tape dispenser</item>
+        <item>Bulldog clip</item>
+        <item>Ballpoint</item>
+        <item>Marker</item>
+        <item>Pencil Leads</item>
+        <item>Pencil</item>
+        <item>Ink Bottle</item>
+        <item>Fountain pen</item>
+        <item>Highlighter</item>
+        <item>Rubber stamp</item>
+        <item>Paper clip</item>
+        <item>Thumbtack</item>
+        <item>Drawing pin</item>
+        <item>Push-pin</item>
+        <item>Eraser</item>
+        <item>Stapler</item>
+    </string-array>
+
+    <string-array name="baby_care">
+        <item>Diapers</item>
+        <item>Diaper Cream</item>
+        <item>Diaper Bag</item>
+        <item>Bath Tub</item>
+        <item>Bottle Nipple</item>
+        <item>Feeding Bottle</item>
+        <item>Baby Bath Soap</item>
+        <item>Baby Shampoo</item>
+        <item>Baby Comb</item>
+        <item>Breast Pump</item>
+        <item>Nursing Pad</item>
+        <item>Nursing Cream</item>
+        <item>High Chair</item>
+        <item>Bib</item>
+        <item>Feeding Pillow</item>
+        <item>Baby Sterlizer</item>
+        <item>Milk Powder (Formula)</item>
+        <item>Sipper</item>
+        <item>Crib Sheet</item>
+        <item>Crib</item>
+        <item>Stroller</item>
+        <item>Walker</item>
+        <item>Baby Socks</item>
+        <item>Water Proof Sheet</item>
+        <item>Baby Nail Clipper</item>
+        <item>Baby Thermometer</item>
+        <item>Pacifier</item>
+        <item>Baby Hair Band</item>
+        <item>Baby Gloves</item>
+        <item>Baby Gown</item>
+        <item>Baby Shorts</item>
+        <item>Baby Pants</item>
+        <item>Baby Hat</item>
+        <item>Baby Blanket</item>
+        <item>Baby Laundry Detergent</item>
+        <item>Baby Laundry Conditioner</item>
+        <item>Baby Shirt</item>
+        <item>Bottle Cleanser Liquid</item>
+        <item>Bottle Cleanser Brush</item>
+        <item>Wet Wipes</item>
+        <item>Cloth Diaper</item>
+        <item>Baby Powder</item>
+        <item>Baby Towel</item>
+        <item>Baby Lotion</item>
+        <item>Car Seat</item>
+    </string-array>
+
+    <string-array name="non_veg">
+        <item>Chicken</item>
+        <item>Mutton</item>
+        <item>Egg</item>
+        <item>Beef</item>
+        <item>Pork</item>
+        <item>Prawn</item>
+        <item>Shrimp</item>
+        <item>Fish</item>
+        <item>Lobster</item>
+        <item>Crab</item>
+        <item>Squid</item>
+        <item>Duck</item>
+        <item>Turkey</item>
+        <item>Bacon</item>
+        <item>Sausage</item>
+        <item>Ham</item>
+        <item>Steak</item>
+        <item>Pepperoni</item>
+        <item>Salami</item>
+        <item>Lamb</item>
+        <item>Quail</item>
+        <item>Shark</item>
+        <item>Sardines</item>
+        <item>Tuna</item>
+    </string-array>
+</resources>
