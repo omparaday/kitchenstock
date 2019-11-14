@@ -125,9 +125,9 @@ public class SearchItemDialog extends AlertDialog {
         for (StockContentHelper.Item item : mAllItemsList) {
             if (item.name.equals(searchString)) {
                 best.add(item);
-            } else if (item.name.startsWith(searchString)) {
+            } else if (item.name.toLowerCase().startsWith(searchString.toLowerCase())) {
                 better.add(item);
-            } else if (item.name.contains(searchString)) {
+            } else if (item.name.toLowerCase().contains(searchString.toLowerCase())) {
                 rest.add(item);
             }
         }
@@ -138,9 +138,6 @@ public class SearchItemDialog extends AlertDialog {
     }
 
     private class ItemStockAdapter extends ArrayAdapter<StockContentHelper.Item> {
-        private StockContentHelper.ItemType type;
-        private boolean isInStock;
-        private List<StockContentHelper.Item> itemList;
 
         public ItemStockAdapter(Context context, ArrayList<StockContentHelper.Item> list) {
             super(context, R.layout.list_item, list);

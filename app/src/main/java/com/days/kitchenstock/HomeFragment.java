@@ -19,7 +19,7 @@ public class HomeFragment extends Fragment {
     public static final int TAB_COUNT = 3;
     private ITabFragment mTabFragments[];
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
-    private Button mAddItem, mSearch;
+    private Button mAddItem, mSearch, mEasyAdd;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -68,6 +68,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 new SearchItemDialog(getContext()).show();
+            }
+        });
+        mEasyAdd = view.findViewById(R.id.easy_add);
+        mEasyAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new EasyAddOptionsDialog(getContext()).show();
             }
         });
     }

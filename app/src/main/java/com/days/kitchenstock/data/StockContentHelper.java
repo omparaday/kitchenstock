@@ -3,6 +3,7 @@ package com.days.kitchenstock.data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +76,16 @@ public class StockContentHelper {
                     return context.getString(R.string.in_stock);
                 case OUT_OF_STOCK:
                     return context.getString(R.string.out_of_stock);
+            }
+            return null;
+        }
+
+        public String getTypeString(Context context) {
+            switch (type) {
+                case FRESH:
+                    return context.getString(R.string.fresh);
+                case LONG_TERM:
+                    return context.getString(R.string.long_term);
             }
             return null;
         }
@@ -160,6 +171,24 @@ public class StockContentHelper {
         }
     }
 
+    public static void addToInStockList(Context context, ArrayList<Item> items) {
+        for (Item item : items) {
+            item.status = ItemStatus.IN_STOCK;
+            item.purchaseDate = Calendar.getInstance().getTime();
+            addItem(context, item);
+        }
+    }
+
+
+    public static void addToInShopList(Context context, ArrayList<Item> items) {
+        for (Item item : items) {
+            item.purchaseDate = null;
+            item.expiry = null;
+            item.status = ItemStatus.TO_BUY;
+            addItem(context, item);
+        }
+    }
+
     public static void moveToOutOfStockList(Context context, ArrayList<Item> items) {
         for (Item item : items) {
             item.status = ItemStatus.OUT_OF_STOCK;
@@ -216,6 +245,51 @@ public class StockContentHelper {
         cursor.close();
         return itemArrayList;
     }
+
+    public static ArrayList<String> getExistingItemNames(Context context) {
+        ArrayList<String> itemNameList = new ArrayList<>();
+        String sortOrder = StockContentProvider.NAME + " ASC";
+        Cursor cursor = context.getContentResolver().query(StockContentProvider.CONTENT_URI, null, null, null, sortOrder);
+        if (cursor.moveToFirst()) {
+            do {
+                itemNameList.add(cursor.getString(cursor.getColumnIndex(StockContentProvider.NAME)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return itemNameList;
+    }
+
+    public static ArrayList<Item> getAllEasyAddItems(Context context) {
+        ArrayList<Item> itemArrayList = new ArrayList<>();
+        itemArrayList.addAll(getEasyAddItems(context, R.array.veg, ItemType.FRESH));
+        itemArrayList.addAll(getEasyAddItems(context, R.array.fruits, ItemType.FRESH));
+        itemArrayList.addAll(getEasyAddItems(context, R.array.non_veg, ItemType.FRESH));
+        itemArrayList.addAll(getEasyAddItems(context, R.array.baby_care, ItemType.LONG_TERM));
+        itemArrayList.addAll(getEasyAddItems(context, R.array.stationery, ItemType.LONG_TERM));
+        itemArrayList.addAll(getEasyAddItems(context, R.array.other_house_hold, ItemType.LONG_TERM));
+        return itemArrayList;
+    }
+
+    public static ArrayList<Item> getEasyAddItems(Context context, int arrayId, ItemType itemType) {
+        ArrayList<Item> itemArrayList = new ArrayList<>();
+        ArrayList<String> allEasyAddItems = new ArrayList<String>();
+        allEasyAddItems.addAll(Arrays.asList(context.getResources().getStringArray(arrayId)));
+        ArrayList<String> existingItems = getExistingItemNames(context);
+        for (String existingItem : existingItems) {
+            allEasyAddItems.remove(existingItem);
+        }
+        for (String itemName : allEasyAddItems) {
+            Item item = new Item();
+            item.name = itemName;
+            item.type = itemType;
+            item.status = ItemStatus.OUT_OF_STOCK;
+            item.purchaseDate = null;
+            item.expiry = null;
+            itemArrayList.add(item);
+        }
+        return itemArrayList;
+    }
+
 
     public static int getExpiredSinceCount(Context context, Date since) {
         int count = 0;

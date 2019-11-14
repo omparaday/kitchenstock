@@ -18,6 +18,17 @@
         android:gravity="left"
         android:paddingLeft="0dp"
         android:text="@string/search" />
+    <Button
+        android:id="@+id/easy_add"
+        android:layout_width="0dp"
+        android:minHeight="0dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingRight="0dp"
+        android:text="@string/easy_add" />
 
     <Button
         android:id="@+id/add_item"
