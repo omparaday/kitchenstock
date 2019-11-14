@@ -45,7 +45,7 @@
     <string name="close_icon">&#x2A09;</string>
     <string name="no_items_to_display">No items in this list. Click \"&#xFF0B; Add Item\" or edit other lists to add items here.</string>
     <string name="last_added">Last Added To Stock: %s</string>
-    <string name="easy_add">Easy Add</string>
+    <string name="easy_add">Quick Add</string>
     <string name="groceries">Vegetables &amp; Groceries</string>
     <string name="fruits">Fruits</string>
     <string name="non_veg">Non Veg</string>

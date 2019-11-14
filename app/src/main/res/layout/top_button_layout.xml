@@ -6,6 +6,17 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="horizontal">
+    <Button
+        android:id="@+id/easy_add"
+        android:layout_width="0dp"
+        android:minHeight="0dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="left|center_vertical"
+        android:paddingRight="0dp"
+        android:text="@string/easy_add" />
 
     <Button
         android:id="@+id/search_button"
@@ -13,22 +24,11 @@
         android:minHeight="0dp"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="left"
-        android:paddingLeft="0dp"
-        android:text="@string/search" />
-    <Button
-        android:id="@+id/easy_add"
-        android:layout_width="0dp"
-        android:minHeight="0dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingRight="0dp"
-        android:text="@string/easy_add" />
+        android:paddingLeft="0dp"
+        android:text="@string/search" />
 
     <Button
         android:id="@+id/add_item"
@@ -36,9 +36,9 @@
         android:minHeight="0dp"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="right"
+        android:gravity="right|center_vertical"
         android:paddingRight="0dp"
         android:text="@string/add_item" />
 

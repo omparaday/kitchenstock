@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.days.kitchenstock.data.StockContentHelper;
 import com.google.android.material.tabs.TabLayout;
@@ -19,7 +20,7 @@ public class HomeFragment extends Fragment {
     public static final int TAB_COUNT = 3;
     private ITabFragment mTabFragments[];
     DemoCollectionPagerAdapter demoCollectionPagerAdapter;
-    private Button mAddItem, mSearch, mEasyAdd;
+    private Button mAddItem, mEasyAdd, mSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
