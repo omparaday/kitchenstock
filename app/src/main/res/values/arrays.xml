@@ -28,6 +28,8 @@
         <item>Onion</item>
         <item>Garlic</item>
         <item>Chilli</item>
+        <item>Green Chilli</item>
+        <item>Red Chilli</item>
         <item>Carrot</item>
         <item>Beans</item>
         <item>Capsicum</item>
@@ -63,7 +65,9 @@
         <item>Tea</item>
         <item>Coffee</item>
         <item>Gram Flour</item>
+        <item>Black Gram</item>
         <item>Brown Sugar</item>
+        <item>Palm Sugar</item>
         <item>Black Salt</item>
         <item>Crystal Salt</item>
         <item>Curd/Yogurt</item>
@@ -76,7 +80,14 @@
         <item>Legumes</item>
         <item>Kidney Beans</item>
         <item>Green Beans</item>
+        <item>Split Chick Peas</item>
+        <item>Split Pigeon Peas</item>
+        <item>Green Gram</item>
+        <item>Red Gram</item>
+        <item>Maize Flour</item>
         <item>Lentils</item>
+        <item>Maize</item>
+        <item>Corn Flour</item>
         <item>Peas</item>
         <item>Basil</item>
         <item>Lemon Grass</item>
@@ -223,6 +234,14 @@
         <item>Marker</item>
         <item>Pencil Leads</item>
         <item>Pencil</item>
+        <item>Pen</item>
+        <item>Paint</item>
+        <item>Chalk</item>
+        <item>Paint Brush</item>
+        <item>Color Pencil</item>
+        <item>Instrument Box</item>
+        <item>Crayons</item>
+        <item>Sketch</item>
         <item>Ink Bottle</item>
         <item>Fountain pen</item>
         <item>Highlighter</item>

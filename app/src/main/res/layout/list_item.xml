@@ -28,7 +28,8 @@
             <TextView
                 android:id="@+id/quantity"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:gravity="left" />
@@ -36,7 +37,8 @@
             <TextView
                 android:id="@+id/expiry"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:gravity="center_horizontal" />
@@ -44,7 +46,8 @@
             <TextView
                 android:id="@+id/status"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:gravity="right" />

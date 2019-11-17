@@ -30,6 +30,7 @@ public class EasyAddOptionsDialog extends AlertDialog {
     private String mSearchString;
     private View mSearchResultsLayout, mOptionsList;
     private ArrayList<StockContentHelper.Item> mAllItemsList;
+    private boolean[] mItemsMatch;
     private TextView mGroceries, mFruits, mNonVeg, mBabyCare, mStationery, mOthers;
     private ItemStockAdapter mAdapter;
     private Button mDone, mAddToShop, mAddToStock;
@@ -65,8 +66,18 @@ public class EasyAddOptionsDialog extends AlertDialog {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int k, int i1, int i2) {
                 mSearchString = charSequence.toString();
+                if (mSearchString == null) {
+                    for (int i = 0; i < mAllItemsList.size(); i++) {
+                        mItemsMatch[i] =true;
+                    }
+                } else {
+                    for (int i = 0; i < mAllItemsList.size(); i++) {
+                        StockContentHelper.Item item = mAllItemsList.get(i);
+                        mItemsMatch[i] = item.name.toLowerCase().contains(mSearchString.toLowerCase());
+                    }
+                }
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -197,6 +208,10 @@ public class EasyAddOptionsDialog extends AlertDialog {
         mAllItemsList = getItemsList();
         Collections.sort(mAllItemsList);
         mAdapter = new ItemStockAdapter(getContext(), mAllItemsList);
+        mItemsMatch = new boolean[mAllItemsList.size()];
+        for (int i = 0; i < mAllItemsList.size(); i++) {
+            mItemsMatch[i] = true;
+        }
         mResultsList.setAdapter(mAdapter);
     }
 
@@ -242,6 +257,11 @@ public class EasyAddOptionsDialog extends AlertDialog {
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
             StockContentHelper.Item item = (StockContentHelper.Item) getItem(i);
+            if (!checkedValues[i] && !mItemsMatch[i]) {
+                View view1 = new View(getContext());
+                view1.setMinimumHeight(0);
+                return view1;
+            }
             view = getLayoutInflater().inflate(R.layout.list_item_with_divider, null);
             TextView name = view.findViewById(R.id.item_name);
             name.setText(item.name);
@@ -262,11 +282,6 @@ public class EasyAddOptionsDialog extends AlertDialog {
                     checkBox.toggle();
                 }
             });
-            if (!checkedValues[i] && mSearchString != null && !item.name.toLowerCase().contains(mSearchString.toLowerCase())) {
-                View view1 = new View(getContext());
-                view1.setMinimumHeight(0);
-                return view1;
-            }
             return view;
         }
     }
