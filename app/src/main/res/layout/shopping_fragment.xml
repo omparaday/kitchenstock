@@ -57,7 +57,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/no_items_to_display"
+            android:text="@string/no_items_purchased_today"
             android:visibility="gone" />
 
         <ListView

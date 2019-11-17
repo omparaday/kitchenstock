@@ -43,7 +43,8 @@
     <string name="name_to_search">Enter item name to search</string>
     <string name="delete_selected">&#x1f5d1; Delete</string>
     <string name="close_icon">&#x2A09;</string>
-    <string name="no_items_to_display">No items in this list. Click \"&#xFF0B; Add Item\" or edit other lists to add items here.</string>
+    <string name="no_items_to_display">No items in this list. Click \"QUICK ADD\" or \"&#xFF0B; ADD ITEM\" or edit other lists to add items here.</string>
+    <string name="no_items_purchased_today">No item in stock is purchased today.</string>
     <string name="last_added">Last Added To Stock: %s</string>
     <string name="easy_add">Quick Add</string>
     <string name="groceries">Vegetables &amp; Groceries</string>
