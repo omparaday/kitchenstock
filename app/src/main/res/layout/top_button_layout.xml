@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="left|center_vertical"
-        android:paddingRight="0dp"
+        android:paddingLeft="0dp"
         android:text="@string/easy_add" />
 
     <Button
@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingLeft="0dp"
+        android:layout_gravity="center"
         android:text="@string/search" />
 
     <Button
