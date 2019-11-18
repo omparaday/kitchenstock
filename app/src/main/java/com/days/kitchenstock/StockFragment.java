@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -433,8 +434,10 @@ public class StockFragment extends Fragment implements ITabFragment {
             quantity.setText(item.quantity);
             TextView status = view.findViewById(R.id.status);
             TextView expiry = view.findViewById(R.id.expiry);
+            String statusString = null;
             if (item.status == StockContentHelper.ItemStatus.TO_BUY) {
-                status.setText(item.getStatusString(getContext()));
+                statusString = item.getStatusString(getContext());
+                status.setText(statusString);
             } else if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
                 if (item.expiry != null) {
                     expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));
@@ -446,6 +449,9 @@ public class StockFragment extends Fragment implements ITabFragment {
                         status.setText(R.string.expiring_soon);
                     }
                 }
+            }
+            if (!TextUtils.isEmpty(item.quantity) || item.expiry != null || !TextUtils.isEmpty(statusString)) {
+                view.findViewById(R.id.summary_layout).setVisibility(View.VISIBLE);
             }
             if (!isEditing) {
                 view.setOnClickListener(new View.OnClickListener() {

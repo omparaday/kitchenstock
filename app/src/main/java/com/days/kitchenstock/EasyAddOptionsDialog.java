@@ -267,6 +267,7 @@ public class EasyAddOptionsDialog extends AlertDialog {
             name.setText(item.name);
             TextView status = view.findViewById(R.id.quantity);
             status.setText(item.getTypeString(getContext()));
+            view.findViewById(R.id.summary_layout).setVisibility(View.VISIBLE);
             final CheckBox checkBox = view.findViewById(R.id.checkbox);
             checkBox.setTag(i);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

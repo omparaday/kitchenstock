@@ -154,6 +154,7 @@ public class SearchItemDialog extends AlertDialog {
             TextView status = view.findViewById(R.id.status);
             TextView expiry = view.findViewById(R.id.expiry);
             status.setText(item.getStatusString(getContext()));
+            view.findViewById(R.id.summary_layout).setVisibility(View.VISIBLE);
             if (item.status == StockContentHelper.ItemStatus.IN_STOCK) {
                 if (item.expiry != null) {
                     expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));

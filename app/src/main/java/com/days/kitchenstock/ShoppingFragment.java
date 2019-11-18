@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -425,9 +426,13 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
             final TextView name = view.findViewById(R.id.item_name);
             name.setText(item.name);
             TextView quantity = view.findViewById(R.id.quantity);
-            quantity.setText(item.quantity);
+            if (!TextUtils.isEmpty(item.quantity)) {
+                view.findViewById(R.id.summary_layout).setVisibility(View.VISIBLE);
+                quantity.setText(item.quantity);
+            }
             TextView expiry = view.findViewById(R.id.expiry);
             if (item.expiry != null) {
+                view.findViewById(R.id.summary_layout).setVisibility(View.VISIBLE);
                 expiry.setText(DateFormat.getMediumDateFormat(getContext()).format(item.expiry));
             }
             if (!isEditing) {
