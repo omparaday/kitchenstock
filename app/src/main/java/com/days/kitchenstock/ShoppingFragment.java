@@ -184,23 +184,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mToBuyShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String shareBody = getString(R.string.share_to_buy);
-                ArrayList<StockContentHelper.Item> itemArrayList = mToBuyAdapter.getSelectedItems();
-                int sNo = 1;
-                for (StockContentHelper.Item item : itemArrayList) {
-                    shareBody = shareBody + "\n";
-                    shareBody = shareBody + sNo + ". ";
-                    sNo++;
-                    shareBody = shareBody + item.name;
-                    if (!TextUtils.isEmpty(item.quantity)) {
-                        shareBody = shareBody + ", " + item.quantity;
-                    }
-                }
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_to_buy));
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_to_buy)));
+                shareItem(R.string.share_to_buy, mToBuyAdapter);
             }
         });
         mToBuyEditButton = mToBuyTitleButtons.findViewById(R.id.edit);
@@ -260,6 +244,26 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         });
     }
 
+    private void shareItem(int subjectRes, ItemStockAdapter mToBuyAdapter) {
+        String shareBody = getString(subjectRes);
+        ArrayList<StockContentHelper.Item> itemArrayList = mToBuyAdapter.getSelectedItems();
+        int sNo = 1;
+        for (StockContentHelper.Item item : itemArrayList) {
+            shareBody = shareBody + "\n";
+            if (!TextUtils.isEmpty(item.quantity)) {
+                shareBody = shareBody + getString(R.string.share_row_format_qty, sNo, item.name, item.quantity);
+            } else {
+                shareBody = shareBody + getString(R.string.share_row_format,sNo, item.name);
+            }
+            sNo++;
+        }
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(subjectRes));
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(subjectRes)));
+    }
+
 
     private void setupPurchasedTodayLayoutButtons(View view) {
         mPurchasedTodayTitleButtons = view.findViewById(R.id.purchased_today_title_buttons);
@@ -269,23 +273,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         mPurchasedTodayShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String shareBody = getString(R.string.share_purchased_today);
-                ArrayList<StockContentHelper.Item> itemArrayList = mPurchasedTodayAdapter.getSelectedItems();
-                int sNo = 1;
-                for (StockContentHelper.Item item : itemArrayList) {
-                    shareBody = shareBody + "\n";
-                    shareBody = shareBody + sNo + ". ";
-                    sNo++;
-                    shareBody = shareBody + item.name;
-                    if (!TextUtils.isEmpty(item.quantity)) {
-                        shareBody = shareBody + ", " + item.quantity;
-                    }
-                }
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_purchased_today));
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_purchased_today)));
+                shareItem(R.string.share_purchased_today, mPurchasedTodayAdapter);
             }
         });
         mPurchasedTodayActionButtons = view.findViewById(R.id.purchased_today_action_buttons);

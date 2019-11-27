@@ -68,4 +68,6 @@
     <string name="share_long_term_outofstock">Long Term - Out Of Stock</string>
     <string name="share_short_term_instock">Short Term - In Stock</string>
     <string name="share_short_term_outofstock">Short Term - Out Of Stock</string>
+    <string name="share_row_format">%d. %1s</string>
+    <string name="share_row_format_qty">%d. %1s (%2s)</string>
 </resources>

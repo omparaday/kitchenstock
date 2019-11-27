@@ -174,24 +174,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mInStockShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = mItemType == StockContentHelper.ItemType.LONG_TERM ? getString(R.string.share_long_term_instock) : getString(R.string.share_short_term_instock);
-                String shareBody = title;
-                ArrayList<StockContentHelper.Item> itemArrayList = mInStockAdapter.getSelectedItems();
-                int sNo = 1;
-                for (StockContentHelper.Item item : itemArrayList) {
-                    shareBody = shareBody + "\n";
-                    shareBody = shareBody + sNo + ". ";
-                    sNo++;
-                    shareBody = shareBody + item.name;
-                    if (!TextUtils.isEmpty(item.quantity)) {
-                        shareBody = shareBody + ", " + item.quantity;
-                    }
-                }
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, title);
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, title));
+                shareItems(R.string.share_long_term_instock, R.string.share_short_term_instock, mInStockAdapter);
             }
         });
         mInStockEditButton = mInStockTitleButtons.findViewById(R.id.edit);
@@ -260,24 +243,7 @@ public class StockFragment extends Fragment implements ITabFragment {
         mOutOfStockShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = mItemType == StockContentHelper.ItemType.LONG_TERM ? getString(R.string.share_long_term_outofstock) : getString(R.string.share_short_term_outofstock);
-                String shareBody = title;
-                ArrayList<StockContentHelper.Item> itemArrayList = mOutOfStockAdapter.getSelectedItems();
-                int sNo = 1;
-                for (StockContentHelper.Item item : itemArrayList) {
-                    shareBody = shareBody + "\n";
-                    shareBody = shareBody + sNo + ". ";
-                    sNo++;
-                    shareBody = shareBody + item.name;
-                    if (!TextUtils.isEmpty(item.quantity)) {
-                        shareBody = shareBody + ", " + item.quantity;
-                    }
-                }
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, title);
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, title));
+                shareItems(R.string.share_long_term_outofstock, R.string.share_short_term_outofstock, mOutOfStockAdapter);
             }
         });
         mOutOfStockActionButtons = view.findViewById(R.id.out_of_stock_action_buttons);
@@ -336,6 +302,27 @@ public class StockFragment extends Fragment implements ITabFragment {
                 exitEditingOutOfStockList();
             }
         });
+    }
+
+    private void shareItems(int longTermRes, int shortTermRes, ItemStockAdapter mOutOfStockAdapter) {
+        String title = mItemType == StockContentHelper.ItemType.LONG_TERM ? getString(longTermRes) : getString(shortTermRes);
+        String shareBody = title;
+        ArrayList<StockContentHelper.Item> itemArrayList = mOutOfStockAdapter.getSelectedItems();
+        int sNo = 1;
+        for (StockContentHelper.Item item : itemArrayList) {
+            shareBody = shareBody + "\n";
+            if (!TextUtils.isEmpty(item.quantity)) {
+                shareBody = shareBody + getString(R.string.share_row_format_qty, sNo, item.name, item.quantity);
+            } else {
+                shareBody = shareBody + getString(R.string.share_row_format,sNo, item.name);
+            }
+            sNo++;
+        }
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, title));
     }
 
     private void exitEditingInStockList() {
