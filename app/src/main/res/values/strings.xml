@@ -38,8 +38,9 @@
     <string name="expiry_notification_message">"%d items expired; %d items expiring soon"</string>
     <string name="expiry_notification_title">Stock Expiry Alert</string>
     <string name="search">&#x1F50D; Search</string>
-    <string name="edit">Edit</string>
-    <string name="cancel_edit">Cancel Editing</string>
+    <string name="edit">Select</string>
+    <string name="share">Share</string>
+    <string name="cancel_edit">Done</string>
     <string name="name_to_search">Enter item name to search</string>
     <string name="delete_selected">&#x1f5d1; Delete</string>
     <string name="close_icon">&#x2A09;</string>
@@ -61,4 +62,10 @@
     <string name="search_baby_care">&#x1F50D; Baby Care</string>
     <string name="search_other_items">&#x1F50D; Search Other Household Items</string>
     <string name="done">Done</string>
+    <string name="share_purchased_today">Purchased Today</string>
+    <string name="share_to_buy">Shop</string>
+    <string name="share_long_term_instock">Long Term - In Stock</string>
+    <string name="share_long_term_outofstock">Long Term - Out Of Stock</string>
+    <string name="share_short_term_instock">Short Term - In Stock</string>
+    <string name="share_short_term_outofstock">Short Term - Out Of Stock</string>
 </resources>

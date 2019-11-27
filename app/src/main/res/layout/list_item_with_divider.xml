@@ -8,5 +8,5 @@
     <include layout="@layout/editing_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <View style="@style/Divider"/>
+    <View style="@style/HorizontalDivider"/>
 </LinearLayout>

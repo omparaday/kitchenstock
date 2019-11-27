@@ -1,6 +1,7 @@
 package com.days.kitchenstock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,8 +58,9 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     private Button mPurchasedTodayEditButton;
     private View mPurchasedTodayTitleButtons;
     private View mToBuyTitleButtons;
-    private View mToBuyEditCancelLayout;
-    private View mPurchasedTodayEditCancelLayout;
+    private View mToBuyOtherButtonsLayout, mPurchasedTodayOtherButtonsLayout;
+    private View mToBuyOptionButtonsLayout, mPurchasedTodayOptionButtonsLayout;
+    private Button mToBuyShareButton, mPurchasedTodayShareButton;
     private Button mCancelEditingToBuyButton;
     private View mToBuyActionButtons;
     private Button mCancelEditingPurchasedTodayButton;
@@ -103,7 +105,6 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.shopping_fragment, container, false);
     }
 
@@ -146,8 +147,8 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                     mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
                     mToBuyLayout.setVisibility(View.VISIBLE);
                     mPurhcasedTodayLayout.setVisibility(View.GONE);
-                    mToBuyEditCancelLayout.setVisibility(View.VISIBLE);
-                    mPurchasedTodayEditCancelLayout.setVisibility(View.GONE);
+                    mToBuyOtherButtonsLayout.setVisibility(View.VISIBLE);
+                    mPurchasedTodayOtherButtonsLayout.setVisibility(View.GONE);
                     if (mPurchasedTodayAdapter != null) {
                         mPurchasedTodayAdapter.dismissSwipe();
                     }
@@ -162,8 +163,8 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                     mPurchasedTodayListTitle.setText(R.string.purchased_today_expand);
                     mPurhcasedTodayLayout.setVisibility(View.VISIBLE);
                     mToBuyLayout.setVisibility(View.GONE);
-                    mToBuyEditCancelLayout.setVisibility(View.GONE);
-                    mPurchasedTodayEditCancelLayout.setVisibility(View.VISIBLE);
+                    mToBuyOtherButtonsLayout.setVisibility(View.GONE);
+                    mPurchasedTodayOtherButtonsLayout.setVisibility(View.VISIBLE);
                     if (mToBuyAdapter != null) {
                         mToBuyAdapter.dismissSwipe();
                     }
@@ -177,7 +178,31 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
 
     private void setupToBuyLayoutButtons(View view) {
         mToBuyTitleButtons = view.findViewById(R.id.to_buy_title_buttons);
-        mToBuyEditCancelLayout = mToBuyTitleButtons.findViewById(R.id.other_buttons);
+        mToBuyOtherButtonsLayout = mToBuyTitleButtons.findViewById(R.id.other_buttons);
+        mToBuyOptionButtonsLayout = mToBuyOtherButtonsLayout.findViewById(R.id.options_buttons);
+        mToBuyShareButton = mToBuyOptionButtonsLayout.findViewById(R.id.share);
+        mToBuyShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String shareBody = getString(R.string.share_to_buy);
+                ArrayList<StockContentHelper.Item> itemArrayList = mToBuyAdapter.getSelectedItems();
+                int sNo = 1;
+                for (StockContentHelper.Item item : itemArrayList) {
+                    shareBody = shareBody + "\n";
+                    shareBody = shareBody + sNo + ". ";
+                    sNo++;
+                    shareBody = shareBody + item.name;
+                    if (!TextUtils.isEmpty(item.quantity)) {
+                        shareBody = shareBody + ", " + item.quantity;
+                    }
+                }
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_to_buy));
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_to_buy)));
+            }
+        });
         mToBuyEditButton = mToBuyTitleButtons.findViewById(R.id.edit);
         mCancelEditingToBuyButton = mToBuyTitleButtons.findViewById(R.id.cancel);
         mToBuyListTitle = mToBuyTitleButtons.findViewById(R.id.list_title);
@@ -238,10 +263,34 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
 
     private void setupPurchasedTodayLayoutButtons(View view) {
         mPurchasedTodayTitleButtons = view.findViewById(R.id.purchased_today_title_buttons);
-        mPurchasedTodayEditCancelLayout = mPurchasedTodayTitleButtons.findViewById(R.id.other_buttons);
+        mPurchasedTodayOtherButtonsLayout = mPurchasedTodayTitleButtons.findViewById(R.id.other_buttons);
+        mPurchasedTodayOptionButtonsLayout = mPurchasedTodayOtherButtonsLayout.findViewById(R.id.options_buttons);
+        mPurchasedTodayShareButton = mPurchasedTodayOptionButtonsLayout.findViewById(R.id.share);
+        mPurchasedTodayShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String shareBody = getString(R.string.share_purchased_today);
+                ArrayList<StockContentHelper.Item> itemArrayList = mPurchasedTodayAdapter.getSelectedItems();
+                int sNo = 1;
+                for (StockContentHelper.Item item : itemArrayList) {
+                    shareBody = shareBody + "\n";
+                    shareBody = shareBody + sNo + ". ";
+                    sNo++;
+                    shareBody = shareBody + item.name;
+                    if (!TextUtils.isEmpty(item.quantity)) {
+                        shareBody = shareBody + ", " + item.quantity;
+                    }
+                }
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_purchased_today));
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_purchased_today)));
+            }
+        });
         mPurchasedTodayActionButtons = view.findViewById(R.id.purchased_today_action_buttons);
         mPurchasedTodayEditButton = mPurchasedTodayTitleButtons.findViewById(R.id.edit);
-        mPurchasedTodayEditCancelLayout.setVisibility(View.GONE);
+        mPurchasedTodayOtherButtonsLayout.setVisibility(View.GONE);
         mCancelEditingPurchasedTodayButton = mPurchasedTodayTitleButtons.findViewById(R.id.cancel);
         mPurchasedTodayListTitle = mPurchasedTodayTitleButtons.findViewById(R.id.list_title);
         mPurchasedTodayListTitle.setText(R.string.purchased_today_collapse);
@@ -300,6 +349,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     private void exitEditingToBuyList() {
         mCancelEditingToBuyButton.setVisibility(View.GONE);
         mToBuyActionButtons.setVisibility(View.GONE);
+        mToBuyEditButton.setVisibility(View.VISIBLE);
         mPurchasedTodayTitleButtons.setVisibility(View.VISIBLE);
         mIsToBuyEditing = false;
         mToBuyListTitle.setOnClickListener(mToBuyTitleClickListener);
@@ -309,6 +359,7 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
     private void exitEditingPurchasedTodayList() {
         mCancelEditingPurchasedTodayButton.setVisibility(View.GONE);
         mPurchasedTodayActionButtons.setVisibility(View.GONE);
+        mPurchasedTodayEditButton.setVisibility(View.VISIBLE);
         mToBuyTitleButtons.setVisibility(View.VISIBLE);
         mIsPurchasedTodayEditing = false;
         mPurchasedTodayListTitle.setOnClickListener(mPurchasedTodayTitleClickListener);
@@ -323,12 +374,12 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                 mToBuyListView.setVisibility(View.VISIBLE);
                 mToBuyEmptyMessage.setVisibility(View.GONE);
                 if (!editMode) {
-                    mToBuyEditButton.setVisibility(View.VISIBLE);
+                    mToBuyOptionButtonsLayout.setVisibility(View.VISIBLE);
                 }
                 mToBuyListView.setAdapter(mToBuyAdapter);
             } else {
                 mToBuyListView.setVisibility(View.GONE);
-                mToBuyEditButton.setVisibility(View.GONE);
+                mToBuyOptionButtonsLayout.setVisibility(View.GONE);
                 mToBuyAdapter = null;
                 mToBuyEmptyMessage.setVisibility(View.VISIBLE);
             }
@@ -344,12 +395,12 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                 mPurchasedTodayAdapter = new ItemStockAdapter(getActivity(), mPurchasedTodayList, editMode);
                 mPurchasedTodayListView.setAdapter(mPurchasedTodayAdapter);
                 if (!editMode) {
-                    mPurchasedTodayEditButton.setVisibility(View.VISIBLE);
+                    mPurchasedTodayOptionButtonsLayout.setVisibility(View.VISIBLE);
                 }
             } else {
                 mPurchasedTodayListView.setVisibility(View.GONE);
                 mPurchasedTodayAdapter = null;
-                mPurchasedTodayEditButton.setVisibility(View.GONE);
+                mPurchasedTodayOptionButtonsLayout.setVisibility(View.GONE);
                 mPurchasedTodayEmptyMessge.setVisibility(View.VISIBLE);
             }
         }
@@ -406,6 +457,9 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
         }
 
         ArrayList<StockContentHelper.Item> getSelectedItems() {
+            if (!isEditing) {
+                return itemList;
+            }
             ArrayList<StockContentHelper.Item> selectedItems = new ArrayList<>();
             for (int i = 0; i < itemList.size(); i++) {
                 if (checkedValues[i]) {
@@ -513,13 +567,14 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                 public boolean onSwipeLeft() {
                     dismissSwipe();
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
-                    params.width = (int)convertDpToPixel(BUTTONS_WIDTH,getContext());
+                    params.width = (int) convertDpToPixel(BUTTONS_WIDTH, getContext());
                     swipeButtons.setLayoutParams(params);
                     swipeButtons.invalidate();
                     currentVisibleSwipe = swipeButtons;
                     return true;
                 }
-                public boolean onMoveLeft(float deltaX){
+
+                public boolean onMoveLeft(float deltaX) {
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swipeButtons.getLayoutParams());
                     params.width = (int) Math.min(convertDpToPixel(BUTTONS_WIDTH, getContext()), deltaX);
                     swipeButtons.setLayoutParams(params);
@@ -528,11 +583,11 @@ public class ShoppingFragment extends Fragment implements ITabFragment {
                     return true;
                 }
 
-                public boolean onDown(){
+                public boolean onDown() {
                     return dismissSwipe();
                 }
 
-                public boolean onCancel(){
+                public boolean onCancel() {
                     dismissSwipe();
                     return false;
                 }
