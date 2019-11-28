@@ -43,7 +43,7 @@
     <string name="cancel_edit">Done</string>
     <string name="name_to_search">Enter item name to search</string>
     <string name="delete_selected">&#x1f5d1; Delete</string>
-    <string name="close_icon">&#x2A09;</string>
+    <string name="close_icon">X</string>
     <string name="no_items_to_display">No items in this list. Click \"QUICK ADD\" or \"&#xFF0B; ADD ITEM\" or edit other lists to add items here.</string>
     <string name="no_items_purchased_today">No item in stock is purchased today.</string>
     <string name="last_added">Last Added To Stock: %s</string>
@@ -63,10 +63,10 @@
     <string name="search_other_items">&#x1F50D; Search Other Household Items</string>
     <string name="done">Done</string>
     <string name="rate_now">Rate Now</string>
-    <string name="remind_later">Remind Later</string>
-    <string name="never_ask">Don\'t Ask Again</string>
+    <string name="remind_later">Later</string>
+    <string name="never_ask">Never Ask</string>
     <string name="rate_app_title">Rate Keep Stock</string>
-    <string name="rate_app_message">Hope you are finding this app useful. Would you like to take a moment to rate us in play store?</string>
+    <string name="rate_app_message">Hope you are finding this app useful.\nPlease take a moment to rate us in play store. It won\'t take more than a minute.\n\nThank you for the support!</string>
     <string name="share_purchased_today">Purchased Today</string>
     <string name="share_to_buy">Shop</string>
     <string name="share_long_term_instock">Long Term - In Stock</string>
