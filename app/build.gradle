@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.days.kitchenstock"
-        minSdkVersion 24
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 3
         versionName "3.0"

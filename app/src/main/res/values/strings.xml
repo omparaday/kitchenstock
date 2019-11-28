@@ -62,6 +62,11 @@
     <string name="search_baby_care">&#x1F50D; Baby Care</string>
     <string name="search_other_items">&#x1F50D; Search Other Household Items</string>
     <string name="done">Done</string>
+    <string name="rate_now">Rate Now</string>
+    <string name="remind_later">Remind Later</string>
+    <string name="never_ask">Don\'t Ask Again</string>
+    <string name="rate_app_title">Rate Keep Stock</string>
+    <string name="rate_app_message">Hope you are finding this app useful. Would you like to take a moment to rate us in play store?</string>
     <string name="share_purchased_today">Purchased Today</string>
     <string name="share_to_buy">Shop</string>
     <string name="share_long_term_instock">Long Term - In Stock</string>
