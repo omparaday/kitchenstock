@@ -2,6 +2,7 @@ package com.days.kitchenstock;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -138,17 +139,43 @@ public class EasyAddOptionsDialog extends AlertDialog {
         mAddToStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mAdapter.getSelectedItems();
-                StockContentHelper.addToInStockList(getContext(), selectedItems);
-                updateList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.add_to_stock_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mAdapter.getSelectedItems();
+                                StockContentHelper.addToInStockList(getContext(), selectedItems);
+                                updateList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
         mAddToShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mAdapter.getSelectedItems();
-                StockContentHelper.addToInShopList(getContext(), selectedItems);
-                updateList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.add_to_shop_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mAdapter.getSelectedItems();
+                                StockContentHelper.addToInShopList(getContext(), selectedItems);
+                                updateList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
     }

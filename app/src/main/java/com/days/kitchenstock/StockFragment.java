@@ -1,6 +1,8 @@
 package com.days.kitchenstock;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -211,25 +213,64 @@ public class StockFragment extends Fragment implements ITabFragment {
         deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
-                StockContentHelper.deleteItemList(getContext(), selectedItems);
-                exitEditingInStockList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.delete_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
+                                StockContentHelper.deleteItemList(getContext(), selectedItems);
+                                exitEditingInStockList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
         moveToShopSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
-                StockContentHelper.moveToShopList(getContext(), selectedItems);
-                exitEditingInStockList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.add_to_shop_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
+                                StockContentHelper.moveToShopList(getContext(), selectedItems);
+                                exitEditingInStockList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
         moveToOutOfStockSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
-                StockContentHelper.moveToOutOfStockList(getContext(), selectedItems);
-                exitEditingInStockList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.move_to_out_of_stock_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mInStockAdapter.getSelectedItems();
+                                StockContentHelper.moveToOutOfStockList(getContext(), selectedItems);
+                                exitEditingInStockList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
     }
@@ -281,25 +322,64 @@ public class StockFragment extends Fragment implements ITabFragment {
         deleteSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
-                StockContentHelper.deleteItemList(getContext(), selectedItems);
-                exitEditingOutOfStockList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.delete_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
+                                StockContentHelper.deleteItemList(getContext(), selectedItems);
+                                exitEditingOutOfStockList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
         moveToShopSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
-                StockContentHelper.moveToShopList(getContext(), selectedItems);
-                exitEditingOutOfStockList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.add_to_shop_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
+                                StockContentHelper.moveToShopList(getContext(), selectedItems);
+                                exitEditingOutOfStockList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
         moveToInStockSelectedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
-                StockContentHelper.moveToInStockList(getContext(), selectedItems);
-                exitEditingOutOfStockList();
+                new AlertDialog.Builder(getContext()).setMessage(R.string.add_to_stock_confirmation)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ArrayList<StockContentHelper.Item> selectedItems = mOutOfStockAdapter.getSelectedItems();
+                                StockContentHelper.moveToInStockList(getContext(), selectedItems);
+                                exitEditingOutOfStockList();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // nothing
+                            }
+                        })
+                        .show();
             }
         });
     }
