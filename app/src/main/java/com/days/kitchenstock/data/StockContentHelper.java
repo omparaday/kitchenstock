@@ -270,6 +270,15 @@ public class StockContentHelper {
         return itemArrayList;
     }
 
+    public static ArrayList<String> getAllEasyAddItemNames(Context context) {
+        ArrayList<String> itemNamesArrayList = new ArrayList<>();
+        ArrayList<Item> allItems = getAllEasyAddItems(context);
+        for (Item item : allItems) {
+            itemNamesArrayList.add(item.name);
+        }
+        return itemNamesArrayList;
+    }
+
     public static ArrayList<Item> getEasyAddItems(Context context, int arrayId, ItemType itemType) {
         ArrayList<Item> itemArrayList = new ArrayList<>();
         ArrayList<String> allEasyAddItems = new ArrayList<String>();

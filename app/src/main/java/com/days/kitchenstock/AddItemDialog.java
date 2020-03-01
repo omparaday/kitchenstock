@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -19,12 +21,14 @@ import com.days.kitchenstock.data.StockContentHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddItemDialog extends AlertDialog implements DialogInterface.OnShowListener {
 
     private OnClickListener mAddButtonListener;
-    private EditText mName, mQuantity, mExpiry;
+    private EditText mQuantity, mExpiry;
+    private AutoCompleteTextView mName;
     private RadioGroup mItemTypeGroup, mItemStatusGroup;
     private Calendar mExpiryCalendar = Calendar.getInstance();
     private CheckBox mAutoOutOfStock;
@@ -34,6 +38,15 @@ public class AddItemDialog extends AlertDialog implements DialogInterface.OnShow
         View view = getLayoutInflater().inflate(R.layout.add_item_dialog, null);
         setView(view);
         mName = view.findViewById(R.id.item_name);
+
+        ArrayList<String> allEasyAddItemNames = StockContentHelper.getAllEasyAddItemNames(context);
+        ArrayList<String> allExistingItemNames = StockContentHelper.getExistingItemNames(context);
+        ArrayList<String> addItemSuggestions = new ArrayList<String>();
+        addItemSuggestions.addAll(allExistingItemNames);
+        addItemSuggestions.addAll(allEasyAddItemNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, addItemSuggestions);
+        adapter.setNotifyOnChange(true);
+        mName.setAdapter(adapter);
         mName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {

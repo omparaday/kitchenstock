@@ -19,7 +19,7 @@
             android:layout_gravity="right"
             android:text="@string/close_icon" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
